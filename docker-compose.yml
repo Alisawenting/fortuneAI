@@ -1,0 +1,22 @@
+# 云枢易馆 —— 生产部署编排
+# 用法：
+#   docker compose up -d --build     # 构建并后台启动
+#   docker compose logs -f           # 看日志
+#   docker compose down              # 停止
+#   docker compose up -d --build     # 改代码后重新部署
+services:
+  yunshu:
+    build: .
+    image: yunshu-ai:latest
+    container_name: yunshu-ai
+    restart: unless-stopped
+    ports:
+      - "80:3000" # 公网 80 端口 -> 容器内 3000；以后上 HTTPS 可改为 nginx/证书在前面
+    env_file:
+      - .env # DeepSeek / 智谱 / 缘份居 API key、JWT_SECRET 等
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_PATH=/app/data/yunshu.db # 覆盖 .env 里的相对路径，指向挂载卷
+    volumes:
+      - ./data:/app/data # SQLite 数据持久化到宿主机 ./data

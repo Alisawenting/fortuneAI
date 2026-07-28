@@ -1,0 +1,19 @@
+# 不要把这些拷进 Docker 构建上下文 / 镜像
+node_modules
+.output
+dist
+.git
+.tanstack
+.nitro
+.wrangler
+.vscode
+.idea
+*.log
+
+# 数据库用挂载卷持久化，不打进镜像
+data
+
+# 密钥不打进镜像，运行时通过 docker compose 的 env_file 注入
+.env
+.env.local
+.env.production
