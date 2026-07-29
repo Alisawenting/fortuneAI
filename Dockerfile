@@ -22,7 +22,7 @@ RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debia
 # 使用阿里云 npm 镜像加速（国内服务器必备）
 RUN npm config set registry https://registry.npmmirror.com
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install
 
 # 拷贝源码并构建（产出 .output/：服务端 .output/server/index.mjs、静态资源 .output/public）
 COPY . .
