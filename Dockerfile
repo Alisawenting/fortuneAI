@@ -11,8 +11,9 @@ FROM node:22-bookworm-slim
 
 WORKDIR /app
 
-# better-sqlite3 原生编译需要的工具链
-RUN apt-get update \
+# 替换为阿里云 Debian 源（国内服务器加速 apt）
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources \
+    && apt-get update \
     && apt-get install -y --no-install-recommends python3 make g++ ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
