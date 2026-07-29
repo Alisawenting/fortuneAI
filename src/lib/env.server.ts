@@ -46,9 +46,10 @@ export function getEnv(key: string, fallback?: string): string {
   throw new Error(`Missing required env var: ${key}`);
 }
 
+/** 缘份居 API 配置（可选 — 本地引擎已替代，仅作 fallback） */
 export function getYuanfenjuConfig() {
   return {
-    apiKey: getEnv("YUANFENJU_API_KEY", "TBaImZuWXetReYhUM3v8ERrdu"),
+    apiKey: getEnv("YUANFENJU_API_KEY", ""),
     apiBase: getEnv("YUANFENJU_API_BASE", "https://api.yuanfenju.com/index.php/v1/"),
   };
 }
