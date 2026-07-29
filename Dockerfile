@@ -18,6 +18,8 @@ RUN apt-get update \
 
 # 先装依赖，利用 Docker 层缓存（注意：此处不能设 NODE_ENV=production，
 # 否则 npm ci 会跳过构建所需的 devDependencies：vite / nitro / drizzle-kit / typescript）
+# 使用阿里云 npm 镜像加速（国内服务器必备）
+RUN npm config set registry https://registry.npmmirror.com
 COPY package.json package-lock.json ./
 RUN npm ci
 
