@@ -54,6 +54,7 @@
     "embla-carousel-react": "^8.6.0",
     "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
+    "iztro": "^2.5.8",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.575.0",
     "lunar-typescript": "^1.8.6",

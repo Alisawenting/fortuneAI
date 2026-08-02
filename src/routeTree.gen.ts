@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ZiweiChartRouteImport } from './routes/ziwei-chart'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReadingRouteImport } from './routes/reading'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -21,6 +22,11 @@ import { Route as BookmarksRouteImport } from './routes/bookmarks'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserNameRouteImport } from './routes/user.$name'
 
+const ZiweiChartRoute = ZiweiChartRouteImport.update({
+  id: '/ziwei-chart',
+  path: '/ziwei-chart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/reading': typeof ReadingRoute
   '/shop': typeof ShopRoute
+  '/ziwei-chart': typeof ZiweiChartRoute
   '/user/$name': typeof UserNameRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/reading': typeof ReadingRoute
   '/shop': typeof ShopRoute
+  '/ziwei-chart': typeof ZiweiChartRoute
   '/user/$name': typeof UserNameRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/reading': typeof ReadingRoute
   '/shop': typeof ShopRoute
+  '/ziwei-chart': typeof ZiweiChartRoute
   '/user/$name': typeof UserNameRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/reading'
     | '/shop'
+    | '/ziwei-chart'
     | '/user/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/reading'
     | '/shop'
+    | '/ziwei-chart'
     | '/user/$name'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/reading'
     | '/shop'
+    | '/ziwei-chart'
     | '/user/$name'
   fileRoutesById: FileRoutesById
 }
@@ -170,11 +182,19 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   ReadingRoute: typeof ReadingRoute
   ShopRoute: typeof ShopRoute
+  ZiweiChartRoute: typeof ZiweiChartRoute
   UserNameRoute: typeof UserNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ziwei-chart': {
+      id: '/ziwei-chart'
+      path: '/ziwei-chart'
+      fullPath: '/ziwei-chart'
+      preLoaderRoute: typeof ZiweiChartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shop': {
       id: '/shop'
       path: '/shop'
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   ReadingRoute: ReadingRoute,
   ShopRoute: ShopRoute,
+  ZiweiChartRoute: ZiweiChartRoute,
   UserNameRoute: UserNameRoute,
 }
 export const routeTree = rootRouteImport

@@ -4,7 +4,9 @@ import { Sparkles, Wand2, Compass, ChevronLeft, HelpCircle, UserPlus, Loader2, C
 import { useEffect, useState } from "react";
 import { addRole, readRoles, getActiveRole, AVATAR_OPTIONS, MAX_ROLES } from "@/lib/roles";
 import { calculateBazi } from "@/lib/api/yuanfenju.functions";
+import { calculateZiwei } from "@/lib/ziwei/ziwei.functions";
 import type { PaipanData } from "@/lib/api/yuanfenju.types";
+import type { ZiweiChartData } from "@/lib/ziwei/types";
 import { toast } from "sonner";
 
 // ===== 出生日期：公历/农历共用的选项与工具 =====
@@ -101,7 +103,38 @@ function DivinePage() {
     }
 
     if (type === "ziwei") {
-      toast("紫微斗数即将上线", { description: "目前仅支持八字排盘，紫微斗数功能开发中" });
+      setLoading(true);
+      try {
+        const result = await calculateZiwei({
+          data: {
+            name: displayName,
+            gender,
+            birthDate: date,
+            birthTime: time,
+            calendar,
+          },
+        });
+
+        if (!result.success) {
+          toast.error("紫微排盘失败", { description: result.error });
+          return;
+        }
+
+        // 缓存排盘结果
+        try { localStorage.setItem("yunshu:last-ziwei", JSON.stringify(result.data)); } catch { /* ignore */ }
+
+        navigate({
+          to: "/ziwei-chart",
+          state: {
+            chartData: result.data as ZiweiChartData,
+            formData: { gender, birthDate: date, birthTime: time, calendar },
+          } as any,
+        });
+      } catch (err) {
+        toast.error("网络错误", { description: (err as Error).message });
+      } finally {
+        setLoading(false);
+      }
       return;
     }
 

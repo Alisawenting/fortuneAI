@@ -37,3 +37,4 @@ dist-ssr
 *.sw?
 data/yunshu.db-shm
 data/yunshu.db-wal
+fortuneAI-v2.tar.gz
