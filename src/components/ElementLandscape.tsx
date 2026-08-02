@@ -198,16 +198,39 @@ export function ElementLandscape({ scores, sizhuStr, rizhu, zhengge, name }: Pro
       const dataUrl = await renderExportCanvas();
       if (dataUrl) {
         const blob = await (await fetch(dataUrl)).blob();
-        if (navigator.share && navigator.canShare?.({ files: [new File([blob], "landscape.png", { type: "image/png" })] })) {
-          await navigator.share({ title: "我的八字命理风景 · 云枢易馆", files: [new File([blob], "landscape.png", { type: "image/png" })] });
-          return;
+        const file = new File([blob], `云枢易馆_命理风景_${name}.png`, { type: "image/png" });
+        // 尝试 Web Share API（手机上支持 files 分享）
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: "我的八字命理风景 · 云枢易馆" });
+            return;
+          } catch (e) {
+            if ((e as Error).name === "AbortError") return;
+          }
         }
+        // 手机但 share 不支持 file → 下载
+        const link = document.createElement("a");
+        link.download = `云枢易馆_命理风景_${name}.png`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
-      // 回退：复制链接
-      await navigator.clipboard.writeText(aiImageUrl);
-      toast("AI 风景图链接已复制");
+      // 兜底：下载 + 复制文案
+      if (!dataUrl) {
+        const link = document.createElement("a");
+        link.download = `云枢易馆_命理风景_原图_${name}.png`;
+        link.href = aiImageUrl;
+        link.click();
+      }
+      try {
+        await navigator.clipboard.writeText("古法藏枢机，AI 解流年 —— 这是我的八字命理风景图，来自「云枢易馆」");
+        toast.success("图片已下载 + 分享文案已复制", { description: "可直接粘贴到微信发送给好友" });
+      } catch {
+        toast.success("图片已下载", { description: "可长按图片发送给好友" });
+      }
     } catch {
-      toast("分享暂不可用，请保存后分享");
+      toast("分享暂不可用，请先保存图片后再手动分享");
     }
   };
 

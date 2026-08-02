@@ -290,46 +290,74 @@ export function FateChart({ paipanData, formData }: FateChartProps) {
   ];
 
   const onSave = async () => {
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
     try {
       const { default: html2canvas } = await import("html2canvas");
-      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2 });
+      const canvas = await html2canvas(el, {
+        backgroundColor: "#1a1530",
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+      });
+      const dataUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = `云枢易馆_八字命理图_${displayName}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = dataUrl;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       toast.success("命理图已保存", { description: "PNG 图片已下载到本地" });
-    } catch {
-      toast.error("保存失败", { description: "请稍后重试" });
+    } catch (e) {
+      console.error("FateChart save error:", e);
+      toast.error("保存失败", { description: (e as Error).message?.slice(0, 30) || "请稍后重试" });
     }
   };
+
   const onShare = async () => {
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
     try {
       const { default: html2canvas } = await import("html2canvas");
-      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2 });
+      const canvas = await html2canvas(el, {
+        backgroundColor: "#1a1530",
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+      });
+      const dataUrl = canvas.toDataURL("image/png");
       const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, "image/png"));
-      if (!blob) { toast.error("生成图片失败"); return; }
+      if (!blob) throw new Error("图片生成失败");
+
       const file = new File([blob], `云枢易馆_八字命理图_${displayName}.png`, { type: "image/png" });
+
+      // 尝试 Web Share API（手机上能用 files 分享）
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title: "我的八字命理图 · 云枢易馆", text: "古法藏枢机，AI 解流年", files: [file] });
-      } else {
-        const link = document.createElement("a");
-        link.download = `云枢易馆_八字命理图_${displayName}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        toast("已下载到本地", { description: "可手动分享给好友" });
+        try {
+          await navigator.share({ files: [file], title: "我的八字命理图 · 云枢易馆" });
+          return;
+        } catch (e) {
+          if ((e as Error).name === "AbortError") return; // 用户取消
+        }
+      }
+
+      // 回退：先下载，再复制一段分享文案
+      const link = document.createElement("a");
+      link.download = `云枢易馆_八字命理图_${displayName}.png`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      try {
+        await navigator.clipboard.writeText("古法藏枢机，AI 解流年 —— 这是我的八字命理图，来自「云枢易馆」");
+        toast.success("图片已下载 + 分享文案已复制", { description: "可直接粘贴到微信发送给好友" });
+      } catch {
+        toast.success("图片已下载", { description: "可长按图片发送给好友" });
       }
     } catch (e) {
-      if ((e as Error).name !== "AbortError") {
-        const { default: html2canvas } = await import("html2canvas");
-        const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2 });
-        const link = document.createElement("a");
-        link.download = `云枢易馆_八字命理图_${displayName}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        toast("已下载到本地", { description: "可手动分享给好友" });
-      }
+      console.error("FateChart share error:", e);
+      toast.error("分享失败", { description: (e as Error).message?.slice(0, 30) || "请稍后重试" });
     }
   };
 
@@ -345,7 +373,7 @@ export function FateChart({ paipanData, formData }: FateChartProps) {
         className="relative overflow-hidden rounded-3xl p-5 text-white shadow-floating"
         style={{
           background:
-            "linear-gradient(160deg, oklch(0.28 0.05 280) 0%, oklch(0.22 0.04 260) 50%, oklch(0.18 0.06 30) 100%)",
+            "linear-gradient(160deg, #2d1a4e 0%, #171f3a 50%, #3a1a08 100%)",
         }}
       >
         {/* 装饰云纹 */}
@@ -382,13 +410,13 @@ export function FateChart({ paipanData, formData }: FateChartProps) {
                   .map((p) => {
                     const gInfo = GAN_WUXING[p.tg] || { color: "#f4d58a" };
                     return (
-                      <div key={p.l} className="rounded-xl border border-white/10 bg-white/5 py-2 text-center backdrop-blur-sm">
+                      <div key={p.l} className="rounded-xl border border-white/10 bg-white/10 py-2 text-center">
                         <p className="font-serif-cn text-xl font-bold" style={{ color: gInfo.color }}>{p.tg}</p>
                       </div>
                     );
                   })
                 : ["—","—","—","—"].map((x, i) => (
-                    <div key={i} className="rounded-xl border border-white/10 bg-white/5 py-2 text-center backdrop-blur-sm">
+                    <div key={i} className="rounded-xl border border-white/10 bg-white/10 py-2 text-center">
                       <p className="font-serif-cn text-xl" style={{ color: "#f4d58a" }}>{x}</p>
                     </div>
                   ))
@@ -401,13 +429,13 @@ export function FateChart({ paipanData, formData }: FateChartProps) {
                   .map((p) => {
                     const zInfo = ZHI_WUXING[p.dz] || { color: "#e0e0e0" };
                     return (
-                      <div key={p.l} className="rounded-xl border border-white/10 bg-white/5 py-1.5 text-center backdrop-blur-sm">
+                      <div key={p.l} className="rounded-xl border border-white/10 bg-white/10 py-1.5 text-center">
                         <p className="font-serif-cn text-lg font-bold" style={{ color: zInfo.color }}>{p.dz}</p>
                       </div>
                     );
                   })
                 : ["—","—","—","—"].map((x, i) => (
-                    <div key={i} className="rounded-xl border border-white/10 bg-white/5 py-1.5 text-center backdrop-blur-sm">
+                    <div key={i} className="rounded-xl border border-white/10 bg-white/10 py-1.5 text-center">
                       <p className="font-serif-cn text-lg">{x}</p>
                     </div>
                   ))
@@ -432,7 +460,7 @@ export function FateChart({ paipanData, formData }: FateChartProps) {
             ))}
           </div>
 
-          <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-3 text-[11px] leading-5 backdrop-blur-sm">
+          <div className="mt-5 rounded-2xl border border-white/10 bg-white/10 p-3 text-[11px] leading-5">
             <p className="opacity-80">
               日元 {sizhu ? `${sizhu.day.tg}${sizhu.day.dz}` : "—"}
             </p>
