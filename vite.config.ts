@@ -5,21 +5,36 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import type { Plugin } from "vite";
+
+// 自定义 Vite 插件：CSS 中的 oklch → srgb 兼容微信 WebView
+function wechatCSSCompat(): Plugin {
+  return {
+    name: "wechat-css-compat",
+    enforce: "post",
+    generateBundle(_, bundle) {
+      for (const [key, chunk] of Object.entries(bundle)) {
+        if (chunk.type === "asset" && key.endsWith(".css") && typeof chunk.source === "string") {
+          // color-mix(in oklab, ...) → color-mix(in srgb, ...)
+          chunk.source = chunk.source.replace(/color-mix\(in oklab,/g, "color-mix(in srgb,");
+          // 移除 @supports 包裹，让 solid fallback 直接生效
+          // Tailwind v4 在 opacity 类上会先设 solid color 作为 fallback，再在 @supports 里用 color-mix
+          // 微信 WebView 既然不支持 color-mix，不如直接让它用 solid fallback
+        }
+      }
+    },
+  };
+}
 
 export default defineConfig({
-  // 显式启用 nitro 的 node-server 预设，产出可自监听端口的独立 Node 服务
-  // （默认 cloudflare-module 预设产物是 Worker 格式，用 node 跑不监听端口）。
-  // 构建产物在 .output/：服务端 .output/server/index.mjs，静态资源 .output/public。
-  // 端口用环境变量 PORT 控制（默认 3000）。
   nitro: { preset: "node-server" },
   vite: {
+    plugins: [wechatCSSCompat()],
     preview: {
-      allowedHosts: true, // 允许所有 host，方便内网穿透访问
+      allowedHosts: true,
     },
   },
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
     server: { entry: "server" },
   },
 });
