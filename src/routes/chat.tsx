@@ -4,7 +4,7 @@ import { Mic, Send, Sparkles, Loader2, ChevronLeft } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { sendChatMessage } from "@/lib/api/chat.functions";
 import { calculateBazi } from "@/lib/api/yuanfenju.functions";
-import { getActiveRole } from "@/lib/roles";
+import { getActiveRole, readRoles, setActiveRoleId, readActiveRoleId, ROLE_CHANGE_EVENT, type Role } from "@/lib/roles";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { MarkdownText } from "@/lib/utils";
 import { toast } from "sonner";
@@ -18,17 +18,94 @@ export const Route = createFileRoute("/chat")({
 interface Msg { id: string; role: "user" | "ai"; content: string; }
 
 function ChatPage() {
-  const role = typeof window !== "undefined" ? getActiveRole() : null;
+  const initialRole = typeof window !== "undefined" ? getActiveRole() : null;
+  const [role, setRole] = useState<Role | null>(initialRole);
+  const [roles, setRoles] = useState<Role[]>(typeof window !== "undefined" ? readRoles() : []);
+  const [roleOpen, setRoleOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { id: "w", role: "ai", content: role
-      ? `你好！我已加载「${role.name}」的命盘（${role.gender}·${role.birthDate}）。正在获取八字数据...`
+    { id: "w", role: "ai", content: initialRole
+      ? `你好！我已加载「${initialRole.name}」的命盘（${initialRole.gender}·${initialRole.birthDate}）。正在获取八字数据...`
       : "你好！我是云枢易馆的 AI 命理师「枢机」。请先在测算页面录入生辰，我就能结合命盘为你解读。" }
   ]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [baziCtx, setBaziCtx] = useState<Record<string, string>>({});
-  const [baziLoading, setBaziLoading] = useState(!!role);
+  const [baziLoading, setBaziLoading] = useState(!!initialRole);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // 加载指定角色的八字数据
+  const loadRoleBazi = useCallback(async (r: Role) => {
+    setBaziLoading(true);
+    const ctx: Record<string, string> = { name: r.name, sex: r.gender === "男" ? "乾造" : "坤造", birthDate: r.birthDate, birthTime: r.birthTime };
+
+    try {
+      const cached = localStorage.getItem("yunshu:last-paipan");
+      let hasCached = false;
+      if (cached) {
+        const p = JSON.parse(cached) as PaipanData;
+        if (p.detail_info?.sizhu && p.base_info?.name === r.name) {
+          const s = p.detail_info.sizhu;
+          ctx.sizhu = `${s.year.tg}${s.year.dz} ${s.month.tg}${s.month.dz} ${s.day.tg}${s.day.dz} ${s.hour.tg}${s.hour.dz}`;
+          if (p.base_info?.zhengge) ctx.zhengge = p.base_info.zhengge;
+          if (p.base_info?.qiyun) ctx.qiyun = p.base_info.qiyun;
+          if (p.detail_info?.sizhu?.day) ctx.rizhu = `${p.detail_info.sizhu.day.tg}${p.detail_info.sizhu.day.dz}日元`;
+          const currentYear = new Date().getFullYear();
+          const idx = (p.dayun_info?.big_start_year || []).findIndex(
+            (y: number) => y <= currentYear && ((p.dayun_info.big_end_year || [])[p.dayun_info.big_start_year.indexOf(y)] || 9999) >= currentYear
+          );
+          if (idx >= 0) ctx.currentDayun = `当前大运：${p.dayun_info.big[idx]}（${p.dayun_info.big_god?.[idx] || ""}）`;
+          hasCached = true;
+        }
+      }
+      const cesuanCached = localStorage.getItem("yunshu:last-cesuan");
+      if (cesuanCached) {
+        const c = JSON.parse(cesuanCached);
+        if (c.xiyongshen?.xiyongshen) ctx.xiyongshen = c.xiyongshen.xiyongshen;
+        if (c.wuxing?.simple_desc) ctx.wuxing = c.wuxing.simple_desc;
+      }
+
+      if (!hasCached) {
+        const result = await calculateBazi({ data: { name: r.name || "用户", gender: r.gender, birthDate: r.birthDate, birthTime: r.birthTime, calendar: r.calendar || "公历" } });
+        if (result.success && result.data) {
+          const p = result.data;
+          try { localStorage.setItem("yunshu:last-paipan", JSON.stringify(p)); } catch { /* */ }
+          if (p.detail_info?.sizhu) {
+            const s = p.detail_info.sizhu;
+            ctx.sizhu = `${s.year.tg}${s.year.dz} ${s.month.tg}${s.month.dz} ${s.day.tg}${s.day.dz} ${s.hour.tg}${s.hour.dz}`;
+          }
+          if (p.base_info?.zhengge) ctx.zhengge = p.base_info.zhengge;
+          if (p.base_info?.qiyun) ctx.qiyun = p.base_info.qiyun;
+          if (p.detail_info?.sizhu?.day) ctx.rizhu = `${p.detail_info.sizhu.day.tg}${p.detail_info.sizhu.day.dz}日元`;
+        }
+      }
+    } catch { /* */ }
+
+    setBaziCtx(ctx);
+    setBaziLoading(false);
+    setMessages([{ id: "w", role: "ai", content: `已切换到「${r.name}」的命盘（${r.gender}·${r.birthDate}）。\n八字：${ctx.sizhu || "已加载"}\n格局：${ctx.zhengge || "待分析"}\n\n有什么想了解的？` }]);
+  }, []);
+
+  const switchRole = useCallback((r: Role) => {
+    setRole(r);
+    setActiveRoleId(r.id);
+    setRoleOpen(false);
+    loadRoleBazi(r);
+    toast(`已切换到 ${r.name} 的命盘`);
+  }, [loadRoleBazi]);
+
+  // 监听角色变更事件
+  useEffect(() => {
+    const handler = () => {
+      setRoles(readRoles());
+      const active = getActiveRole();
+      if (active && active.id !== role?.id) {
+        setRole(active);
+        loadRoleBazi(active);
+      }
+    };
+    window.addEventListener(ROLE_CHANGE_EVENT, handler);
+    return () => window.removeEventListener(ROLE_CHANGE_EVENT, handler);
+  }, [role, loadRoleBazi]);
 
   // 首次加载时构建八字上下文 — 优先缓存，无缓存则主动请求 API
   useEffect(() => {
@@ -156,15 +233,38 @@ function ChatPage() {
 
   return (
     <MobileShell hideNav>
-      <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-border/60 bg-card/90 px-5 py-3 backdrop-blur-xl">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Sparkles className="h-5 w-5" /></div>
-        <div className="flex-1">
-          <p className="font-serif-cn text-sm font-medium">枢机 · AI 命理师</p>
-          <p className="text-[11px] text-muted-foreground">
-            {baziLoading ? `正在加载「${role?.name}」命盘...` : (role ? `已绑定 · ${role.name}${baziCtx.sizhu ? " · 八字已加载" : ""}` : "通用模式 · 未绑定命盘")}
-          </p>
+      <header className="sticky top-0 z-10 border-b border-border/60 bg-card/90 px-5 py-3 backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Sparkles className="h-5 w-5" /></div>
+          <div className="flex-1">
+            <p className="font-serif-cn text-sm font-medium">枢机 · AI 命理师</p>
+            <p className="text-[11px] text-muted-foreground">
+              {baziLoading ? `正在加载「${role?.name}」命盘...` : (role ? `已绑定 · ${role.name}${baziCtx.sizhu ? " · 八字已加载" : ""}` : "通用模式 · 未绑定命盘")}
+            </p>
+          </div>
+          <Link to="/" className="text-muted-foreground"><ChevronLeft className="h-5 w-5" /></Link>
         </div>
-        <Link to="/" className="text-muted-foreground"><ChevronLeft className="h-5 w-5" /></Link>
+        {/* 角色切换 */}
+        {roles.length > 0 && (
+          <div className="mt-2 flex gap-1.5 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
+            {roles.map((r) => (
+              <button
+                key={r.id}
+                onClick={() => role?.id !== r.id && switchRole(r)}
+                className={`shrink-0 rounded-full px-3 py-1 text-[11px] transition ${
+                  r.id === role?.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"
+                }`}
+              >
+                {r.avatar || ""} {r.name}
+              </button>
+            ))}
+            {roles.length < 5 && (
+              <Link to="/divine" className="shrink-0 rounded-full border border-dashed border-primary/40 px-3 py-1 text-[11px] text-primary">
+                + 新增
+              </Link>
+            )}
+          </div>
+        )}
       </header>
 
       <div className="flex-1 space-y-4 px-5 py-5 pb-28" ref={listRef}>

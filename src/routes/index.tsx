@@ -19,7 +19,7 @@ import {
 } from "@/lib/roles";
 import { getDailyFortune, calculateBazi } from "@/lib/api/yuanfenju.functions";
 import type { YunshiData, PaipanData } from "@/lib/api/yuanfenju.types";
-import { analyzeFortune, type FortuneAnalysisResult } from "@/lib/api/fortune-analysis.functions";
+import { analyzeFortune, analyzeDayunDetail, type FortuneAnalysisResult } from "@/lib/api/fortune-analysis.functions";
 import { MarkdownText } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -80,6 +80,34 @@ function HomePage() {
   const [liunianList, setLiunianList] = useState<{ year: string; gz: string }[]>([]);
   const [aiAnalysis, setAiAnalysis] = useState<FortuneAnalysisResult | null>(null);
   const [aiAnalysisLoading, setAiAnalysisLoading] = useState(false);
+  const [dayunDialogOpen, setDayunDialogOpen] = useState(false);
+  const [dayunDialogData, setDayunDialogData] = useState<{ gz: string; god: string; age: string } | null>(null);
+  const [dayunAnalysisText, setDayunAnalysisText] = useState("");
+  const [dayunAnalysisLoading, setDayunAnalysisLoading] = useState(false);
+
+  const handleDayunClick = async (gz: string, god: string, age: string) => {
+    setDayunDialogData({ gz, god, age });
+    setDayunDialogOpen(true);
+    setDayunAnalysisText("");
+    setDayunAnalysisLoading(true);
+    const bsi = paipanData?.base_info;
+    const di = paipanData?.detail_info;
+    const sizhu = di?.sizhu;
+    const sizhuStr = sizhu ? `${sizhu.year.tg}${sizhu.year.dz} ${sizhu.month.tg}${sizhu.month.dz} ${sizhu.day.tg}${sizhu.day.dz} ${sizhu.hour.tg}${sizhu.hour.dz}` : "";
+    const cesuanCache = (() => { try { const c = localStorage.getItem("yunshu:last-cesuan"); return c ? JSON.parse(c) : null; } catch { return null; } })();
+    try {
+      const r = await analyzeDayunDetail({
+        data: {
+          name: activeRole?.name || "用户", gender: activeRole?.gender || "",
+          dayunGz: gz, dayunGod: god, ageRange: age,
+          rizhu: sizhu ? `${sizhu.day.tg}${sizhu.day.dz}日元` : "",
+          zhengge: bsi?.zhengge || "", xiyongshen: cesuanCache?.xiyongshen?.xiyongshen || "", sizhu: sizhuStr,
+        },
+      });
+      if (r.success) setDayunAnalysisText(r.analysis);
+    } catch { setDayunAnalysisText("网络错误"); }
+    setDayunAnalysisLoading(false);
+  };
 
   // 打卡初始化
   useEffect(() => {
@@ -204,16 +232,19 @@ function HomePage() {
     });
     setDayunList(dayuns.slice(0, 8));
 
-    // 提取流年列表
+    // 提取流年列表 — 解析增强后的 year_char: "2026年（丙午·正财）"
     const currentDayunIdx = dayuns.findIndex((d) => d.current);
     const liunianKey = `years_info${currentDayunIdx >= 0 ? currentDayunIdx : 0}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const liunianData = (dyi as any)[liunianKey] as { year_char: string }[] | undefined;
     if (liunianData && liunianData.length > 0) {
-      const lns = liunianData.slice(0, 5).map((y) => ({
-        year: y.year_char.replace("年", ""),
-        gz: y.year_char,
-      }));
+      const lns = liunianData.slice(0, 6).map((y) => {
+        const yearMatch = y.year_char.match(/^(\d+)年（(.+?)·(.+?)）$/);
+        return {
+          year: yearMatch ? yearMatch[1] : y.year_char.replace("年", ""),
+          gz: yearMatch ? `${yearMatch[1]}年（${yearMatch[2]}·${yearMatch[3]}）` : y.year_char,
+        };
+      });
       setLiunianList(lns);
     }
   }
@@ -665,17 +696,28 @@ function HomePage() {
             <ul className="space-y-1 text-sm">
               {liunianList.map((ln, i) => {
                 const isCurrentYear = ln.year.includes(String(new Date().getFullYear()));
+                const gzMatch = ln.gz.match(/（(.+?)·(.+?)）$/);
+                const ganzhi = gzMatch ? gzMatch[1] : "";
+                const shishen = gzMatch ? gzMatch[2] : "";
+                const hints: Record<string, string> = {
+                  "比肩": "同辈助力，宜合作共赢", "劫财": "人际活跃，谨防破财",
+                  "食神": "创意迸发，宜学新技能", "伤官": "才思敏捷，注意口舌",
+                  "正财": "正财运佳，稳定增长", "偏财": "偏财运旺，机遇与风险并存",
+                  "正官": "事业上升，适合晋升", "七杀": "挑战与机遇并存，突破自我",
+                  "正印": "贵人运强，宜进修", "偏印": "深耕专业，独立思考",
+                };
+                const hint = shishen ? (hints[shishen] || "运势流转，顺势而为") : "";
                 return (
                   <li key={ln.gz} className={`flex items-start gap-3 rounded-xl p-2 -mx-2 ${isCurrentYear ? "bg-primary/5" : ""}`}>
                     <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isCurrentYear ? "bg-primary" : "bg-accent"}`} />
                     <div className="flex-1">
                       <p className="flex items-center gap-2">
-                        <span className="font-medium">{ln.gz}</span>
+                        <span className="font-medium">{ln.year}年</span>
+                        {ganzhi && <span className="text-[11px] text-muted-foreground">{ganzhi}</span>}
+                        {shishen && <span className="text-[10px] text-primary/70">{shishen}</span>}
                         {isCurrentYear && <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] text-primary">当前</span>}
                       </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {isCurrentYear ? "今年流年，宜顺势而为，把握机遇" : `流年 ${ln.gz}，运势流转`}
-                      </p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
                     </div>
                   </li>
                 );
@@ -715,19 +757,20 @@ function HomePage() {
           {/* 附近大运速览 */}
           {dayunList.length > 0 && (
             <div className="mt-3 pt-3 border-t border-border/40">
-              <p className="text-[11px] text-muted-foreground mb-2">一生大运排布</p>
+              <p className="text-[11px] text-muted-foreground mb-2">一生大运排布（点击查看详解）</p>
               <div className="flex gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
                 {dayunList.map((d) => (
-                  <div
+                  <button
                     key={d.age}
-                    className={`min-w-[5.5rem] shrink-0 rounded-xl border px-2.5 py-2 text-center ${
-                      d.current ? "border-primary bg-primary/5" : "border-border/60 bg-card"
+                    onClick={() => handleDayunClick(d.gz, d.note, d.age)}
+                    className={`min-w-[5.5rem] shrink-0 rounded-xl border px-2.5 py-2 text-center transition active:scale-95 ${
+                      d.current ? "border-primary bg-primary/5 hover:bg-primary/10" : "border-border/60 bg-card hover:bg-muted/50"
                     }`}
                   >
                     <p className="text-[10px] text-muted-foreground">{d.age}岁</p>
                     <p className={`font-serif-cn text-sm ${d.current ? "text-primary" : ""}`}>{d.gz}</p>
                     <p className="text-[10px] text-muted-foreground truncate">{d.note}</p>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -797,6 +840,30 @@ function HomePage() {
                   "情绪": yunshiData.yunshi_info.health_description,
                 }[openFortune] || activeFortune?.detail
               : activeFortune?.detail}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* 大运详解弹窗 */}
+      <Dialog open={dayunDialogOpen} onOpenChange={setDayunDialogOpen}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="font-serif-cn text-center">
+              {dayunDialogData?.age}岁 · 大运「{dayunDialogData?.gz}」
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              {dayunDialogData?.god && <span className="text-primary">{dayunDialogData.god}</span>}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-2 text-sm leading-7 text-foreground/85 max-h-80 overflow-y-auto">
+            {dayunAnalysisLoading ? (
+              <div className="flex flex-col items-center py-6">
+                <Loader2 className="h-6 w-6 animate-spin text-primary mb-2" />
+                <p className="text-xs text-muted-foreground">AI 正在解读这段大运...</p>
+              </div>
+            ) : (
+              <p className="whitespace-pre-line">{dayunAnalysisText || "暂无法获取分析"}</p>
+            )}
           </div>
         </DialogContent>
       </Dialog>

@@ -166,13 +166,19 @@ export function computePaipan(input: BaziInput): PaipanData {
     big_god.push(shiShenInfo);
   }
 
-  // 流年 (第一个大运的流年)
+  // 流年 (每个大运各10年，包含干支)
   const yearsInfoMap: Record<string, { year_char: string }[]> = {};
-  for (let i = 0; i < Math.min(9, dayuns.length); i++) {
+  for (let i = 0; i < Math.min(10, dayuns.length); i++) {
     const liuNians = dayuns[i].getLiuNian(10);
-    yearsInfoMap[`years_info${i}`] = liuNians.map((ln) => ({
-      year_char: `${ln.getYear()}年`,
-    }));
+    const dyGan = dayuns[i].getGanZhi()[0];
+    yearsInfoMap[`years_info${i}`] = liuNians.map((ln) => {
+      const lnGz = ln.getGanZhi();
+      const lnGan = lnGz[0];
+      const lnDesc = getShiShenForGanZhi(rizhuGan, lnGan);
+      return {
+        year_char: `${ln.getYear()}年（${lnGz}·${lnDesc}）`,
+      };
+    });
   }
 
   const firstDayunLiunian = dayuns[0]?.getLiuNian(1)?.[0];

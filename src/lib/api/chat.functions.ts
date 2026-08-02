@@ -46,8 +46,11 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     message: z.string().min(1),
     history: z.array(z.object({ role: z.string(), content: z.string() })).default([]),
     baziContext: z.object({
-      sex: z.string().default(""), birthDate: z.string().default(""),
-      sizhu: z.string().default(""), zhengge: z.string().default(""),
+      name: z.string().default(""), sex: z.string().default(""),
+      birthDate: z.string().default(""), birthTime: z.string().default(""),
+      sizhu: z.string().default(""), rizhu: z.string().default(""),
+      zhengge: z.string().default(""), qiyun: z.string().default(""),
+      currentDayun: z.string().default(""),
       xiyongshen: z.string().default(""), wuxing: z.string().default(""),
     }).default({}),
   }))

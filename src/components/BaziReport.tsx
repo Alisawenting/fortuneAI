@@ -151,7 +151,7 @@ export function FullAnalysis({ paipanData }: FullAnalysisProps) {
         <div>
           <p className="font-serif-cn text-base font-medium">AI 八字深度分析报告</p>
           <p className="text-[11px] text-muted-foreground">
-            {loading ? "DeepSeek 正在分析命盘..." : report ? "基于八字排盘 · AI 通俗解读" : error ? "AI 分析暂不可用" : "准备中..."}
+            {loading ? "AI 正在分析命盘..." : report ? "基于八字排盘 · AI 通俗解读" : error ? "AI 分析暂不可用" : "准备中..."}
           </p>
         </div>
       </div>
@@ -195,7 +195,7 @@ export function FullAnalysis({ paipanData }: FullAnalysisProps) {
       )}
 
       <div className="mt-4 rounded-2xl bg-secondary/60 p-3 text-[11px] leading-5 text-muted-foreground">
-        💡 AI 分析由 DeepSeek 基于八字排盘数据生成，用通俗语言解读。如需追问，可前往{" "}
+        💡 AI 分析由大语言模型基于八字排盘数据生成，用通俗语言解读。如需追问，可前往{" "}
         <Link to="/chat" className="text-primary">咨询枢机</Link>。
       </div>
     </section>
@@ -289,14 +289,47 @@ export function FateChart({ paipanData, formData }: FateChartProps) {
     { n: "水", v: 10, c: "#6a9bd1" },
   ];
 
-  const onSave = () => {
-    toast.success("命理图已保存到相册", { description: "（演示）已生成 1080×1920 海报" });
+  const onSave = async () => {
+    if (!ref.current) return;
+    try {
+      const { default: html2canvas } = await import("html2canvas");
+      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2 });
+      const link = document.createElement("a");
+      link.download = `云枢易馆_八字命理图_${displayName}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      toast.success("命理图已保存", { description: "PNG 图片已下载到本地" });
+    } catch {
+      toast.error("保存失败", { description: "请稍后重试" });
+    }
   };
-  const onShare = () => {
-    if (navigator.share) {
-      navigator.share({ title: "我的八字命理图 · 云枢易馆", text: "古法藏枢机，AI 解流年" }).catch(() => {});
-    } else {
-      toast("分享链接已复制", { description: "可粘贴到微信 / 朋友圈" });
+  const onShare = async () => {
+    if (!ref.current) return;
+    try {
+      const { default: html2canvas } = await import("html2canvas");
+      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2 });
+      const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, "image/png"));
+      if (!blob) { toast.error("生成图片失败"); return; }
+      const file = new File([blob], `云枢易馆_八字命理图_${displayName}.png`, { type: "image/png" });
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ title: "我的八字命理图 · 云枢易馆", text: "古法藏枢机，AI 解流年", files: [file] });
+      } else {
+        const link = document.createElement("a");
+        link.download = `云枢易馆_八字命理图_${displayName}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        toast("已下载到本地", { description: "可手动分享给好友" });
+      }
+    } catch (e) {
+      if ((e as Error).name !== "AbortError") {
+        const { default: html2canvas } = await import("html2canvas");
+        const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2 });
+        const link = document.createElement("a");
+        link.download = `云枢易馆_八字命理图_${displayName}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        toast("已下载到本地", { description: "可手动分享给好友" });
+      }
     }
   };
 

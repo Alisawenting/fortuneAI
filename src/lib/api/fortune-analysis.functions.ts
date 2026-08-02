@@ -171,3 +171,54 @@ function parseAnalysisReply(text: string): FortuneAnalysisResult {
 
   return { dailyComment, dayunAnalysis, liunianHint, careerHint, wealthHint, loveHint, healthHint, luckyAdvice };
 }
+
+// ── 单个大运详细解读 ──
+
+export const analyzeDayunDetail = createServerFn({ method: "POST" })
+  .inputValidator(z.object({
+    name: z.string().default("用户"),
+    gender: z.string(),
+    dayunGz: z.string(),          // 大运干支
+    dayunGod: z.string(),         // 大运十神
+    ageRange: z.string(),         // 年龄范围
+    rizhu: z.string(),            // 日柱
+    zhengge: z.string(),          // 格局
+    xiyongshen: z.string(),       // 喜用神
+    sizhu: z.string(),            // 四柱
+  }))
+  .handler(async ({ data }) => {
+    try {
+      const prompt = `你是"云枢易馆"的AI命理师"枢机"。请为以下用户解读其人生的一个十年大运阶段。
+
+📋 基本信息
+- 称呼：${data.name}（${data.gender}）
+- 四柱：${data.sizhu}
+- 日柱：${data.rizhu}
+- 格局：${data.zhengge}
+- 喜用神：${data.xiyongshen}
+
+📅 本阶段大运
+- 年龄：${data.ageRange}
+- 干支：${data.dayunGz}
+- 十神：${data.dayunGod}
+
+请用通俗易懂的语言（150-200字），像朋友聊天一样解读这段大运。要点：
+1. 这个十年的人生主题是什么
+2. 事业/财运/情感方面的特点
+3. 需要注意什么、如何把握
+4. 语气温暖积极，避免吓人的说法`;
+
+      const config = getConfig();
+      const res = await fetch(`${config.apiBase}/chat/completions`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${config.apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "deepseek-chat", messages: [{ role: "user", content: prompt }], temperature: 0.7, max_tokens: 400 }),
+      });
+      if (!res.ok) throw new Error(`DeepSeek ${res.status}`);
+      const json = await res.json() as { choices?: { message?: { content?: string } }[] };
+      const reply = json.choices?.[0]?.message?.content || "";
+      return { success: true as const, analysis: reply };
+    } catch (e) {
+      return { success: false as const, error: (e as Error).message };
+    }
+  });

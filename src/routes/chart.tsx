@@ -4,10 +4,14 @@ import { MobileShell } from "@/components/MobileShell";
 import { FullAnalysis, FateChart } from "@/components/BaziReport";
 import { ElementLandscape } from "@/components/ElementLandscape";
 import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
+} from "@/components/ui/dialog";
+import {
   ChevronLeft, Bookmark, Sparkles, Briefcase, Coins,
-  HeartHandshake, Activity, ShoppingBag,
+  HeartHandshake, Activity, ShoppingBag, Loader2,
 } from "lucide-react";
 import type { PaipanData, CesuanData } from "@/lib/api/yuanfenju.types";
+import { analyzeDayunDetail } from "@/lib/api/fortune-analysis.functions";
 
 export const Route = createFileRoute("/chart")({
   head: () => ({
@@ -212,6 +216,45 @@ function computeElementScores(paipanData: PaipanData): { wood: number; fire: num
 
 function ChartPage() {
   const [tab, setTab] = useState<"basic" | "pro">("basic");
+  const [dayunDialogOpen, setDayunDialogOpen] = useState(false);
+  const [dayunDialogData, setDayunDialogData] = useState<{ gz: string; god: string; age: string } | null>(null);
+  const [dayunAnalysis, setDayunAnalysis] = useState("");
+  const [dayunLoading, setDayunLoading] = useState(false);
+
+  const handleDayunClick = async (gz: string, god: string, age: string) => {
+    setDayunDialogData({ gz, god, age });
+    setDayunDialogOpen(true);
+    setDayunAnalysis("");
+    setDayunLoading(true);
+
+    const di = paipanData?.detail_info;
+    const bsi = paipanData?.base_info;
+    const sizhu = di?.sizhu;
+    const sizhuStr = sizhu ? `${sizhu.year.tg}${sizhu.year.dz} ${sizhu.month.tg}${sizhu.month.dz} ${sizhu.day.tg}${sizhu.day.dz} ${sizhu.hour.tg}${sizhu.hour.dz}` : "";
+    const cesuanCache = (() => { try { const c = localStorage.getItem("yunshu:last-cesuan"); return c ? JSON.parse(c) : null; } catch { return null; } })();
+
+    try {
+      const r = await analyzeDayunDetail({
+        data: {
+          name: bsi?.name || "用户",
+          gender: bsi?.sex || "",
+          dayunGz: gz,
+          dayunGod: god,
+          ageRange: age,
+          rizhu: sizhu ? `${sizhu.day.tg}${sizhu.day.dz}日元` : "",
+          zhengge: bsi?.zhengge || "",
+          xiyongshen: cesuanCache?.xiyongshen?.xiyongshen || "",
+          sizhu: sizhuStr,
+        },
+      });
+      if (r.success) setDayunAnalysis(r.analysis);
+      else setDayunAnalysis("AI 分析暂不可用");
+    } catch {
+      setDayunAnalysis("网络错误，请稍后重试");
+    } finally {
+      setDayunLoading(false);
+    }
+  };
 
   // 从 router state 读取排盘数据，回退到 localStorage
   const locationState = useRouterState({
@@ -282,7 +325,7 @@ function ChartPage() {
     hot: i === 2 || i === 3,
   })).slice(0, 6);
 
-  // 流年数据
+  // 流年数据 — 解析增强后的 year_char: "2026年（丙午·正财）"
   const currentYear = new Date().getFullYear();
   const currentDayunIdx = dyi.big_start_year
     ? dyi.big_start_year.findIndex((y: number) => y <= currentYear && (dyi.big_end_year?.[dyi.big_start_year.indexOf(y)] || 9999) >= currentYear)
@@ -291,11 +334,37 @@ function ChartPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const liunianData = (dyi as any)[liunianKey] as { year_char: string }[] | undefined;
 
-  const liunian = (liunianData || []).slice(0, 3).map((y) => ({
-    year: y.year_char,
-    luck: "中吉",
-    text: "",
-  }));
+  const liunian = (liunianData || []).slice(0, 6).map((y) => {
+    const yearMatch = y.year_char.match(/^(\d+)年（(.+?)·(.+?)）$/);
+    const yearNum = yearMatch ? parseInt(yearMatch[1]) : 0;
+    const ganzhi = yearMatch ? yearMatch[2] : "";
+    const desc = yearMatch ? yearMatch[3] : "";
+    const isCurrent = yearNum === currentYear;
+    return {
+      year: yearMatch ? `${yearNum}年` : y.year_char,
+      ganzhi,
+      luck: isCurrent ? "当前" : (desc || "流年"),
+      text: yearMatch
+        ? `${yearNum}年流年「${ganzhi}」· 十神「${desc}」。${getLiunianHint(desc, ganzhi)}`
+        : "",
+    };
+  });
+
+  function getLiunianHint(desc: string, gz: string): string {
+    const hints: Record<string, string> = {
+      "比肩": "同辈助力，宜合作共赢，但也需注意竞争关系。",
+      "劫财": "人际活跃，开销增多，宜理性消费，谨防破财。",
+      "食神": "创意迸发，适合学习新技能或开启副业，心情愉悦。",
+      "伤官": "才思敏捷，言语表达能力强，但需注意口舌是非。",
+      "正财": "正财运佳，适合稳扎稳打的投资，收入稳定增长。",
+      "偏财": "偏财运旺，可能有意外之财，但风险与机遇并存。",
+      "正官": "事业运上升，容易获得认可，适合争取晋升。",
+      "七杀": "挑战与机遇并存，压力即动力，突破自我之年。",
+      "正印": "贵人运强，学习进修的好时机，身心滋养。",
+      "偏印": "独立思考能力强，适合深耕专业领域，但需注意人际关系。",
+    };
+    return hints[desc] || "运势流转，把握当下，顺势而为。";
+  }
 
   // 神煞
   const shensha = formatShenshaList(di.shensha);
@@ -472,36 +541,64 @@ function ChartPage() {
 
         {/* 大运 */}
         <section className="mt-5 rounded-3xl bg-card p-5 shadow-soft">
-          <p className="font-serif-cn text-sm font-medium">大运排布</p>
+          <p className="font-serif-cn text-sm font-medium">大运排布（点击查看详解）</p>
           <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto pb-1">
             {dayun.map((d) => (
-              <div
+              <button
                 key={d.age}
-                className={`min-w-[7.5rem] shrink-0 rounded-2xl border p-3 ${
-                  d.hot ? "border-primary bg-primary/5" : "border-border/60 bg-card"
+                onClick={() => handleDayunClick(d.gz, d.note, d.age)}
+                className={`min-w-[7.5rem] shrink-0 rounded-2xl border p-3 text-left transition active:scale-95 ${
+                  d.hot ? "border-primary bg-primary/5 hover:bg-primary/10" : "border-border/60 bg-card hover:bg-muted/50"
                 }`}
               >
                 <p className="text-[10px] text-muted-foreground">{d.age} 岁</p>
                 <p className="mt-0.5 font-serif-cn text-base text-primary">{d.gz}</p>
                 <p className="mt-1 text-[11px] leading-4 text-foreground/80">{d.note}</p>
-              </div>
+              </button>
             ))}
           </div>
         </section>
 
+        {/* 大运解读弹窗 */}
+        <Dialog open={dayunDialogOpen} onOpenChange={setDayunDialogOpen}>
+          <DialogContent className="max-w-sm rounded-2xl">
+            <DialogHeader>
+              <DialogTitle className="font-serif-cn text-center">
+                {dayunDialogData?.age}岁 · 大运「{dayunDialogData?.gz}」
+              </DialogTitle>
+              <DialogDescription className="text-center">
+                {dayunDialogData?.god && <span className="text-primary">{dayunDialogData.god}</span>}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-2 text-sm leading-7 text-foreground/85 max-h-80 overflow-y-auto">
+              {dayunLoading ? (
+                <div className="flex flex-col items-center py-6">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary mb-2" />
+                  <p className="text-xs text-muted-foreground">AI 正在解读这段大运...</p>
+                </div>
+              ) : (
+                <p className="whitespace-pre-line">{dayunAnalysis || "暂无法获取分析"}</p>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
         {/* 流年 */}
         {liunian.length > 0 && (
           <section className="mt-5 rounded-3xl bg-card p-5 shadow-soft">
-            <p className="font-serif-cn text-sm font-medium">流年运势</p>
-            <div className="mt-3 space-y-2.5">
+            <p className="font-serif-cn text-sm font-medium">流年运势 · 逐年详解</p>
+            <div className="mt-3 space-y-3">
               {liunian.map((l) => (
                 <div key={l.year} className="flex items-start gap-3 border-l-2 border-primary/40 pl-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-medium">{l.year}</p>
-                      <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px]">{l.luck}</span>
+                      <span className="text-[11px] text-muted-foreground">{l.ganzhi}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] ${l.luck === "当前" ? "bg-primary/10 text-primary" : "bg-secondary text-muted-foreground"}`}>
+                        {l.luck}
+                      </span>
                     </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{l.text || "—"}</p>
+                    <p className="mt-1 text-xs leading-5 text-foreground/75">{l.text || "—"}</p>
                   </div>
                 </div>
               ))}

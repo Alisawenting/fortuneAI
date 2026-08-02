@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
-import { ChevronLeft, ShoppingBag, Sparkles, Star, ExternalLink } from "lucide-react";
+import { ChevronLeft, ShoppingBag, Sparkles, Star, Clock } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -24,15 +25,14 @@ type Item = {
   price: number;
   tag: string;
   color: string;
-  link: string;
 };
 
 const items: Item[] = [
-  { id: "1", name: "和田青玉 · 静水手串", element: "水", desc: "润而不烈，助身旺者泄秀，宜思虑过重之人", match: 96, price: 488, tag: "本命首推", color: "oklch(0.5 0.08 230)", link: "https://example.com/p/1" },
-  { id: "2", name: "天然砗磲 · 月华链", element: "金水", desc: "金水相生，清心安神，利文书与人际", match: 93, price: 326, tag: "贵人扶持", color: "oklch(0.92 0.02 250)", link: "https://example.com/p/2" },
-  { id: "3", name: "925 银嵌海蓝宝", element: "金水", desc: "金气清纯，助决断；海蓝宝润喉舌，化口舌", match: 90, price: 568, tag: "化口舌", color: "oklch(0.7 0.08 230)", link: "https://example.com/p/3" },
-  { id: "4", name: "白水晶 · 净心串", element: "金", desc: "平价入门款，纯净通透，平衡过旺土气", match: 85, price: 168, tag: "入门首选", color: "oklch(0.95 0.01 250)", link: "https://example.com/p/4" },
-  { id: "5", name: "黑曜石 · 镇煞链", element: "水", desc: "夜间或出差佩戴，挡煞辟邪", match: 82, price: 258, tag: "夜行护身", color: "oklch(0.25 0.01 250)", link: "https://example.com/p/5" },
+  { id: "1", name: "和田青玉 · 静水手串", element: "水", desc: "润而不烈，助身旺者泄秀，宜思虑过重之人", match: 96, price: 488, tag: "本命首推", color: "oklch(0.5 0.08 230)" },
+  { id: "2", name: "天然砗磲 · 月华链", element: "金水", desc: "金水相生，清心安神，利文书与人际", match: 93, price: 326, tag: "贵人扶持", color: "oklch(0.92 0.02 250)" },
+  { id: "3", name: "925 银嵌海蓝宝", element: "金水", desc: "金气清纯，助决断；海蓝宝润喉舌，化口舌", match: 90, price: 568, tag: "化口舌", color: "oklch(0.7 0.08 230)" },
+  { id: "4", name: "白水晶 · 净心串", element: "金", desc: "平价入门款，纯净通透，平衡过旺土气", match: 85, price: 168, tag: "入门首选", color: "oklch(0.95 0.01 250)" },
+  { id: "5", name: "黑曜石 · 镇煞链", element: "水", desc: "夜间或出差佩戴，挡煞辟邪", match: 82, price: 258, tag: "夜行护身", color: "oklch(0.25 0.01 250)" },
 ];
 
 const avoid = [
@@ -86,14 +86,12 @@ function ShopPage() {
                 </div>
               </div>
             </div>
-            <a
-              href={it.link}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 flex items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-xs font-medium text-primary-foreground"
+            <button
+              onClick={() => toast("功能开发中", { description: "真实商品链接功能正在开发，敬请期待！届时将支持一键跳转淘宝购买。" })}
+              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary/60 py-2.5 text-xs font-medium text-primary-foreground"
             >
-              去商城查看 <ExternalLink className="h-3 w-3" />
-            </a>
+              去商城查看 <Clock className="h-3 w-3" />
+            </button>
           </article>
         ))}
       </section>
