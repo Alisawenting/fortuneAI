@@ -11,7 +11,7 @@ services:
     container_name: yunshu-ai
     restart: unless-stopped
     ports:
-      - "80:3000" # 公网 80 端口 -> 容器内 3000；以后上 HTTPS 可改为 nginx/证书在前面
+      - "127.0.0.1:3000:3000" # Nginx 反代 → 容器，不直接暴露外网
     env_file:
       - .env # DeepSeek / 智谱 / 缘份居 API key、JWT_SECRET 等
     environment:
