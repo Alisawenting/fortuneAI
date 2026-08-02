@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>微信WebView测试</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;padding:16px;background:#f5f0eb;color:#333}
+.card{background:#fff;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+h2{font-size:16px;color:#c43a2f;margin-bottom:8px}
+p{font-size:14px;line-height:1.7}
+.box{width:50px;height:50px;border-radius:10px;display:inline-block;margin:4px}
+.r{background:#c43a2f}.g{background:#4a9e6e}.b{background:#5a8ec9}.y{background:#c49a3c}
+.btn-row{display:flex;gap:10px;margin-top:10px}
+.btn{flex:1;text-align:center;padding:12px;border-radius:12px;font-size:14px}
+.btn-gray{background:#e5e5e5}.btn-red{background:#c43a2f;color:#fff}
+.ok{color:#4a9e6e}.fail{color:#c43a2f}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>1. CSS 基础渲染测试</h2>
+  <p>如果你看到白色圆角卡片+阴影 → <span class="ok">✅ CSS正常</span></p>
+  <p>如果你看到纯白底无样式文字 → <span class="fail">❌ CSS不生效</span></p>
+</div>
+
+<div class="card">
+  <h2>2. 颜色测试</h2>
+  <p>下面应该是红、绿、蓝、金四个色块：</p>
+  <div class="box r"></div><div class="box g"></div><div class="box b"></div><div class="box y"></div>
+</div>
+
+<div class="card">
+  <h2>3. Flexbox 布局测试</h2>
+  <p>下面应该是一灰一红两个按钮并排：</p>
+  <div class="btn-row">
+    <div class="btn btn-gray">灰色按钮</div>
+    <div class="btn btn-red">红色按钮</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>4. 设备信息</h2>
+  <p style="word-break:break-all;font-size:11px;color:#999" id="ua"></p>
+</div>
+
+<script>
+document.getElementById('ua').textContent = navigator.userAgent;
+</script>
+</body>
+</html>
