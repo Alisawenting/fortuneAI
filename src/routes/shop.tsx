@@ -28,11 +28,11 @@ type Item = {
 };
 
 const items: Item[] = [
-  { id: "1", name: "和田青玉 · 静水手串", element: "水", desc: "润而不烈，助身旺者泄秀，宜思虑过重之人", match: 96, price: 488, tag: "本命首推", color: "oklch(0.5 0.08 230)" },
-  { id: "2", name: "天然砗磲 · 月华链", element: "金水", desc: "金水相生，清心安神，利文书与人际", match: 93, price: 326, tag: "贵人扶持", color: "oklch(0.92 0.02 250)" },
-  { id: "3", name: "925 银嵌海蓝宝", element: "金水", desc: "金气清纯，助决断；海蓝宝润喉舌，化口舌", match: 90, price: 568, tag: "化口舌", color: "oklch(0.7 0.08 230)" },
-  { id: "4", name: "白水晶 · 净心串", element: "金", desc: "平价入门款，纯净通透，平衡过旺土气", match: 85, price: 168, tag: "入门首选", color: "oklch(0.95 0.01 250)" },
-  { id: "5", name: "黑曜石 · 镇煞链", element: "水", desc: "夜间或出差佩戴，挡煞辟邪", match: 82, price: 258, tag: "夜行护身", color: "oklch(0.25 0.01 250)" },
+  { id: "1", name: "和田青玉 · 静水手串", element: "水", desc: "润而不烈，助身旺者泄秀，宜思虑过重之人", match: 96, price: 488, tag: "本命首推", color: "#5a8ec9" },
+  { id: "2", name: "天然砗磲 · 月华链", element: "金水", desc: "金水相生，清心安神，利文书与人际", match: 93, price: 326, tag: "贵人扶持", color: "#e8e8ec" },
+  { id: "3", name: "925 银嵌海蓝宝", element: "金水", desc: "金气清纯，助决断；海蓝宝润喉舌，化口舌", match: 90, price: 568, tag: "化口舌", color: "#6a9ed9" },
+  { id: "4", name: "白水晶 · 净心串", element: "金", desc: "平价入门款，纯净通透，平衡过旺土气", match: 85, price: 168, tag: "入门首选", color: "#f2f2f4" },
+  { id: "5", name: "黑曜石 · 镇煞链", element: "水", desc: "夜间或出差佩戴，挡煞辟邪", match: 82, price: 258, tag: "夜行护身", color: "#3d3d42" },
 ];
 
 const avoid = [
@@ -70,7 +70,7 @@ function ShopPage() {
             <div className="flex gap-3">
               <div
                 className="h-20 w-20 shrink-0 rounded-2xl"
-                style={{ background: `radial-gradient(circle at 30% 30%, ${it.color}, color-mix(in oklab, ${it.color} 60%, var(--card)))` }}
+                style={{ background: `radial-gradient(circle at 30% 30%, ${it.color}, color-mix(in srgb, ${it.color} 60%, var(--card)))` }}
               />
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">
@@ -96,7 +96,7 @@ function ShopPage() {
         ))}
       </section>
 
-      <section className="mx-5 mt-6 rounded-2xl border border-dashed border-[var(--cinnabar)]/40 bg-[color-mix(in_oklab,var(--cinnabar)_6%,transparent)] p-4">
+      <section className="mx-5 mt-6 rounded-2xl border border-dashed border-[var(--cinnabar)]/40 bg-cinnabar/[0.06] p-4">
         <p className="font-serif-cn text-sm font-medium text-[var(--cinnabar)]">忌佩提示</p>
         <ul className="mt-2 space-y-1.5 text-xs text-foreground/80">
           {avoid.map((a) => (

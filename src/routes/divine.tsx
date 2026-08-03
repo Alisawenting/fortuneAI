@@ -299,7 +299,7 @@ function DivinePage() {
               <div className="flex items-center gap-2">
                 <UserPlus className="h-4 w-4 text-primary" />
                 <p className="text-sm font-medium">保存为角色档案</p>
-                <span className={`rounded-full px-2 py-0.5 text-[10px] ${full ? "bg-[color-mix(in_oklab,var(--cinnabar)_15%,transparent)] text-[var(--cinnabar)]" : "bg-secondary text-muted-foreground"}`}>
+                <span className={`rounded-full px-2 py-0.5 text-[10px] ${full ? "bg-cinnabar/[0.15] text-[var(--cinnabar)]" : "bg-secondary text-muted-foreground"}`}>
                   {roleCount}/{MAX_ROLES}
                 </span>
               </div>

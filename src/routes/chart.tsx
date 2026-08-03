@@ -140,8 +140,8 @@ function getElementColor(name: string): string {
     "木": "var(--jade)",
     "火": "var(--cinnabar)",
     "土": "var(--gold)",
-    "金": "oklch(0.7 0.02 250)",
-    "水": "oklch(0.5 0.08 230)",
+    "金": "#b8b8c0",
+    "水": "#5a8ec9",
   };
   return colors[name] || "var(--muted-foreground)";
 }
@@ -382,8 +382,8 @@ function ChartPage() {
     { name: "木", value: 25, color: "var(--jade)" },
     { name: "火", value: 20, color: "var(--cinnabar)" },
     { name: "土", value: 25, color: "var(--gold)" },
-    { name: "金", value: 20, color: "oklch(0.7 0.02 250)" },
-    { name: "水", value: 10, color: "oklch(0.5 0.08 230)" },
+    { name: "金", value: 20, color: "#b8b8c0" },
+    { name: "水", value: 10, color: "#5a8ec9" },
   ];
 
   // 格局
@@ -646,9 +646,9 @@ function ChartPage() {
           <div className="mt-3 grid grid-cols-2 gap-2">
             {[
               { icon: Briefcase, title: "事业", tone: "text-primary bg-primary/10" },
-              { icon: Coins, title: "财运", tone: "text-[var(--gold)] bg-[color-mix(in_oklab,var(--gold)_15%,transparent)]" },
-              { icon: HeartHandshake, title: "情感", tone: "text-[var(--cinnabar)] bg-[color-mix(in_oklab,var(--cinnabar)_12%,transparent)]" },
-              { icon: Activity, title: "健康", tone: "text-[var(--jade)] bg-[color-mix(in_oklab,var(--jade)_12%,transparent)]" },
+              { icon: Coins, title: "财运", tone: "text-[var(--gold)] bg-gold/[0.15]" },
+              { icon: HeartHandshake, title: "情感", tone: "text-[var(--cinnabar)] bg-cinnabar/[0.12]" },
+              { icon: Activity, title: "健康", tone: "text-[var(--jade)] bg-jade/[0.12]" },
             ].map((s) => {
               const Icon = s.icon;
               return (
@@ -670,7 +670,7 @@ function ChartPage() {
         </section>
 
         {/* 开运手串推荐 */}
-        <div className="mt-5 rounded-2xl bg-gradient-to-br from-primary/10 via-card to-[color-mix(in_oklab,var(--gold)_10%,transparent)] p-4">
+        <div className="mt-5 rounded-2xl bg-gradient-to-br from-primary/10 via-card to-gold/[0.10] p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-card text-primary shadow-soft">

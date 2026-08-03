@@ -246,7 +246,7 @@ export function ElementLandscape({ scores, sizhuStr, rizhu, zhengge, name }: Pro
     <section className="mt-5 rounded-3xl bg-card p-5 shadow-soft">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--gold)_15%,transparent)] text-[var(--gold)]">
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gold/[0.15] text-[var(--gold)]">
             <Sparkles className="h-4 w-4" />
           </span>
           <div>

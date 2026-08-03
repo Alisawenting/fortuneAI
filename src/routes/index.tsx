@@ -579,7 +579,7 @@ function HomePage() {
             <span className="text-[11px] text-muted-foreground">黄历 · 戊辰日</span>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-[color-mix(in_oklab,var(--jade)_30%,transparent)] bg-[color-mix(in_oklab,var(--jade)_6%,transparent)] p-3">
+            <div className="rounded-2xl border border-jade/[0.30] bg-jade/[0.06] p-3">
               <div className="flex items-center gap-1.5">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--jade)] text-[10px] text-white">
                   <Check className="h-3 w-3" />
@@ -595,7 +595,7 @@ function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl border border-[color-mix(in_oklab,var(--cinnabar)_30%,transparent)] bg-[color-mix(in_oklab,var(--cinnabar)_6%,transparent)] p-3">
+            <div className="rounded-2xl border border-cinnabar/[0.30] bg-cinnabar/[0.06] p-3">
               <div className="flex items-center gap-1.5">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--cinnabar)] text-[10px] text-white">
                   <X className="h-3 w-3" />
@@ -742,7 +742,7 @@ function HomePage() {
                       aria-pressed={marked}
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${
                         marked
-                          ? "text-[var(--cinnabar)] bg-[color-mix(in_oklab,var(--cinnabar)_10%,transparent)]"
+                          ? "text-[var(--cinnabar)] bg-cinnabar/[0.10]"
                           : "text-muted-foreground hover:text-foreground hover:bg-muted"
                       }`}
                     >
@@ -892,7 +892,7 @@ function HomePage() {
                 {r.id === activeId && <Check className="h-4 w-4 text-primary shrink-0" />}
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDeleteRole(r.id, r.name); }}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-[color-mix(in_oklab,var(--cinnabar)_10%,transparent)] hover:text-[var(--cinnabar)] transition-colors"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-cinnabar/[0.10] hover:text-[var(--cinnabar)] transition-colors"
                   title={`删除 ${r.name}`}
                 >
                   <X className="h-3.5 w-3.5" />

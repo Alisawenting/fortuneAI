@@ -307,10 +307,10 @@ function ZiweiChartPage() {
             <div className="mt-3 space-y-3">
               {[
                 { key: "overview", icon: BookOpen, title: "命盘总览", content: report.overview, color: "text-primary bg-primary/10" },
-                { key: "minggongAnalysis", icon: Star, title: "命宫解读", content: report.minggongAnalysis, color: "text-[var(--cinnabar)] bg-[color-mix(in_oklab,var(--cinnabar)_12%,transparent)]" },
-                { key: "shenggongAnalysis", icon: Eye, title: "身宫与后天", content: report.shenggongAnalysis, color: "text-[var(--gold)] bg-[color-mix(in_oklab,var(--gold)_12%,transparent)]" },
+                { key: "minggongAnalysis", icon: Star, title: "命宫解读", content: report.minggongAnalysis, color: "text-[var(--cinnabar)] bg-cinnabar/[0.12]" },
+                { key: "shenggongAnalysis", icon: Eye, title: "身宫与后天", content: report.shenggongAnalysis, color: "text-[var(--gold)] bg-gold/[0.12]" },
                 { key: "sixiang", icon: Compass, title: "四化点睛", content: report.sixiang, color: "text-accent bg-accent/10" },
-                { key: "pattern", icon: Target, title: "格局初探", content: report.pattern, color: "text-[var(--jade)] bg-[color-mix(in_oklab,var(--jade)_12%,transparent)]" },
+                { key: "pattern", icon: Target, title: "格局初探", content: report.pattern, color: "text-[var(--jade)] bg-jade/[0.12]" },
                 { key: "lifeAdvice", icon: Sparkles, title: "人生锦囊", content: report.lifeAdvice, color: "text-primary bg-primary/10" },
               ].filter((s) => s.content).map((s) => {
                 const Icon = s.icon;

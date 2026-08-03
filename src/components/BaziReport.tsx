@@ -135,11 +135,11 @@ export function FullAnalysis({ paipanData }: FullAnalysisProps) {
 
   const reportSections = [
     { key: "overview", icon: BookOpen, title: "命盘总览", content: report?.overview, color: "text-primary bg-primary/10" },
-    { key: "rizhuPersonality", icon: User, title: "日主解读", content: report?.rizhuPersonality, color: "text-[var(--cinnabar)] bg-[color-mix(in_oklab,var(--cinnabar)_12%,transparent)]" },
-    { key: "wuxingLife", icon: Droplets, title: "五行与生活", content: report?.wuxingLife, color: "text-[var(--jade)] bg-[color-mix(in_oklab,var(--jade)_12%,transparent)]" },
-    { key: "dayunStory", icon: Calendar, title: "大运人生", content: report?.dayunStory, color: "text-[var(--gold)] bg-[color-mix(in_oklab,var(--gold)_12%,transparent)]" },
+    { key: "rizhuPersonality", icon: User, title: "日主解读", content: report?.rizhuPersonality, color: "text-[var(--cinnabar)] bg-cinnabar/[0.12]" },
+    { key: "wuxingLife", icon: Droplets, title: "五行与生活", content: report?.wuxingLife, color: "text-[var(--jade)] bg-jade/[0.12]" },
+    { key: "dayunStory", icon: Calendar, title: "大运人生", content: report?.dayunStory, color: "text-[var(--gold)] bg-gold/[0.12]" },
     { key: "shenshaFun", icon: Star, title: "神煞趣解", content: report?.shenshaFun, color: "text-accent bg-accent/10" },
-    { key: "lifeAdvice", icon: Compass, title: "人生锦囊", content: report?.lifeAdvice, color: "text-[var(--jade)] bg-[color-mix(in_oklab,var(--jade)_12%,transparent)]" },
+    { key: "lifeAdvice", icon: Compass, title: "人生锦囊", content: report?.lifeAdvice, color: "text-[var(--jade)] bg-jade/[0.12]" },
   ];
 
   return (

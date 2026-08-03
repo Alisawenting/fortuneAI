@@ -130,7 +130,7 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
           </div>
 
           {error && (
-            <p className="text-xs text-[var(--cinnabar)] bg-[color-mix(in_oklab,var(--cinnabar)_8%,transparent)] rounded-lg px-3 py-2">{error}</p>
+            <p className="text-xs text-[var(--cinnabar)] bg-cinnabar/[0.08] rounded-lg px-3 py-2">{error}</p>
           )}
 
           <button

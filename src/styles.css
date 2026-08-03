@@ -45,80 +45,64 @@
 
 :root {
   --radius: 1rem;
-
-  /* 新中式 低饱和古风配色 */
-  --background: oklch(0.965 0.018 80);          /* 宣纸米 */
-  --foreground: oklch(0.22 0.02 40);            /* 墨色 */
-  --rice: oklch(0.965 0.018 80);
-  --ink: oklch(0.22 0.02 40);
-  --cinnabar: oklch(0.58 0.16 30);              /* 朱砂 */
-  --jade: oklch(0.55 0.07 175);                 /* 黛青 */
-  --gold: oklch(0.72 0.12 75);                  /* 鎏金 */
-
-  --card: oklch(0.99 0.008 80);
+  --background: #faf6f0;
+  --foreground: #3d3226;
+  --rice: #faf6f0;
+  --ink: #3d3226;
+  --cinnabar: #c43a2f;
+  --jade: #4a9e6e;
+  --gold: #c49a3c;
+  --card: #fff;
   --card-foreground: var(--ink);
-  --popover: oklch(0.99 0.008 80);
+  --popover: #fff;
   --popover-foreground: var(--ink);
-
-  --primary: oklch(0.58 0.16 30);               /* 朱砂为主色 */
-  --primary-foreground: oklch(0.98 0.01 80);
-
-  --secondary: oklch(0.93 0.025 75);
+  --primary: #c43a2f;
+  --primary-foreground: #fcf5f4;
+  --secondary: #ede4d5;
   --secondary-foreground: var(--ink);
-
-  --muted: oklch(0.93 0.018 80);
-  --muted-foreground: oklch(0.48 0.025 50);
-
-  --accent: oklch(0.55 0.07 175);
-  --accent-foreground: oklch(0.98 0.01 80);
-
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(0.98 0.01 80);
-
-  --border: oklch(0.88 0.02 75);
-  --input: oklch(0.9 0.02 75);
-  --ring: oklch(0.58 0.16 30);
-
-  --gradient-zen: linear-gradient(180deg, oklch(0.97 0.022 80) 0%, oklch(0.94 0.03 70) 100%);
-  --gradient-scroll: linear-gradient(135deg, oklch(0.96 0.025 85) 0%, oklch(0.92 0.035 60) 100%);
-  --gradient-cinnabar: linear-gradient(135deg, oklch(0.62 0.17 30) 0%, oklch(0.5 0.15 25) 100%);
-
-  --shadow-soft: 0 4px 20px -8px oklch(0.3 0.04 40 / 0.15);
-  --shadow-floating: 0 12px 40px -12px oklch(0.3 0.04 40 / 0.22);
+  --muted: #ede4d5;
+  --muted-foreground: #8c7b6e;
+  --accent: #4a9e6e;
+  --accent-foreground: #fcfcf9;
+  --destructive: #c43a2f;
+  --destructive-foreground: #fcf5f4;
+  --border: #e8e0d5;
+  --input: #e8e0d5;
+  --ring: #c43a2f;
+  --gradient-zen: linear-gradient(180deg, #faf6f0 0%, #ede4d5 100%);
+  --gradient-scroll: linear-gradient(135deg, #faf6f0 0%, #ede4d5 100%);
+  --gradient-cinnabar: linear-gradient(135deg, #c43a2f 0%, #8b1a1a 100%);
+  --shadow-soft: 0 4px 20px -8px rgba(48,32,16,.15);
+  --shadow-floating: 0 12px 40px -12px rgba(48,32,16,.22);
 }
 
 .dark {
-  --background: oklch(0.18 0.015 40);
-  --foreground: oklch(0.95 0.015 80);
-  --card: oklch(0.22 0.018 40);
-  --card-foreground: oklch(0.95 0.015 80);
-  --primary: oklch(0.68 0.16 35);
-  --primary-foreground: oklch(0.15 0.01 40);
-  --border: oklch(0.3 0.02 40);
-  --muted: oklch(0.25 0.018 40);
-  --muted-foreground: oklch(0.7 0.02 50);
+  --background: #1a1612;
+  --foreground: #ede4d5;
+  --card: #221e1a;
+  --card-foreground: #ede4d5;
+  --primary: #d44a3f;
+  --primary-foreground: #1a1612;
+  --border: #3d3226;
+  --muted: #2d2420;
+  --muted-foreground: #b8a99a;
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
+  * { border-color: var(--color-border); }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans-cn);
     -webkit-font-smoothing: antialiased;
   }
-
   .font-serif-cn { font-family: var(--font-serif-cn); }
 }
 
-/* 国风装饰元素 */
 .scroll-paper {
   background-image:
-    radial-gradient(circle at 20% 10%, oklch(0.92 0.04 65 / 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, oklch(0.88 0.05 50 / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 20% 10%, rgba(227,204,160,.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(220,180,130,.3) 0%, transparent 50%),
     var(--gradient-scroll);
 }
 
@@ -128,22 +112,10 @@
 }
 
 .phone-frame {
-  width: 100%;
-  max-width: 440px;
-  min-height: 100dvh;
-  margin: 0 auto;
-  background: var(--color-background);
-  position: relative;
-  box-shadow: var(--shadow-floating);
+  width: 100%; max-width: 440px; min-height: 100dvh; margin: 0 auto;
+  background: var(--color-background); position: relative; box-shadow: var(--shadow-floating);
 }
 
-/* 平板 / 桌面：不再是居中的“手机卡片”，而是自适应的内容列（配合左侧侧边导航） */
 @media (min-width: 768px) {
-  .phone-frame {
-    max-width: 768px;
-    min-height: 100dvh;
-    margin: 0 auto;
-    background: transparent;
-    box-shadow: none;
-  }
+  .phone-frame { max-width: 768px; min-height: 100dvh; margin: 0 auto; background: transparent; box-shadow: none; }
 }
