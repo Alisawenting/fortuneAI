@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>外部CSS测试</title>
+<link rel="stylesheet" href="/wx-test.css"/>
+<style>.fallback{display:none}</style></head>
+<body>
+<div class="card"><h2>外部CSS加载测试</h2>
+<p id="result">测试中...</p>
+<p class="fallback" style="color:red">❌ 外部CSS无法加载！这是微信WebView的核心限制。</p></div>
+<script>
+window.onload=function(){
+  var el=document.querySelector('.card');
+  var style=getComputedStyle(el);
+  if(style.backgroundColor==='rgb(255, 255, 255)'){
+    document.getElementById('result').innerHTML='✅ 外部CSS加载成功！微信WebView支持link标签。';
+  }else{
+    document.getElementById('result').innerHTML='❌ 外部CSS未加载。背景色='+style.backgroundColor;
+    document.querySelector('.fallback').style.display='block';
+  }
+}
+</script>
+</body></html>
