@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>八字测算 · 云枢易馆</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;background:#f7f3ed;color:#3d3226;min-height:100vh;padding-bottom:80px}
+.header{background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;padding:20px;display:flex;align-items:center;gap:16px}
+.header a{color:#fff;text-decoration:none;font-size:24px}
+.header h1{font-family:"Noto Serif SC",serif;font-size:20px}
+.form-card{margin:16px;background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:13px;font-weight:600;color:#666;margin-bottom:6px}
+.fg input,.fg select{width:100%;padding:12px;border:1.5px solid #e0d8cc;border-radius:12px;font-size:15px;font-family:inherit;background:#faf8f5}
+.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23999'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.gender-row{display:flex;gap:12px}
+.gender-btn{flex:1;padding:12px;border:1.5px solid #e0d8cc;border-radius:12px;text-align:center;font-size:15px;background:#faf8f5;cursor:pointer;font-family:inherit}
+.gender-btn.sel{border-color:#c43a2f;background:#fef5f4;color:#c43a2f;font-weight:600}
+.date-row{display:flex;gap:8px}
+.date-row select{flex:1}
+.btn{display:block;width:calc(100% - 32px);margin:8px 16px;padding:14px;border-radius:14px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;border:none;cursor:pointer;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;box-shadow:0 4px 16px rgba(196,58,47,.3)}
+.btn-outline{background:#fff;color:#c43a2f;border:1.5px solid #c43a2f}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,.04)}
+.nav-item{text-align:center;font-size:10px;color:#999;text-decoration:none;flex:1}
+.nav-item .ni{font-size:22px;display:block;margin-bottom:2px}
+.nav-item.active{color:#c43a2f}
+.result{margin:16px;display:none}
+.pillar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.pillar{background:#faf8f5;border-radius:12px;padding:12px;text-align:center;border:1px solid #eee}
+.pillar .pl{font-size:10px;color:#999}
+.pillar .pg{font-size:22px;font-family:"Noto Serif SC",serif;font-weight:700;margin:4px 0}
+.pillar .pz{font-size:18px;font-family:"Noto Serif SC",serif}
+.info-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;background:#fef5f4;color:#c43a2f}
+.tag.g{background:#e8f5e9;color:#2e7d32}
+.tag.b{background:#e3f2fd;color:#1565c0}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="index.html">←</a>
+  <h1>八字排盘</h1>
+</div>
+
+<form class="form-card" id="form" onsubmit="return false">
+  <div class="fg">
+    <label>姓名</label>
+    <input type="text" id="name" placeholder="请输入姓名" value=""/>
+  </div>
+  <div class="fg">
+    <label>性别</label>
+    <div class="gender-row">
+      <div class="gender-btn sel" onclick="selGender('男')" id="gMale">♂ 男</div>
+      <div class="gender-btn" onclick="selGender('女')" id="gFemale">♀ 女</div>
+    </div>
+  </div>
+  <div class="fg">
+    <label>出生日期</label>
+    <input type="date" id="birthDate" value="1995-08-12"/>
+  </div>
+  <div class="fg">
+    <label>出生时间</label>
+    <input type="time" id="birthTime" value="07:20"/>
+  </div>
+</form>
+
+<button class="btn btn-primary" onclick="doCalc()">🔮 生成八字命盘</button>
+<button class="btn btn-outline" onclick="doZiwei()" style="display:none">✨ 生成紫微命盘（开发中）</button>
+
+<div class="result" id="result"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-item"><span class="ni">🏠</span>运势</a>
+  <a href="divine.html" class="nav-item active"><span class="ni">🔮</span>测算</a>
+  <a href="chat.html" class="nav-item"><span class="ni">💬</span>问答</a>
+</nav>
+
+<script src="bazi-engine.js"></script>
+<script>
+var gender = "男";
+function selGender(g){
+  gender=g;
+  document.getElementById("gMale").className="gender-btn"+(g==="男"?" sel":"");
+  document.getElementById("gFemale").className="gender-btn"+(g==="女"?" sel":"");
+}
+
+function doCalc(){
+  var name = document.getElementById("name").value || "用户";
+  var birthDate = document.getElementById("birthDate").value;
+  var birthTime = document.getElementById("birthTime").value;
+  if(!birthDate||!birthTime){ alert("请填写出生日期和时间");return; }
+
+  var d = computeBazi(birthDate, birthTime);
+  d.name = name;
+  d.gender = gender==="男"?"乾造":"坤造";
+
+  // 保存
+  try{ localStorage.setItem("yunshu:bazi-data",JSON.stringify(d)); }catch(e){}
+
+  // 渲染
+  var h = '<div class="card" style="margin:0 0 16px">';
+  h += '<div style="font-family:Noto Serif SC,serif;font-size:18px;margin-bottom:4px">'+d.gender+' · '+d.name+'</div>';
+  h += '<div style="font-size:13px;color:#666">公历 '+d.gongli+' · '+d.rizhu+'</div>';
+  h += '<div style="font-size:13px;color:#666">格局：'+d.zhengge+' · 五行：'+d.qiangruo+'</div>';
+
+  // 四柱
+  h += '<div class="pillar-grid">';
+  var colors = {木:"#4a9e6e",火:"#c43a2f",土:"#c49a3c",金:"#8d8d9b",水:"#5a8ec9"};
+  var wxG = d.sizhu.map(function(p){return WX[p.g];});
+  var wxZ = d.sizhu.map(function(p){return WX_Z[p.z];});
+  for(var i=0;i<4;i++){
+    h += '<div class="pillar"><div class="pl">'+d.sizhu[i].label+'</div>';
+    h += '<div class="pg" style="color:'+(colors[wxG[i]]||"#333")+'">'+d.sizhu[i].g+'</div>';
+    h += '<div class="pz" style="color:'+(colors[wxZ[i]]||"#333")+'">'+d.sizhu[i].z+'</div>';
+    h += '<div style="font-size:9px;color:#999;margin-top:2px">'+d.nayin[i]+'</div>';
+    h += '<div style="font-size:9px;color:#999">'+d.shishen[i]+'</div>';
+  }
+  h += '</div>';
+
+  // 藏干
+  h += '<div style="font-size:11px;color:#999;margin-top:4px">藏干：';
+  for(var i=0;i<4;i++) h += d.sizhu[i].label+' '+(d.canggan[i]||[]).join("")+'　';
+  h += '</div>';
+
+  // 五行
+  h += '<div style="margin-top:12px;font-size:13px">';
+  var wxNames = ["木","火","土","金","水"];
+  var wxColors = ["#4a9e6e","#c43a2f","#c49a3c","#8d8d9b","#5a8ec9"];
+  for(var i=0;i<5;i++){
+    h += '<span style="display:inline-block;margin-right:8px"><span style="color:'+wxColors[i]+'">'+wxNames[i]+'</span> '+d.scores[wxNames[i]]+'分</span>';
+  }
+  h += '</div>';
+  h += '<div style="font-size:13px;margin-top:4px">'+d.qiangruo+' · 喜用神：'+d.xiyongshen+'</div>';
+
+  // 称骨
+  h += '<div style="font-size:13px;color:#999;margin-top:4px">称骨：'+d.chenggu.liang+'两'+d.chenggu.qian+'钱</div>';
+
+  // 大运
+  h += '<div style="margin-top:12px;font-family:Noto Serif SC,serif;font-size:14px;font-weight:600">📅 大运排布</div>';
+  h += '<div style="display:flex;gap:6px;overflow-x:auto;padding:8px 0">';
+  for(var i=0;i<d.dayuns.length;i++){
+    var dy = d.dayuns[i];
+    h += '<div style="min-width:75px;text-align:center;padding:8px;background:#faf8f5;border-radius:10px;border:1px solid #eee;font-size:12px"><div style="color:#999">'+dy.age+'岁</div><div style="font-weight:700;color:#c43a2f;margin:4px 0;font-size:13px">'+dy.gz+'</div><div style="color:#999;font-size:10px">'+dy.god+'</div></div>';
+  }
+  h += '</div>';
+
+  h += '</div>';
+
+  document.getElementById("result").innerHTML = h;
+  document.getElementById("result").style.display = "block";
+  window.scrollTo({top:document.getElementById("result").offsetTop-20,behavior:"smooth"});
+}
+
+function doZiwei(){
+  alert("紫微斗数功能即将上线");
+}
+</script>
+</body>
+</html>

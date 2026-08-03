@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>AI 问答 · 云枢易馆</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;background:#f7f3ed;color:#3d3226;min-height:100vh;padding-bottom:120px}
+.header{background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;padding:20px;display:flex;align-items:center;gap:12px}
+.header a{color:#fff;text-decoration:none;font-size:22px}
+.header h1{font-family:"Noto Serif SC",serif;font-size:17px}
+.header .sub{font-size:10px;opacity:.7;margin-top:2px}
+.msg-list{padding:12px 16px}
+.msg{margin-bottom:12px;display:flex;gap:8px}
+.msg.user{flex-direction:row-reverse}
+.msg .av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.msg.ai .av{background:#fef5f4}
+.msg.user .av{background:#c43a2f;color:#fff}
+.msg .bub{max-width:80%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.6;word-break:break-word}
+.msg.ai .bub{background:#fff;border-top-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.04);white-space:pre-line}
+.msg.user .bub{background:#c43a2f;color:#fff;border-top-right-radius:4px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;padding:8px 16px}
+.quick span{padding:8px 14px;border-radius:20px;background:#fff;border:1px solid #e0d8cc;font-size:12px;color:#666;cursor:pointer;transition:all .15s}
+.quick span:active{background:#fef5f4;color:#c43a2f;border-color:#c43a2f}
+.input-bar{position:fixed;bottom:60px;left:0;right:0;background:#fff;padding:8px 12px;display:flex;gap:8px;align-items:center;border-top:1px solid #eee}
+.input-bar input{flex:1;padding:10px 14px;border:1.5px solid #e0d8cc;border-radius:22px;font-size:14px;font-family:inherit;background:#faf8f5;outline:none}
+.input-bar input:focus{border-color:#c43a2f}
+.input-bar button{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;border:none;font-size:16px;cursor:pointer;flex-shrink:0}
+.typing{display:flex;gap:3px;padding:6px 0}
+.typing span{width:5px;height:5px;border-radius:50%;background:#ccc;animation:tp 1.4s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes tp{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,.04)}
+.nav-item{text-align:center;font-size:10px;color:#999;text-decoration:none;flex:1}
+.nav-item .ni{font-size:22px;display:block;margin-bottom:2px}
+.nav-item.active{color:#c43a2f}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="index.html">←</a>
+  <div>
+    <h1>枢机 · AI 命理师</h1>
+    <div class="sub" id="roleInfo">通用模式</div>
+  </div>
+</div>
+
+<div class="quick" id="quickQs">
+  <span onclick="send('近期事业运势如何？')">💼 近期事业</span>
+  <span onclick="send('感情方面有什么建议？')">💕 感情建议</span>
+  <span onclick="send('财运方面如何提升？')">💰 财运提升</span>
+  <span onclick="send('最近健康需要注意什么？')">🏥 健康注意</span>
+</div>
+
+<div class="msg-list" id="msgList">
+  <div class="msg ai">
+    <div class="av">🔮</div>
+    <div class="bub" id="welcome">你好！我是 AI 命理师「枢机」。<br>请在「测算」页面录入生辰，<br>我就能结合你的八字命盘为你解读。</div>
+  </div>
+</div>
+
+<div class="input-bar">
+  <input type="text" id="msgInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')send()"/>
+  <button onclick="send()">➤</button>
+</div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-item"><span class="ni">🏠</span>运势</a>
+  <a href="divine.html" class="nav-item"><span class="ni">🔮</span>测算</a>
+  <a href="chat.html" class="nav-item active"><span class="ni">💬</span>问答</a>
+</nav>
+
+<script>
+var baziData = null;
+var history = [];
+var API = "https://yunshuyiguan.cn";
+
+(function(){
+  try{
+    var d = JSON.parse(localStorage.getItem("yunshu:bazi-data"));
+    if(d){
+      baziData = d;
+      document.getElementById("roleInfo").textContent = (d.gender||"")+" · "+d.gongli+" · "+d.rizhu;
+      document.getElementById("welcome").innerHTML = "你好！我已加载你的命盘。\n\n八字："+d.sizhu.map(function(p){return p.g+p.z}).join(" ")+"\n格局："+d.zhengge+"\n五行："+d.qiangruo+"\n\n有什么想了解的？";
+    }
+  }catch(e){}
+})();
+
+function addMsg(role, text){
+  var div = document.createElement("div");
+  div.className = "msg "+(role==="user"?"user":"ai");
+  div.innerHTML = '<div class="av">'+(role==="user"?"👤":"🔮")+'</div><div class="bub">'+text.replace(/\n/g,"<br>")+'</div>';
+  document.getElementById("msgList").appendChild(div);
+  var list = document.getElementById("msgList");
+  list.scrollTop = list.scrollHeight;
+}
+
+function typing(){
+  var div = document.createElement("div");
+  div.className = "msg ai";
+  div.id = "typingMsg";
+  div.innerHTML = '<div class="av">🔮</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';
+  document.getElementById("msgList").appendChild(div);
+  var list = document.getElementById("msgList");
+  list.scrollTop = list.scrollHeight;
+}
+
+function removeTyping(){
+  var el = document.getElementById("typingMsg");
+  if(el) el.remove();
+}
+
+function send(text){
+  var msg = text || document.getElementById("msgInput").value.trim();
+  if(!msg) return;
+  document.getElementById("msgInput").value = "";
+  document.getElementById("quickQs").style.display = "none";
+  addMsg("user", msg);
+  typing();
+
+  var ctx = baziData
+    ? "用户八字："+baziData.sizhu.map(function(p){return p.g+p.z}).join(" ")+"。日柱"+baziData.rizhu+"。格局"+baziData.zhengge+"。喜用神"+baziData.xiyongshen+"。"
+    : "";
+
+  var body = {
+    message: msg,
+    history: history.slice(-8).map(function(m){return {role:m.r,content:m.c}}),
+    baziContext: {
+      sex: baziData?baziData.gender||"":"", birthDate: baziData?baziData.gongli||"":"",
+      sizhu: baziData?baziData.sizhu.map(function(p){return p.g+p.z}).join(" "):"",
+      zhengge: baziData?baziData.zhengge||"":"",
+      xiyongshen: baziData?baziData.xiyongshen||"":"",
+      wuxing: baziData?baziData.qiangruo||"":"",
+      rizhu: baziData?baziData.rizhu||"":"",
+      name: baziData?baziData.name||"":"",
+      birthTime: ""
+    }
+  };
+
+  fetch(API+"/api/chat",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  }).then(function(r){return r.json().catch(function(){return{}})})
+  .then(function(data){
+    removeTyping();
+    if(data.reply){
+      addMsg("ai", data.reply);
+      history.push({r:"user",c:msg});
+      history.push({r:"assistant",c:data.reply});
+    } else {
+      addMsg("ai", localReply(msg));
+    }
+  })
+  .catch(function(){
+    removeTyping();
+    addMsg("ai", localReply(msg));
+  });
+}
+
+function localReply(msg){
+  if(!baziData) return "我是本地运行的 AI 命理师。请先去「测算」页面录入生辰，我就能结合八字命盘为你解读。\n\n（💡 提示：AI 对话服务需要连接服务器才能获得更智能的回复）";
+
+  var rizhu = baziData.rizhu;
+  var zhengge = baziData.zhengge;
+  var xy = baziData.xiyongshen;
+  var xy1 = xy.split("、")[0];
+
+  if(msg.indexOf("事业")>=0||msg.indexOf("工作")>=0||msg.indexOf("职业")>=0)
+    return "📊 事业运分析\n\n你的日主为"+rizhu+"，格局"+zhengge+"。这意味着你在职场中具有稳重可靠的品质，适合深耕专业领域。\n\n喜用神「"+xy+"」提示：多关注"+xy1+"属性的行业方向，对你的发展更有利。当前流年宜稳中求进，不宜冒险跳槽。\n\n💡 建议：发挥你的耐心和专注力，在现有岗位上做出成绩。";
+
+  if(msg.indexOf("感情")>=0||msg.indexOf("爱情")>=0||msg.indexOf("姻缘")>=0)
+    return "💕 感情运势\n\n"+rizhu+"的主星特质让你在感情中偏向内敛、细腻。你重视精神层面的契合，不轻易开始一段关系。\n\n喜用神「"+xy+"」暗示：多接触"+xy1+"属性的人，缘分更容易出现。已有伴侣的话，今年适合增加共同活动。\n\n💡 建议：保持开放心态，感情需要自然发展。";
+
+  if(msg.indexOf("财")>=0||msg.indexOf("钱")>=0||msg.indexOf("收入")>=0)
+    return "💰 财运分析\n\n你八字中的正财运稳健，适合以专业能力和工作积累财富。格局"+zhengge+"说明你的财富增长需要时间沉淀。\n\n喜用神「"+xy+"」提示："+xy1+"属性的投资方向值得关注，但不宜贪多求快。\n\n💡 建议：做好长期理财规划，避免冲动消费。";
+
+  if(msg.indexOf("健康")>=0||msg.indexOf("身体")>=0)
+    return "🏥 健康提示\n\n"+rizhu+"的体质整体平衡，但需关注"+xy1+"属性对应的身体系统。建议保持规律作息，适度运动。\n\n💡 建议：定期体检，劳逸结合。";
+
+  return "🔮 八字命理分析\n\n你的命盘：日主"+rizhu+"，格局"+zhengge+"，五行"+baziData.qiangruo+"。\n\n喜用神为「"+xy+"」，这是你的能量来源。整体来看，你的命盘偏向稳重型，适合循序渐进的发展路线。\n\n有什么具体方面想深入了解的吗？";
+}
+</script>
+</body>
+</html>

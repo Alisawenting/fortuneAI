@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>云枢易馆</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;background:#f7f3ed;color:#3d3226;min-height:100vh;padding-bottom:80px}
+.header{background:linear-gradient(135deg,#c43a2f,#8b1a1a);padding:24px 20px 20px;text-align:center}
+.header h1{color:#fff;font-family:"Noto Serif SC","Songti SC",serif;font-size:22px;letter-spacing:2px}
+.header .sub{color:rgba(255,255,255,.7);font-size:11px;margin-top:4px}
+.card{margin:16px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card-title{font-family:"Noto Serif SC",serif;font-size:15px;font-weight:600;margin-bottom:12px}
+.scores{display:flex;justify-content:space-around;text-align:center}
+.score-item{flex:1}
+.score-val{font-size:24px;font-weight:700}
+.score-label{font-size:11px;color:#999;margin-top:2px}
+.bar{height:4px;border-radius:2px;margin:4px 8px 0;background:#eee;overflow:hidden}
+.bar-inner{height:100%;border-radius:2px}
+.yi-ji{display:flex;gap:12px;margin-top:12px}
+.yi{flex:1;background:#e8f5e9;border-radius:12px;padding:12px;text-align:center}
+.ji{flex:1;background:#fbe9e7;border-radius:12px;padding:12px;text-align:center}
+.yi .h,.ji .h{font-family:"Noto Serif SC",serif;font-size:14px;font-weight:600}
+.yi .h{color:#2e7d32}.ji .h{color:#c62828}
+.yi .tags,.ji .tags{font-size:12px;color:#666;margin-top:4px}
+.lucky-row{display:flex;gap:12px;margin-top:12px}
+.lucky-box{flex:1;background:#faf8f5;border-radius:12px;padding:12px;text-align:center}
+.lucky-box .lb{font-size:11px;color:#999}
+.lucky-box .lv{font-size:14px;font-weight:600;color:#8b1a1a;margin-top:4px}
+.dayun-scroll{overflow-x:auto;white-space:nowrap;padding-bottom:4px}
+.dayun-item{display:inline-block;min-width:80px;text-align:center;padding:12px 10px;margin-right:8px;background:#faf8f5;border-radius:12px;border:1px solid #eee}
+.dayun-item.cur{border-color:#c43a2f;background:#fef5f4}
+.dayun-item .da{font-size:10px;color:#999}
+.dayun-item .dgz{font-family:"Noto Serif SC",serif;font-size:15px;font-weight:600;color:#c43a2f;margin:4px 0}
+.dayun-item .dn{font-size:10px;color:#999}
+.btn{display:block;width:calc(100% - 32px);margin:12px 16px;padding:14px;border-radius:14px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;border:none;cursor:pointer;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;box-shadow:0 4px 16px rgba(196,58,47,.3)}
+.placeholder{padding:24px;text-align:center;color:#999;font-size:14px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,.04)}
+.nav-item{text-align:center;font-size:10px;color:#999;text-decoration:none;flex:1}
+.nav-item .ni{font-size:22px;display:block;margin-bottom:2px}
+.nav-item.active{color:#c43a2f}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>☁️ 云枢易馆</h1>
+  <div class="sub">古法藏枢机 · AI 解流年</div>
+</div>
+
+<div id="app">
+  <div class="card" id="fortuneCard">
+    <div class="card-title">📊 今日命理指数</div>
+    <div class="scores" id="scores">
+      <div class="score-item"><div class="score-val" style="color:#c43a2f">--</div><div class="score-label">事业</div></div>
+      <div class="score-item"><div class="score-val" style="color:#c49a3c">--</div><div class="score-label">财运</div></div>
+      <div class="score-item"><div class="score-val" style="color:#e91e63">--</div><div class="score-label">情感</div></div>
+      <div class="score-item"><div class="score-val" style="color:#7c4dff">--</div><div class="score-label">人际</div></div>
+      <div class="score-item"><div class="score-val" style="color:#4a9e6e">--</div><div class="score-label">健康</div></div>
+    </div>
+  </div>
+
+  <div class="card" id="dayunCard">
+    <div class="card-title">📅 大运排布</div>
+    <div class="dayun-scroll" id="dayunList"></div>
+  </div>
+
+  <div id="noData" class="placeholder">
+    <p style="font-size:48px;margin-bottom:12px">🔮</p>
+    <p style="font-size:16px">请先录入生辰</p>
+    <p style="font-size:12px;color:#bbb;margin-top:4px">生成专属八字命盘</p>
+  </div>
+</div>
+
+<a href="divine.html" class="btn btn-primary">📝 录入生辰 · 开始测算</a>
+
+<nav class="nav">
+  <a href="index.html" class="nav-item active"><span class="ni">🏠</span>运势</a>
+  <a href="divine.html" class="nav-item"><span class="ni">🔮</span>测算</a>
+  <a href="chat.html" class="nav-item"><span class="ni">💬</span>问答</a>
+</nav>
+
+<script>
+(function(){
+  try{
+    var d = JSON.parse(localStorage.getItem("yunshu:bazi-data"));
+    if(d){
+      document.getElementById("noData").style.display="none";
+      var colors = ["#c43a2f","#c49a3c","#e91e63","#7c4dff","#4a9e6e"];
+      var labels = ["事业","财运","情感","人际","健康"];
+      var base = 58 + (d.qiangruo==="身强"?15:d.qiangruo==="身弱"?-5:0);
+      var shtml = "";
+      for(var i=0;i<5;i++){
+        var v = Math.min(98, base + Math.floor(Math.sin(i*2.3)*15));
+        shtml += '<div class="score-item"><div class="score-val" style="color:'+colors[i]+'">'+v+'</div><div class="score-label">'+labels[i]+'</div><div class="bar"><div class="bar-inner" style="width:'+v+'%;background:'+colors[i]+'"></div></div></div>';
+      }
+      document.getElementById("scores").innerHTML = shtml;
+      var card = document.getElementById("fortuneCard");
+      card.innerHTML += '<div class="yi-ji"><div class="yi"><div class="h">✅ 宜</div><div class="tags">出行 · 签约 · 会友</div></div><div class="ji"><div class="h">❌ 忌</div><div class="tags">争辩 · 动土</div></div></div>';
+      var wy = d.xiyongshen||"";
+      var lc = wy.indexOf("木")>=0?"松烟青":wy.indexOf("火")>=0?"朱砂红":wy.indexOf("水")>=0?"墨蓝":"鎏金";
+      var ln = wy.indexOf("木")>=0?"3、8":wy.indexOf("火")>=0?"2、7":wy.indexOf("水")>=0?"1、6":"5、0";
+      card.innerHTML += '<div class="lucky-row"><div class="lucky-box"><div class="lb">🎨 幸运色</div><div class="lv">'+lc+'</div></div><div class="lucky-box"><div class="lb">🔢 幸运数字</div><div class="lv">'+ln+'</div></div></div>';
+
+      var dyhtml = "";
+      for(var i=0;i<Math.min(d.dayuns.length,8);i++){
+        var dy = d.dayuns[i];
+        dyhtml += '<div class="dayun-item'+(dy.current?" cur":"")+'"><div class="da">'+dy.age+'岁</div><div class="dgz">'+dy.gz+'</div><div class="dn">'+dy.god+'</div></div>';
+      }
+      document.getElementById("dayunList").innerHTML = dyhtml;
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
