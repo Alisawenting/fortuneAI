@@ -1,6 +1,6 @@
 App({
   globalData: {
-    apiBase: 'https://yunshuyiguan.cn',
+    apiBase: 'http://120.26.213.89:3000',
     userInfo: null,
     statusBarHeight: 0,
     navBarHeight: 0

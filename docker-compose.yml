@@ -11,7 +11,7 @@ services:
     container_name: yunshu-ai
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3000:3000" # Nginx 反代 → 容器，不直接暴露外网
+      - "0.0.0.0:3000:3000" # 小程序 API 直连 + Nginx 反代
     env_file:
       - .env # DeepSeek / 智谱 / 缘份居 API key、JWT_SECRET 等
     environment:
