@@ -1,0 +1,27 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">AI 命理解读</text>
+    <view class="back-btn"></view>
+  </view>
+
+  <view class="content px-5">
+    <block wx:if="{{loading}}">
+      <view class="loading-wrap">
+        <text class="animate-spin" style="font-size:64rpx;color:var(--primary);margin-bottom:24rpx">⟳</text>
+        <text>AI 正在为您解读命盘...</text>
+      </view>
+    </block>
+    <block wx:else>
+      <rich-text nodes="{{analysisNodes}}" class="analysis-text"></rich-text>
+
+      <view class="dimensions mt-5" wx:if="{{dimensions.length > 0}}">
+        <view class="dim-card" wx:for="{{dimensions}}" wx:key="label">
+          <text class="dim-icon">{{item.emoji}}</text>
+          <text class="dim-label">{{item.label}}</text>
+          <text class="dim-text">{{item.text}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

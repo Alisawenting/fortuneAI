@@ -1,0 +1,10 @@
+.ui-input-wrap { margin-bottom: 24rpx; }
+.ui-input-label { display: block; font-size: 24rpx; color: var(--muted-foreground); margin-bottom: 12rpx; }
+.ui-input {
+  width: 100%; padding: 24rpx 32rpx;
+  border: 2rpx solid var(--border); border-radius: 24rpx;
+  background: var(--card); font-size: 28rpx; box-sizing: border-box;
+}
+.ui-input:focus { border-color: var(--primary); }
+.ui-input.error { border-color: var(--cinnabar); }
+.ui-input-error { font-size: 22rpx; color: var(--cinnabar); margin-top: 8rpx; display: block; }

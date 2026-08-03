@@ -1,0 +1,123 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">个人命盘录入</text>
+    <view class="header-spacer"></view>
+  </view>
+
+  <view class="hero px-5">
+    <text class="hero-title">枢机将启</text>
+    <text class="hero-sub">填四项即可，未知时辰也能智能估算</text>
+  </view>
+
+  <form class="form px-5" bindsubmit="onSubmit">
+    <!-- 性别 -->
+    <view class="field">
+      <text class="field-label">性别</text>
+      <view class="gender-row">
+        <view class="gender-btn {{gender === '男' ? 'active' : ''}}" data-g="男" bindtap="setGender">乾 · 男</view>
+        <view class="gender-btn {{gender === '女' ? 'active' : ''}}" data-g="女" bindtap="setGender">坤 · 女</view>
+      </view>
+    </view>
+
+    <!-- 姓名 -->
+    <view class="field">
+      <text class="field-label">姓名</text>
+      <input class="form-input" value="{{name}}" placeholder="请输入姓名（必填）" bindinput="onNameInput" />
+    </view>
+
+    <!-- 历法 -->
+    <view class="field">
+      <text class="field-label">历法</text>
+      <view class="gender-row">
+        <view class="gender-btn {{calendar === '公历' ? 'active' : ''}}" data-c="公历" bindtap="setCalendar">公历</view>
+        <view class="gender-btn {{calendar === '农历' ? 'active' : ''}}" data-c="农历" bindtap="setCalendar">农历</view>
+      </view>
+    </view>
+
+    <!-- 出生日期 -->
+    <view class="field">
+      <text class="field-label">出生日期（{{calendar}}）</text>
+      <view class="date-row-3">
+        <picker mode="selector" range="{{yearOptions}}" value="{{yearIndex}}" bindchange="onYearChange">
+          <view class="picker-display">{{year}}年</view>
+        </picker>
+        <picker mode="selector" range="{{monthLabels}}" value="{{monthIndex}}" bindchange="onMonthChange">
+          <view class="picker-display">{{monthLabels[monthIndex]}}</view>
+        </picker>
+        <picker mode="selector" range="{{dayOptions}}" value="{{dayIndex}}" bindchange="onDayChange">
+          <view class="picker-display">{{dayLabels[dayIndex]}}</view>
+        </picker>
+      </view>
+      <text class="field-hint">
+        {{calendar === '农历' ? '已按农历（阴历）录入，如不确定可切换公历' : '已按公历（阳历）录入，天数随月份/闰年自动调整'}}
+      </text>
+    </view>
+
+    <!-- 出生时间 -->
+    <view class="field">
+      <text class="field-label">出生时间</text>
+      <view class="time-row">
+        <input class="form-input flex-1" type="time" value="{{time}}" bindinput="onTimeInput" />
+        <button class="estimate-btn" bindtap="onEstimateTime">智能估算</button>
+      </view>
+      <text class="field-hint">将自动进行真太阳时校正</text>
+    </view>
+
+    <!-- 出生地点 -->
+    <view class="field">
+      <text class="field-label">出生地点</text>
+      <input class="form-input" value="{{place}}" placeholder="如：浙江省 杭州市" bindinput="onPlaceInput" />
+    </view>
+
+    <!-- 保存为角色 -->
+    <view class="save-role {{saveAsRole ? 'active' : ''}}">
+      <label class="save-role-label">
+        <checkbox value="{{saveAsRole}}" checked="{{saveAsRole}}" disabled="{{roleCount >= 5}}" bindchange="onSaveRoleChange" />
+        <view class="flex-1">
+          <view class="flex items-center gap-2">
+            <text style="font-size:28rpx">👤</text>
+            <text class="save-role-title">保存为角色档案</text>
+            <text class="save-role-count {{roleCount >= 5 ? 'full' : ''}}">{{roleCount}}/5</text>
+          </view>
+          <text class="save-role-hint">
+            {{roleCount >= 5 ? '角色已满，请先在「会员中心」删除一个' : '此次测算将存档为新角色，首页可一键切换查看'}}
+          </text>
+        </view>
+      </label>
+
+      <view wx:if="{{saveAsRole && roleCount < 5}}" class="role-extra">
+        <input class="form-input mb-2" value="{{name}}" placeholder="角色名称，如：宝宝、爸爸、伴侣" bindinput="onNameInput" />
+        <text class="save-role-hint mb-1">选择头像</text>
+        <view class="avatar-pick">
+          <view
+            class="avatar-item {{avatar === item ? 'active' : ''}}"
+            wx:for="{{avatarOptions}}"
+            wx:key="*this"
+            data-a="{{item}}"
+            bindtap="setAvatar"
+          >{{item}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 生成按钮 -->
+    <view class="btn-row">
+      <button class="gen-btn primary" bindtap="onGenerateBazi" disabled="{{loading}}">
+        <text wx:if="{{!loading}}">🪄 生成八字命盘</text>
+        <block wx:else>
+          <text class="animate-spin" style="display:inline-block">⟳</text>
+          <text>排盘中...</text>
+        </block>
+      </button>
+      <button class="gen-btn outline" bindtap="onGenerateZiwei">
+        <text>🧭 生成紫微命盘</text>
+      </button>
+    </view>
+
+    <!-- 隐私提示 -->
+    <view class="privacy-tip">
+      <text>✦ 数据仅用于命理推演，受加密保护，可随时一键清空</text>
+    </view>
+  </form>
+</view>

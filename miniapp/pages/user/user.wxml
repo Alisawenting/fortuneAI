@@ -1,0 +1,30 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/community/community" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">{{userName}} 的主页</text>
+    <view class="back-btn"></view>
+  </view>
+
+  <view class="profile px-5">
+    <view class="avatar">{{userName.slice(0,1)}}</view>
+    <text class="name">{{userName}}</text>
+    <text class="handle">@{{userName}}</text>
+    <view class="stats">
+      <view class="stat"><text class="stat-n">{{posts.length}}</text><text>帖子</text></view>
+      <view class="stat"><text class="stat-n">{{followCount}}</text><text>关注</text></view>
+      <view class="stat"><text class="stat-n">{{followerCount}}</text><text>粉丝</text></view>
+    </view>
+  </view>
+
+  <view class="posts px-5">
+    <text class="posts-title">TA 的帖子</text>
+    <block wx:if="{{posts.length === 0}}">
+      <text class="empty-text">暂无帖子</text>
+    </block>
+    <view class="post-card" wx:for="{{posts}}" wx:key="id">
+      <text class="post-title">{{item.title}}</text>
+      <text class="post-content">{{item.content}}</text>
+      <text class="post-meta">{{item.category}} · {{item.timeAgo}}</text>
+    </view>
+  </view>
+</view>

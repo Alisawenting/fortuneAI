@@ -1,0 +1,162 @@
+/* ===== CSS 变量（只用简单颜色值，不能用 gradient） ===== */
+page {
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --jade: #4a9e6e;
+  --cinnabar: #d94e3c;
+  --gold: #c49a3c;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --card: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --foreground: #1f2937;
+  --secondary: #f9fafb;
+  --accent: #f0fdf4;
+
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 28rpx;
+  color: #1f2937;
+  background-color: #f5f2ed;
+}
+
+/* ===== 全局 box-sizing ===== */
+view, text, input, button, scroll-view, navigator, image, textarea {
+  box-sizing: border-box;
+}
+
+/* ===== 通用原子类 ===== */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-1 { flex: 1; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-1 { gap: 8rpx; }
+.gap-2 { gap: 16rpx; }
+.gap-3 { gap: 24rpx; }
+.gap-4 { gap: 32rpx; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-xs { font-size: 20rpx; }
+.text-sm { font-size: 26rpx; }
+.text-base { font-size: 30rpx; }
+.text-lg { font-size: 34rpx; }
+.text-xl { font-size: 38rpx; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+.text-primary { color: #8b5cf6; }
+.text-muted { color: #6b7280; }
+.text-foreground { color: #1f2937; }
+.text-jade { color: #4a9e6e; }
+.text-cinnabar { color: #d94e3c; }
+.text-gold { color: #c49a3c; }
+.text-white { color: #ffffff; }
+
+.rounded-xl { border-radius: 16rpx; }
+.rounded-2xl { border-radius: 24rpx; }
+.rounded-3xl { border-radius: 32rpx; }
+.rounded-full { border-radius: 9999rpx; }
+
+.shadow-soft { box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04); }
+.shadow-floating { box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.08); }
+
+.bg-card { background-color: #ffffff; }
+.bg-primary { background-color: #8b5cf6; color: #ffffff; }
+.bg-muted { background-color: #f3f4f6; }
+.bg-page { background-color: #f5f2ed; }
+
+.p-3 { padding: 24rpx; }
+.p-4 { padding: 32rpx; }
+.p-5 { padding: 40rpx; }
+.px-3 { padding-left: 24rpx; padding-right: 24rpx; }
+.px-4 { padding-left: 32rpx; padding-right: 32rpx; }
+.px-5 { padding-left: 40rpx; padding-right: 40rpx; }
+.py-2 { padding-top: 16rpx; padding-bottom: 16rpx; }
+.py-3 { padding-top: 24rpx; padding-bottom: 24rpx; }
+.py-4 { padding-top: 32rpx; padding-bottom: 32rpx; }
+.pt-3 { padding-top: 24rpx; }
+.pt-4 { padding-top: 32rpx; }
+.pt-5 { padding-top: 40rpx; }
+.pb-2 { padding-bottom: 16rpx; }
+.pb-3 { padding-bottom: 24rpx; }
+.pb-4 { padding-bottom: 32rpx; }
+.pb-5 { padding-bottom: 40rpx; }
+.pb-6 { padding-bottom: 48rpx; }
+.mt-1 { margin-top: 8rpx; }
+.mt-2 { margin-top: 16rpx; }
+.mt-3 { margin-top: 24rpx; }
+.mt-4 { margin-top: 32rpx; }
+.mt-5 { margin-top: 40rpx; }
+.mb-1 { margin-bottom: 8rpx; }
+.mb-2 { margin-bottom: 16rpx; }
+.mb-3 { margin-bottom: 24rpx; }
+.mb-4 { margin-bottom: 32rpx; }
+.ml-auto { margin-left: auto; }
+.mr-2 { margin-right: 16rpx; }
+.mx-5 { margin-left: 40rpx; margin-right: 40rpx; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.overflow-hidden { overflow: hidden; }
+.overflow-x-auto { overflow-x: auto; }
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+
+.hidden { display: none; }
+.block { display: block; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+/* ===== 通用 section 卡片 ===== */
+.section-card {
+  padding: 40rpx;
+  border-radius: 32rpx;
+  background: #ffffff;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+}
+
+/* ===== 通用按钮重置（去掉微信默认边框） ===== */
+button::after {
+  border: none;
+}
+button {
+  padding: 0;
+  margin: 0;
+  background: none;
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: 0;
+}
+
+/* ===== 动画 ===== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ===== 渐变背景（不能放 CSS 变量，只能直接写） ===== */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+.bg-gradient-jade {
+  background: linear-gradient(135deg, #4a9e6e, #3a8b5e);
+}
+.bg-gradient-cinnabar {
+  background: linear-gradient(135deg, #d94e3c, #c0392b);
+}

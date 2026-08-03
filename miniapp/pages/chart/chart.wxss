@@ -1,0 +1,143 @@
+.page { background-color: #f5f2ed; min-height: 100vh; }
+.header { display: flex; align-items: center; justify-content: space-between; padding-top: 20rpx; padding-bottom: 20rpx; }
+.back-btn {
+  width: 72rpx; height: 72rpx; border-radius: 50%;
+  background: var(--card); box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  display: flex; align-items: center; justify-content: center; font-size: 28rpx;
+}
+.header-title { font-size: 32rpx; font-weight: 500; }
+
+.empty { display: flex; flex-direction: column; align-items: center; padding-top: 160rpx; text-align: center; }
+.empty-icon {
+  width: 128rpx; height: 128rpx; border-radius: 32rpx;
+  background: rgba(139,92,246,0.1); color: var(--primary);
+  display: flex; align-items: center; justify-content: center; font-size: 64rpx;
+}
+.empty-title { font-size: 36rpx; font-weight: 600; margin-top: 40rpx; }
+.empty-desc { font-size: 28rpx; color: var(--muted-foreground); margin-top: 16rpx; }
+.empty-btn {
+  margin-top: 48rpx; padding: 24rpx 64rpx; border-radius: 24rpx;
+  background: var(--primary); color: var(--primary-foreground);
+  font-size: 28rpx; font-weight: 500; box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.08);
+}
+
+.content { padding-top: 40rpx; padding-bottom: 160rpx; }
+.mt-4 { margin-top: 32rpx; }
+.mt-3 { margin-top: 24rpx; }
+.mt-5 { margin-top: 40rpx; }
+
+/* ===== 命盘头部 ===== */
+.rizhu-label { font-size: 36rpx; font-weight: 600; }
+.sizhu-summary { font-size: 24rpx; color: var(--muted-foreground); margin-top: 4rpx; display: block; }
+.date-convert { font-size: 22rpx; color: var(--muted-foreground); margin-top: 4rpx; display: block; }
+.sx-badge {
+  padding: 8rpx 24rpx; border-radius: 9999rpx;
+  background: rgba(139,92,246,0.1); font-size: 22rpx; color: var(--primary);
+}
+
+.tab-switch { display: inline-flex; border-radius: 9999rpx; background: var(--muted); padding: 4rpx; }
+.tab-btn {
+  padding: 12rpx 24rpx; border-radius: 9999rpx;
+  font-size: 24rpx; color: var(--muted-foreground);
+}
+.tab-btn.active { background: var(--card); color: var(--primary); box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04); }
+
+/* ===== 四柱 ===== */
+.pillar-headers, .pillar-row {
+  display: grid; grid-template-columns: 80rpx 1fr 1fr 1fr 1fr; gap: 12rpx; margin-bottom: 12rpx;
+}
+.ph-label { font-size: 20rpx; color: var(--muted-foreground); display: flex; align-items: center; justify-content: flex-end; }
+.pillar-cell {
+  padding: 20rpx 8rpx; border: 2rpx solid var(--border);
+  border-radius: 16rpx; background: var(--card);
+  text-align: center; position: relative;
+}
+.pillar-gan { font-size: 48rpx; font-weight: 700; }
+.pillar-zhi { font-size: 40rpx; font-weight: 700; }
+.pillar-tag {
+  position: absolute; top: -8rpx; right: -8rpx;
+  padding: 4rpx 12rpx; border-radius: 9999rpx;
+  background: var(--primary); color: var(--primary-foreground); font-size: 18rpx;
+}
+.pillar-shishen { font-size: 18rpx; color: var(--primary); display: block; }
+.pillar-canggan, .pillar-nayin { font-size: 18rpx; color: var(--muted-foreground); display: block; }
+
+.wuxing-legend { display: flex; justify-content: center; gap: 24rpx; }
+.wuxing-dot { font-size: 20rpx; }
+
+.pro-info { padding: 24rpx; border-radius: 24rpx; background: var(--muted); font-size: 22rpx; line-height: 2; color: var(--foreground); }
+.pro-info text { display: block; }
+
+/* ===== 五行进度条 ===== */
+.section-title { font-size: 28rpx; font-weight: 500; }
+.wx-bar { display: flex; align-items: center; gap: 24rpx; margin-bottom: 20rpx; }
+.wx-name { width: 40rpx; font-size: 28rpx; font-weight: 500; }
+.wx-track { flex: 1; height: 16rpx; border-radius: 9999rpx; background: var(--muted); overflow: hidden; }
+.wx-fill { height: 100%; border-radius: 9999rpx; }
+.wx-value { width: 64rpx; text-align: right; font-size: 24rpx; color: var(--muted-foreground); }
+
+/* ===== 大运 ===== */
+.dayun-scroll { white-space: nowrap; padding-bottom: 8rpx; }
+.dayun-card {
+  display: inline-flex; flex-direction: column;
+  min-width: 200rpx; padding: 24rpx; margin-right: 16rpx;
+  border-radius: 24rpx; border: 2rpx solid var(--border);
+  background: var(--card); white-space: normal;
+}
+.dayun-card.active { border-color: var(--primary); background: rgba(139,92,246,0.05); }
+.dayun-card:active { transform: scale(0.95); }
+.dayun-age { font-size: 20rpx; color: var(--muted-foreground); }
+.dayun-gz { font-size: 28rpx; margin-top: 8rpx; }
+.dayun-note { font-size: 20rpx; color: var(--muted-foreground); margin-top: 4rpx; }
+
+/* ===== 流年 ===== */
+.ln-item { display: flex; align-items: flex-start; gap: 24rpx; padding-left: 24rpx; margin-bottom: 24rpx; }
+.ln-left { width: 4rpx; height: 100%; background: rgba(139,92,246,0.4); border-radius: 2rpx; flex-shrink: 0; }
+.ln-year { font-size: 28rpx; font-weight: 500; }
+.ln-ganzhi { font-size: 22rpx; color: var(--muted-foreground); }
+.ln-luck { padding: 4rpx 16rpx; border-radius: 9999rpx; font-size: 20rpx; background: var(--muted); }
+.ln-luck.primary { background: rgba(139,92,246,0.1); color: var(--primary); }
+.ln-text { font-size: 24rpx; color: var(--muted-foreground); margin-top: 8rpx; display: block; line-height: 1.6; }
+
+/* ===== 神煞 ===== */
+.shensha-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16rpx; }
+.ss-card { padding: 24rpx; border-radius: 24rpx; background: var(--muted); }
+.ss-name { font-size: 28rpx; color: var(--primary); }
+.ss-pos { font-size: 20rpx; color: var(--muted-foreground); }
+.ss-desc { font-size: 22rpx; color: var(--muted-foreground); margin-top: 8rpx; display: block; line-height: 1.6; }
+
+/* ===== 命格标签 ===== */
+.mg-tags { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.mg-tag { padding: 8rpx 24rpx; border-radius: 9999rpx; background: var(--muted); font-size: 24rpx; }
+
+/* ===== 生活建议 ===== */
+.detail-link { font-size: 24rpx; color: var(--primary); }
+.life-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16rpx; }
+.life-card { padding: 24rpx; border-radius: 24rpx; border: 2rpx solid var(--border); }
+.life-card:active { transform: scale(0.98); }
+.life-icon { font-size: 36rpx; }
+.life-title { font-size: 28rpx; font-weight: 500; display: block; margin-top: 16rpx; }
+.life-hint { font-size: 22rpx; color: var(--muted-foreground); display: block; margin-top: 8rpx; }
+
+/* ===== 商城入口 ===== */
+.shop-entry {
+  padding: 32rpx; border-radius: 24rpx;
+  background: linear-gradient(135deg, rgba(139,92,246,0.1), var(--card), rgba(196,154,60,0.1));
+}
+.shop-icon {
+  width: 64rpx; height: 64rpx; border-radius: 16rpx;
+  background: var(--card); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32rpx; box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+}
+.shop-title { font-size: 28rpx; font-weight: 500; display: block; }
+.shop-desc { font-size: 22rpx; color: var(--muted-foreground); display: block; }
+.shop-btn {
+  margin-top: 24rpx; padding: 20rpx; border-radius: 16rpx;
+  background: var(--primary); color: var(--primary-foreground);
+  font-size: 26rpx; font-weight: 500; text-align: center; display: block;
+}
+
+/* ===== 弹窗 ===== */
+.dayun-dialog-body { font-size: 28rpx; line-height: 2; max-height: 60vh; overflow-y: auto; }
+.loading-wrap { display: flex; flex-direction: column; align-items: center; padding: 48rpx 0; font-size: 24rpx; color: var(--muted-foreground); }

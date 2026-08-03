@@ -1,0 +1,25 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">我的收藏</text>
+    <view class="back-btn"></view>
+  </view>
+
+  <view class="list px-5">
+    <block wx:if="{{bookmarks.length === 0}}">
+      <view class="empty">
+        <text class="empty-text">还没有收藏内容</text>
+        <navigator url="/pages/index/index" class="empty-link">去首页发现流年提示 →</navigator>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="bm-item" wx:for="{{bookmarks}}" wx:key="id">
+        <view class="flex-1">
+          <text class="bm-title">{{item.title}}</text>
+          <text class="bm-desc">{{item.desc || ''}}</text>
+        </view>
+        <text class="bm-del" data-id="{{item.id}}" bindtap="onRemove">✕</text>
+      </view>
+    </block>
+  </view>
+</view>

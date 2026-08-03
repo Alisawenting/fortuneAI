@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/divine/divine",
+    "pages/chart/chart",
+    "pages/reading/reading",
+    "pages/chat/chat",
+    "pages/community/community",
+    "pages/shop/shop",
+    "pages/profile/profile",
+    "pages/bookmarks/bookmarks",
+    "pages/member/member",
+    "pages/user/user",
+    "pages/ziwei-chart/ziwei-chart"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#f5f2ed",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#8b5cf6",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "运势"
+      },
+      {
+        "pagePath": "pages/divine/divine",
+        "text": "测算"
+      },
+      {
+        "pagePath": "pages/chat/chat",
+        "text": "问答"
+      },
+      {
+        "pagePath": "pages/community/community",
+        "text": "广场"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

@@ -1,0 +1,50 @@
+.page { background-color: #f5f2ed; min-height: 100vh; }
+.header { display: flex; align-items: center; justify-content: space-between; padding-top: 20rpx; padding-bottom: 20rpx; }
+.back-btn { width: 72rpx; height: 72rpx; }
+.header-title { font-size: 32rpx; font-weight: 500; }
+
+.empty { display: flex; flex-direction: column; align-items: center; padding-top: 160rpx; text-align: center; }
+.empty-icon { font-size: 80rpx; }
+.empty-title { font-size: 36rpx; font-weight: 600; margin-top: 40rpx; }
+.empty-desc { font-size: 28rpx; color: var(--muted-foreground); margin-top: 16rpx; }
+.empty-btn {
+  margin-top: 48rpx; padding: 24rpx 64rpx; border-radius: 24rpx;
+  background: var(--primary); color: var(--primary-foreground);
+  font-size: 28rpx; font-weight: 500;
+}
+
+.content { padding-top: 40rpx; padding-bottom: 160rpx; }
+.mt-3 { margin-top: 24rpx; }
+.mt-5 { margin-top: 40rpx; }
+
+.ziwei-title { font-size: 36rpx; font-weight: 600; display: block; }
+.ziwei-sub { font-size: 24rpx; color: var(--muted-foreground); margin-top: 4rpx; display: block; }
+.ziwei-badge { padding: 8rpx 24rpx; border-radius: 9999rpx; background: rgba(139,92,246,0.1); font-size: 22rpx; color: var(--primary); }
+
+.section-title { font-size: 28rpx; font-weight: 500; }
+
+/* 十二宫网格 */
+.gong-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12rpx;
+}
+.gong-cell {
+  padding: 24rpx 12rpx; border-radius: 16rpx;
+  background: var(--muted); text-align: center;
+}
+.gong-name { font-size: 22rpx; color: var(--muted-foreground); display: block; }
+.gong-star { font-size: 26rpx; color: var(--primary); font-weight: 500; display: block; margin-top: 4rpx; }
+.gong-zhi { font-size: 20rpx; color: var(--muted-foreground); display: block; margin-top: 2rpx; }
+
+/* 四化 */
+.sihua-item { display: flex; align-items: center; gap: 16rpx; padding: 20rpx 0; border-bottom: 2rpx solid var(--border); }
+.sihua-item:last-child { border-bottom: none; }
+.sihua-type {
+  width: 64rpx; padding: 4rpx 8rpx; border-radius: 8rpx;
+  text-align: center; font-size: 22rpx; font-weight: 500;
+}
+.sihua-lu { background: rgba(74,158,110,0.15); color: #4a9e6e; }
+.sihua-quan { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+.sihua-ke { background: rgba(106,158,217,0.15); color: #5a8ec9; }
+.sihua-ji { background: rgba(217,78,60,0.15); color: #d94e3c; }
+.sihua-star { font-size: 28rpx; font-weight: 500; }
+.sihua-pos { font-size: 24rpx; color: var(--muted-foreground); margin-left: auto; }

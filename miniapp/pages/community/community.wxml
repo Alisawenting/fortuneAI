@@ -1,0 +1,101 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <text class="header-title">广场</text>
+    <view class="flex items-center gap-2">
+      <button class="post-btn" bindtap="onOpenEditor">发帖</button>
+    </view>
+  </view>
+
+  <!-- 分类标签 -->
+  <scroll-view class="tab-bar px-5" scroll-x enable-flex>
+    <view
+      class="tab-item {{activeTab === index ? 'active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="*this"
+      wx:for-index="index"
+      data-idx="{{index}}"
+      bindtap="onSwitchTab"
+    >{{item}}</view>
+  </scroll-view>
+
+  <!-- 帖子列表 -->
+  <view class="post-list px-5">
+    <block wx:if="{{loading}}">
+      <view class="loading-text">加载中...</view>
+    </block>
+    <block wx:elif="{{posts.length === 0}}">
+      <view class="empty-text">还没有帖子，来发布第一条吧</view>
+    </block>
+    <block wx:else>
+      <view class="post-card" wx:for="{{posts}}" wx:key="id">
+        <view class="flex items-center gap-2">
+          <navigator url="/pages/user/user?name={{item.username || '匿名'}}" class="post-avatar">{{item.displayName ? item.displayName.slice(0,1) : (item.username ? item.username.slice(0,1) : '匿')}}</navigator>
+          <view>
+            <navigator url="/pages/user/user?name={{item.username || '匿名'}}" class="post-author">{{item.displayName || item.username || '匿名'}}</navigator>
+            <text class="post-meta">{{item.category}} · {{item.timeAgo}}</text>
+          </view>
+        </view>
+        <text class="post-title">{{item.title}}</text>
+        <text class="post-content">{{item.content}}</text>
+        <!-- 图片网格 -->
+        <view class="post-images" wx:if="{{item.images && item.images.length > 0}}">
+          <image
+            class="post-img {{item.images.length === 1 ? 'single' : ''}}"
+            wx:for="{{item.images}}"
+            wx:for-item="img"
+            wx:key="*this"
+            src="{{img}}"
+            mode="aspectFill"
+            data-src="{{img}}"
+            bindtap="onPreviewImage"
+          ></image>
+        </view>
+        <view class="post-actions">
+          <view class="action-btn" data-id="{{item.id}}" bindtap="onLike">
+            <text class="{{likedPosts[item.id] ? 'liked' : ''}}">❤️ {{item.likesCount}}</text>
+          </view>
+          <text class="action-btn">💬 {{item.commentsCount}}</text>
+          <text class="action-btn ml-auto">🔖 收藏</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- 图片预览 -->
+<view class="preview-overlay" wx:if="{{previewImage}}" bindtap="onClosePreview">
+  <image src="{{previewImage}}" mode="widthFix" class="preview-img"></image>
+</view>
+
+<!-- 发帖弹窗 -->
+<view class="editor-overlay" wx:if="{{showEditor}}" bindtap="onCloseEditor">
+  <view class="editor-panel" catchtap="noop">
+    <view class="flex items-center justify-between mb-4">
+      <text class="editor-title">发布帖子</text>
+      <text class="editor-close" bindtap="onCloseEditor">✕</text>
+    </view>
+    <view class="flex gap-2 mb-3">
+      <text
+        class="cat-tag {{newCategory === item ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="*this"
+        data-c="{{item}}"
+        bindtap="onSetCategory"
+      >{{item}}</text>
+    </view>
+    <input class="form-input mb-3" value="{{newTitle}}" placeholder="标题（必填）" bindinput="onNewTitleInput" />
+    <textarea class="form-textarea mb-3" value="{{newContent}}" placeholder="分享你的运势心得、命理感悟..." bindinput="onNewContentInput" />
+    <!-- 图片选择 -->
+    <view class="img-pick-row" wx:if="{{newImages.length > 0}}">
+      <view class="img-pick-item" wx:for="{{newImages}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFill" class="img-pick-thumb" data-src="{{item}}" bindtap="onPreviewImage"></image>
+        <text class="img-pick-del" data-idx="{{index}}" bindtap="onRemoveImage">✕</text>
+      </view>
+    </view>
+    <view class="flex items-center gap-2 mb-4">
+      <button class="add-img-btn" bindtap="onChooseImage" disabled="{{newImages.length >= 4}}">添加图片</button>
+      <text class="img-count">最多4张 · 自动压缩</text>
+    </view>
+    <button class="publish-btn" bindtap="onPublish" disabled="{{publishing}}">{{publishing ? '发布中...' : '发布'}}</button>
+  </view>
+</view>

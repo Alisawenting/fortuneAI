@@ -1,0 +1,200 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/divine/divine" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">我的命盘</text>
+    <view class="back-btn" bindtap="onBookmark"><text>🔖</text></view>
+  </view>
+
+  <block wx:if="{{!paipanData}}">
+    <view class="empty">
+      <view class="empty-icon">✦</view>
+      <text class="empty-title">尚未排盘</text>
+      <text class="empty-desc">请先录入生辰信息，生成您的专属命盘</text>
+      <navigator url="/pages/divine/divine" class="empty-btn">开始测算 →</navigator>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="content px-5">
+      <!-- 命盘头部 -->
+      <view class="section-card">
+        <view class="flex items-center justify-between">
+          <view>
+            <text class="rizhu-label">{{rizhuLabel}} · {{rizhuDesc}}</text>
+            <text class="sizhu-summary">{{sizhuSummary}}</text>
+            <text class="date-convert" wx:if="{{calendarInfo}}">📅 {{calendarInfo}}</text>
+          </view>
+          <text class="sx-badge">{{shengxiao}} · {{xingzuo}}</text>
+        </view>
+
+        <!-- 基础/专业切换 -->
+        <view class="tab-switch mt-4">
+          <view class="tab-btn {{tab === 'basic' ? 'active' : ''}}" bindtap="switchTab" data-tab="basic">基础排盘</view>
+          <view class="tab-btn {{tab === 'pro' ? 'active' : ''}}" bindtap="switchTab" data-tab="pro">专业细盘</view>
+        </view>
+
+        <!-- 四柱 -->
+        <view class="mt-4">
+          <view class="pillar-headers">
+            <text class="ph-label"></text>
+            <text class="ph-label" wx:for="{{pillars}}" wx:key="label">{{item.label}}</text>
+          </view>
+          <view class="pillar-row">
+            <text class="ph-label">天干</text>
+            <view class="pillar-cell" wx:for="{{pillars}}" wx:key="label">
+              <text class="pillar-gan" style="color: {{item.ganColor}}">{{item.gan}}</text>
+              <text class="pillar-tag" wx:if="{{item.tag}}">{{item.tag}}</text>
+            </view>
+          </view>
+          <view class="pillar-row">
+            <text class="ph-label">地支</text>
+            <view class="pillar-cell" wx:for="{{pillars}}" wx:key="label">
+              <text class="pillar-zhi" style="color: {{item.zhiColor}}">{{item.zhi}}</text>
+            </view>
+          </view>
+          <view class="pillar-row" wx:if="{{tab === 'pro'}}">
+            <text class="ph-label">十神</text>
+            <view class="pillar-cell" wx:for="{{pillars}}" wx:key="label">
+              <text class="pillar-shishen">{{item.shishen}}</text>
+              <text class="pillar-canggan" wx:if="{{item.hidden}}">藏：{{item.hidden}}</text>
+              <text class="pillar-nayin">{{item.nayin}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 五行颜色图例 -->
+        <view class="wuxing-legend mt-3">
+          <text class="wuxing-dot" wx:for="{{wuxingList}}" wx:key="name" style="color: {{item.color}}">● {{item.name}}</text>
+        </view>
+
+        <!-- 专业模式额外信息 -->
+        <view class="pro-info mt-3" wx:if="{{tab === 'pro'}}">
+          <text>• 格局：{{zhengge || '—'}}</text>
+          <text>• 纳音：{{overallNayin || '—'}}</text>
+          <text>• 日主：{{rizhuDesc || '—'}}</text>
+        </view>
+      </view>
+
+      <!-- 五行强弱 -->
+      <view class="section-card mt-5">
+        <view class="flex items-center justify-between">
+          <text class="section-title">五行强弱</text>
+        </view>
+        <view class="wuxing-bars mt-4">
+          <view class="wx-bar" wx:for="{{elements}}" wx:key="name">
+            <text class="wx-name" style="color: {{item.color}}">{{item.name}}</text>
+            <view class="wx-track"><view class="wx-fill" style="width: {{item.value}}%; background: {{item.color}}"></view></view>
+            <text class="wx-value">{{item.value}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 大运 -->
+      <view class="section-card mt-5">
+        <text class="section-title">大运排布（点击查看详解）</text>
+        <scroll-view class="dayun-scroll mt-3" scroll-x enable-flex>
+          <view
+            class="dayun-card {{item.hot ? 'active' : ''}}"
+            wx:for="{{dayunList}}"
+            wx:key="age"
+            data-gz="{{item.gz}}"
+            data-god="{{item.note}}"
+            data-age="{{item.age}}"
+            bindtap="onDayunDetail"
+          >
+            <text class="dayun-age">{{item.age}} 岁</text>
+            <text class="dayun-gz text-primary">{{item.gz}}</text>
+            <text class="dayun-note">{{item.note}}</text>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 流年 -->
+      <view class="section-card mt-5" wx:if="{{liunian.length > 0}}">
+        <text class="section-title">流年运势 · 逐年详解</text>
+        <view class="liunian-list mt-3">
+          <view class="ln-item" wx:for="{{liunian}}" wx:key="year">
+            <view class="ln-left"></view>
+            <view class="flex-1">
+              <view class="flex items-center gap-2">
+                <text class="ln-year">{{item.year}}</text>
+                <text class="ln-ganzhi">{{item.ganzhi}}</text>
+                <text class="ln-luck {{item.luck === '当前' ? 'primary' : ''}}">{{item.luck}}</text>
+              </view>
+              <text class="ln-text">{{item.text}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 神煞 -->
+      <view class="section-card mt-5" wx:if="{{shensha.length > 0}}">
+        <text class="section-title">神煞速览</text>
+        <view class="shensha-grid mt-3">
+          <view class="ss-card" wx:for="{{shensha}}" wx:key="name">
+            <view class="flex items-center justify-between">
+              <text class="ss-name">{{item.name}}</text>
+              <text class="ss-pos">{{item.pos}}</text>
+            </view>
+            <text class="ss-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 命格标签 -->
+      <view class="section-card mt-5" wx:if="{{minggeTags.length > 0}}">
+        <text class="section-title">命格标签</text>
+        <view class="mg-tags mt-3">
+          <text class="mg-tag" wx:for="{{minggeTags}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 生活建议 -->
+      <view class="section-card mt-5">
+        <view class="flex items-center justify-between">
+          <text class="section-title">多场景命理速读</text>
+          <navigator url="/pages/reading/reading" class="detail-link">详细解读 →</navigator>
+        </view>
+        <view class="life-grid mt-3">
+          <navigator url="/pages/reading/reading" class="life-card" wx:for="{{lifeCards}}" wx:key="title">
+            <text class="life-icon">{{item.emoji}}</text>
+            <text class="life-title">{{item.title}}</text>
+            <text class="life-hint">点击查看 AI 详解 →</text>
+          </navigator>
+        </view>
+      </view>
+
+      <!-- 开运商城入口 -->
+      <view class="shop-entry mt-5">
+        <view class="flex items-center gap-3">
+          <text class="shop-icon">✦</text>
+          <view class="flex-1">
+            <text class="shop-title">AI 开运手串推荐</text>
+            <text class="shop-desc">基于命盘喜用神智能推荐</text>
+          </view>
+        </view>
+        <navigator url="/pages/shop/shop" class="shop-btn">进入开运商城</navigator>
+      </view>
+    </view>
+  </block>
+
+  <!-- 大运详情弹窗 -->
+  <ui-dialog
+    visible="{{dayunDialogVisible}}"
+    title="{{dayunDialogData.age}}岁 · 大运「{{dayunDialogData.gz}}」"
+    description="{{dayunDialogData.god}}"
+    bindclose="onCloseDayunDetail"
+  >
+    <view class="dayun-dialog-body">
+      <block wx:if="{{dayunLoading}}">
+        <view class="loading-wrap">
+          <text class="animate-spin" style="font-size:48rpx;color:var(--primary);margin-bottom:16rpx">⟳</text>
+          <text>AI 正在解读这段大运...</text>
+        </view>
+      </block>
+      <block wx:else>
+        <rich-text nodes="{{dayunAnalysisNodes}}"></rich-text>
+      </block>
+    </view>
+  </ui-dialog>
+</view>

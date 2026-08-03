@@ -1,0 +1,24 @@
+.page { background-color: #f5f2ed; min-height: 100vh; }
+.header { display: flex; align-items: center; justify-content: space-between; padding-top: 20rpx; padding-bottom: 20rpx; }
+.back-btn { width: 72rpx; height: 72rpx; }
+.header-title { font-size: 32rpx; font-weight: 500; }
+
+.list { padding-top: 40rpx; padding-bottom: 160rpx; }
+.empty { text-align: center; padding: 160rpx 0; }
+.empty-text { font-size: 28rpx; color: var(--muted-foreground); display: block; }
+.empty-link { font-size: 24rpx; color: var(--primary); margin-top: 16rpx; display: block; }
+
+.bm-item {
+  display: flex; align-items: center; gap: 24rpx;
+  padding: 32rpx; border-radius: 24rpx;
+  background: var(--card); box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  margin-bottom: 16rpx;
+}
+.bm-title { font-size: 30rpx; font-weight: 500; display: block; }
+.bm-desc { font-size: 24rpx; color: var(--muted-foreground); margin-top: 4rpx; display: block; }
+.bm-del {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: var(--muted); display: flex; align-items: center;
+  justify-content: center; font-size: 28rpx; color: var(--muted-foreground);
+  flex-shrink: 0;
+}

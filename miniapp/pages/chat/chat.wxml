@@ -1,0 +1,67 @@
+<view class="page" style="padding-top:{{navBarHeight}}px">
+  <!-- Header -->
+  <view class="header">
+    <view class="header-inner">
+      <view class="header-icon">✦</view>
+      <view class="flex-1">
+        <text class="header-title">枢机 · AI 命理师</text>
+        <text class="header-sub">{{baziLoading ? '正在加载命盘...' : (role ? '已绑定 · ' + role.name : '通用模式 · 未绑定命盘')}}</text>
+      </view>
+      <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+    </view>
+    <!-- 角色切换条 -->
+    <scroll-view class="role-bar" scroll-x enable-flex wx:if="{{roles.length > 0}}">
+      <view
+        class="role-tag {{item.id === role.id ? 'active' : ''}}"
+        wx:for="{{roles}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onSwitchRole"
+      >{{item.avatar || ''}} {{item.name}}</view>
+      <navigator url="/pages/divine/divine" class="role-tag add" wx:if="{{roles.length < 5}}">+ 新增</navigator>
+    </scroll-view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view class="msg-list" scroll-y enhanced show-scrollbar="{{false}}" scroll-into-view="{{scrollToId}}" scroll-with-animation>
+    <view class="msg-date">{{todayDate}}</view>
+    <view class="msg-item {{item.role === 'user' ? 'user' : 'ai'}}" wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}">
+      <view class="msg-avatar" wx:if="{{item.role === 'ai'}}">枢</view>
+      <view class="msg-bubble {{item.role === 'user' ? 'user-bubble' : 'ai-bubble'}}">
+        <block wx:if="{{item.role === 'ai'}}">
+          <rich-text nodes="{{item.nodes}}"></rich-text>
+        </block>
+        <block wx:else>
+          <text>{{item.content}}</text>
+        </block>
+      </view>
+    </view>
+    <view class="msg-item ai" wx:if="{{sending}}">
+      <view class="msg-avatar">枢</view>
+      <view class="msg-bubble ai-bubble"><text class="animate-spin" style="display:inline-block">⟳</text></view>
+    </view>
+    <view id="msg-bottom"></view>
+  </scroll-view>
+
+  <!-- 输入栏 -->
+  <view class="input-bar">
+    <view class="quick-row">
+      <text
+        class="quick-tag"
+        wx:for="{{quickQuestions}}"
+        wx:key="*this"
+        data-q="{{item}}"
+        bindtap="onQuickSend"
+      >{{item}}</text>
+    </view>
+    <view class="input-row">
+      <button class="voice-btn {{listening ? 'active' : ''}}" bindtap="onVoice">
+        <text>🎤</text>
+      </button>
+      <input class="msg-input" value="{{input}}" placeholder="问问命理师..." bindinput="onInput" bindconfirm="onSend" confirm-type="send" disabled="{{sending}}" />
+      <button class="send-btn" bindtap="onSend" disabled="{{!input || sending}}">
+        <text>➤</text>
+      </button>
+    </view>
+  </view>
+</view>

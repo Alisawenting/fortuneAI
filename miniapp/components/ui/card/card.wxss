@@ -1,0 +1,9 @@
+.ui-card {
+  background: var(--card);
+  border-radius: 32rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+.p-sm { padding: 24rpx; }
+.p-md { padding: 32rpx; }
+.p-lg { padding: 40rpx; }

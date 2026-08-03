@@ -1,0 +1,8 @@
+.skeleton { background: #e5e7eb; position: relative; overflow: hidden; }
+.skeleton.rounded { border-radius: 16rpx; }
+.skeleton.circle { border-radius: 50%; }
+.skeleton-shimmer {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  animation: shimmer 1.5s infinite;
+}

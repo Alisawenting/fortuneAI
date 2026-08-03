@@ -1,0 +1,33 @@
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  border-radius: 32rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+
+.ui-btn::after { border: none; }
+
+/* Variants */
+.primary { background: var(--primary); color: var(--primary-foreground); }
+.outline { background: transparent; border: 2rpx solid var(--border); color: var(--foreground); }
+.ghost { background: transparent; color: var(--muted-foreground); }
+.danger { background: var(--cinnabar); color: #ffffff; }
+
+/* Sizes */
+.sm { padding: 12rpx 24rpx; font-size: 24rpx; border-radius: 16rpx; }
+.md { padding: 20rpx 40rpx; font-size: 28rpx; }
+.lg { padding: 28rpx 56rpx; font-size: 32rpx; }
+
+.ui-btn-hover { opacity: 0.85; }
+.w-full { width: 100%; }
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+}

@@ -1,0 +1,27 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/profile/profile" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">枢机会员</text>
+    <view class="back-btn"></view>
+  </view>
+
+  <view class="hero px-5">
+    <text class="hero-icon">👑</text>
+    <text class="hero-title">升级枢机会员</text>
+    <text class="hero-desc">解锁无限 AI 问答 · 全场景深度解读 · 专属命理报告</text>
+  </view>
+
+  <view class="plans px-5">
+    <view class="plan-card {{item.recommended ? 'recommended' : ''}}" wx:for="{{plans}}" wx:key="id">
+      <text class="plan-recommend" wx:if="{{item.recommended}}">推荐</text>
+      <text class="plan-name">{{item.name}}</text>
+      <text class="plan-price">¥{{item.price}}<text class="plan-period">/{{item.period}}</text></text>
+      <view class="plan-features">
+        <text class="plan-feat" wx:for="{{item.features}}" wx:key="*this">✓ {{item}}</text>
+      </view>
+      <button class="plan-btn {{item.recommended ? 'primary' : ''}}" bindtap="onSubscribe" data-id="{{item.id}}">
+        {{item.price === 0 ? '当前方案' : '立即开通'}}
+      </button>
+    </view>
+  </view>
+</view>

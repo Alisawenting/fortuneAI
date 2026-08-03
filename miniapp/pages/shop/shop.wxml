@@ -1,0 +1,39 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/chart/chart" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">开运商城 · 手串推荐</text>
+    <view class="back-btn"><text>🛍️</text></view>
+  </view>
+
+  <view class="hero px-5">
+    <text class="hero-text">✦ AI 已根据您的命盘喜用 <text class="hero-tag">{{element}}</text> 挑选</text>
+    <text class="hero-desc">您喜「{{element}}」，宜佩温润、清凉、明净之物；忌过燥过红。下列为本命匹配度最高的推荐。</text>
+  </view>
+
+  <view class="item-list px-5">
+    <view class="item-card" wx:for="{{items}}" wx:key="id">
+      <view class="flex gap-3">
+        <view class="item-img" style="background: radial-gradient(circle at 30% 30%, {{item.color}}, {{item.color}}88)"></view>
+        <view class="flex-1">
+          <view class="flex items-start justify-between">
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-tag">{{item.tag}}</text>
+          </view>
+          <text class="item-desc">{{item.desc}}</text>
+          <view class="flex items-center justify-between mt-2">
+            <text class="item-match">⭐ 命盘契合 {{item.match}}%</text>
+            <text class="item-price">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+      <button class="item-btn" bindtap="onBuy">去商城查看</button>
+    </view>
+  </view>
+
+  <view class="avoid-section mx-5">
+    <text class="avoid-title">忌佩提示</text>
+    <text class="avoid-item" wx:for="{{avoidList}}" wx:key="name">· <text class="avoid-name">{{item.name}}</text> — {{item.reason}}</text>
+  </view>
+
+  <text class="disclaimer">命理推荐仅作参考，请理性消费</text>
+</view>

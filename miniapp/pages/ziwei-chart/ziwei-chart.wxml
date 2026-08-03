@@ -1,0 +1,55 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <view class="header px-5">
+    <navigator url="/pages/divine/divine" class="back-btn"><text>←</text></navigator>
+    <text class="header-title">紫微斗数命盘</text>
+    <view class="back-btn"><text>🔖</text></view>
+  </view>
+
+  <block wx:if="{{!chartData}}">
+    <view class="empty">
+      <view class="empty-icon">🧭</view>
+      <text class="empty-title">尚未排盘</text>
+      <text class="empty-desc">请先在测算页面录入生辰，生成紫微命盘</text>
+      <navigator url="/pages/divine/divine" class="empty-btn">开始测算 →</navigator>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="content px-5">
+      <!-- 命盘信息 -->
+      <view class="section-card">
+        <view class="flex items-center justify-between">
+          <view>
+            <text class="ziwei-title">紫微斗数命盘</text>
+            <text class="ziwei-sub">{{chartData.name || '用户'}} · {{chartData.gender || ''}}</text>
+          </view>
+          <text class="ziwei-badge">{{chartData.shengxiao || ''}}</text>
+        </view>
+      </view>
+
+      <!-- 十二宫 -->
+      <view class="section-card mt-5">
+        <text class="section-title">十二宫位</text>
+        <view class="gong-grid mt-3">
+          <view class="gong-cell" wx:for="{{gongList}}" wx:key="name">
+            <text class="gong-name">{{item.name}}</text>
+            <text class="gong-star" wx:if="{{item.star}}">{{item.star}}</text>
+            <text class="gong-zhi">{{item.zhi}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 四化 -->
+      <view class="section-card mt-5" wx:if="{{sihuaList.length > 0}}">
+        <text class="section-title">四化飞星</text>
+        <view class="sihua-list mt-3">
+          <view class="sihua-item" wx:for="{{sihuaList}}" wx:key="type">
+            <text class="sihua-type sihua-{{item.typeEn}}">{{item.type}}</text>
+            <text class="sihua-star">{{item.star}}</text>
+            <text class="sihua-pos">{{item.pos}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

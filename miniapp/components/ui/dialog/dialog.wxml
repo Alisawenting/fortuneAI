@@ -1,0 +1,15 @@
+<view class="dialog-overlay" wx:if="{{visible}}" bindtap="onClose">
+  <view class="dialog-content" catchtap="noop">
+    <view class="dialog-header" wx:if="{{title}}">
+      <text class="dialog-title">{{title}}</text>
+      <text class="dialog-desc" wx:if="{{description}}">{{description}}</text>
+    </view>
+    <view class="dialog-body">
+      <slot />
+    </view>
+    <view class="dialog-footer" wx:if="{{showFooter}}">
+      <button class="dialog-btn cancel" bindtap="onClose">取消</button>
+      <button class="dialog-btn confirm" bindtap="onConfirm">确定</button>
+    </view>
+  </view>
+</view>

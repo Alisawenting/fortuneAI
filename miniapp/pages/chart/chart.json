@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "ui-dialog": "/components/ui/dialog/dialog"
+  },
+  "navigationStyle": "custom"
+}

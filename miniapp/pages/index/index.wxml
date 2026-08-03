@@ -1,0 +1,350 @@
+<view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
+  <!-- Header -->
+  <view class="header px-5">
+    <view class="flex items-center gap-3">
+      <view class="brand-mark"><text class="brand-mark-text">☰</text></view>
+      <view>
+        <text class="brand-title">云枢易馆</text>
+        <text class="brand-sub">古法藏枢机 · AI 解流年</text>
+      </view>
+    </view>
+    <navigator url="/pages/profile/profile" class="member-link">会员中心</navigator>
+  </view>
+
+  <!-- 角色切换 -->
+  <view class="role-switch px-5" bindtap="onRoleSwitch">
+    <view class="role-avatar">{{activeRole.avatar || '🌿'}}</view>
+    <view class="flex-1">
+      <view class="flex items-center gap-2">
+        <text class="role-name">{{activeRole.name || '我自己'}}</text>
+        <text class="role-meta">{{activeRole.gender || '男'}} · {{activeRole.calendar === '农历' ? '农历' : ''}}{{activeRole.birthDate || '未设置'}}</text>
+      </view>
+      <text class="role-hint">点此切换角色查看运势 · 共 {{roles.length}}/5</text>
+    </view>
+    <text class="arrow">▾</text>
+  </view>
+
+  <!-- 日期 -->
+  <view class="date-row px-5">
+    <text>丙午年 · 癸巳月 · 戊辰日</text>
+    <text class="ml-auto">芒种 第三日</text>
+  </view>
+
+  <!-- 五维运势评分 -->
+  <view class="section-card mx-5">
+    <text class="section-label">{{yunshiData ? '今日命理指数 · ' + yunshiData.yunshi_info.jixiong_today : '今日命理指数'}}</text>
+    <view class="fortune-grid">
+      <block wx:if="{{loading}}">
+        <view class="fortune-item" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+          <ui-skeleton width="80rpx" height="80rpx" shape="circle"></ui-skeleton>
+          <ui-skeleton width="64rpx" height="24rpx"></ui-skeleton>
+          <ui-skeleton width="80rpx" height="24rpx"></ui-skeleton>
+        </view>
+      </block>
+      <block wx:else>
+        <view
+          class="fortune-item"
+          wx:for="{{fortunes}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="onFortuneDetail"
+        >
+          <view class="fortune-icon">
+            <text>{{item.emoji}}</text>
+          </view>
+          <text class="fortune-key">{{item.key}}</text>
+          <text class="fortune-score" style="color: {{item.barColor}}">{{item.score}}</text>
+          <view class="score-bar">
+            <view class="score-bar-fill" style="width: {{item.score}}%; background: {{item.barColor}}"></view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 下半区 -->
+  <view class="content-area px-5">
+
+    <!-- AI 深度分析 -->
+    <view class="ai-section">
+      <view class="flex items-center justify-between">
+        <view class="flex items-center gap-2 ai-label">
+          <text>✦</text>
+          <text>{{aiLoading ? 'AI 正在分析命盘...' : 'AI 命理深度分析'}}</text>
+        </view>
+        <text class="share-btn">分享</text>
+      </view>
+
+      <block wx:if="{{loading || aiLoading}}">
+        <ui-skeleton wx:for="{{[1,2,3,4,5]}}" wx:key="*this" width="100%" height="32rpx" customStyle="margin-top:16rpx"></ui-skeleton>
+      </block>
+
+      <block wx:elif="{{aiAnalysis && aiAnalysis.dailyComment}}">
+        <view class="ai-content">
+          <rich-text nodes="{{aiNodes}}"></rich-text>
+        </view>
+        <view class="ai-tags" wx:if="{{aiAnalysis.careerHint || aiAnalysis.wealthHint || aiAnalysis.loveHint || aiAnalysis.healthHint}}">
+          <text class="ai-tag" wx:if="{{aiAnalysis.careerHint}}">事业：{{aiAnalysis.careerHint}}</text>
+          <text class="ai-tag" wx:if="{{aiAnalysis.wealthHint}}">财运：{{aiAnalysis.wealthHint}}</text>
+          <text class="ai-tag" wx:if="{{aiAnalysis.loveHint}}">情感：{{aiAnalysis.loveHint}}</text>
+          <text class="ai-tag" wx:if="{{aiAnalysis.healthHint}}">健康：{{aiAnalysis.healthHint}}</text>
+        </view>
+        <text class="ai-advice" wx:if="{{aiAnalysis.luckyAdvice}}">💡 {{aiAnalysis.luckyAdvice}}</text>
+        <view class="ai-links">
+          <navigator url="/pages/reading/reading" class="ai-link-primary">查看完整解读 ▸</navigator>
+          <navigator url="/pages/chat/chat" class="ai-link-ghost">追问 AI</navigator>
+        </view>
+      </block>
+
+      <block wx:else>
+        <text class="ai-fallback">{{yunshiData ? yunshiData.yunshi_info.fortune_description : '水木相生，今日宜静中观变。上午灵感来得轻盈，适合写下三件被你搁置的小事；黄昏时分若有人来询意见，请放慢半拍再答。'}}</text>
+        <view class="ai-links">
+          <navigator url="/pages/reading/reading" class="ai-link-primary">查看完整 AI 解读 ▸</navigator>
+          <navigator url="/pages/chat/chat" class="ai-link-ghost">追问 AI</navigator>
+        </view>
+      </block>
+    </view>
+
+    <!-- 幸运色 + 幸运数字 -->
+    <view class="lucky-row">
+      <view class="lucky-card">
+        <view class="flex items-center gap-2">
+          <text style="font-size:28rpx">🎨</text>
+          <text style="font-size:24rpx;color:var(--muted-foreground)">今日幸运色</text>
+        </view>
+        <view class="flex items-center gap-3 mt-3">
+          <view
+            class="lucky-color-dot"
+            wx:for="{{luckyColors}}"
+            wx:key="name"
+            style="background: {{item.hex}}"
+          ></view>
+          <text class="lucky-color-name" wx:for="{{luckyColors}}" wx:key="name">{{item.name}}</text>
+        </view>
+      </view>
+      <view class="lucky-card">
+        <view class="flex items-center gap-2">
+          <text style="font-size:28rpx">🔢</text>
+          <text style="font-size:24rpx;color:var(--muted-foreground)">今日幸运数字</text>
+        </view>
+        <view class="flex items-center gap-3 mt-3">
+          <text class="lucky-num" wx:for="{{luckyNumbers}}" wx:key="*this">{{item}}</text>
+          <view class="lucky-extra">
+            <text>方位：{{yunshiData ? yunshiData.yunshi_info.lucky_directions : '正北'}}</text>
+            <text>时辰：巳时 09:00-11:00</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 今日宜忌 -->
+    <view class="section-card">
+      <view class="flex items-center justify-between">
+        <view class="flex items-center gap-2">
+          <text class="section-title">今日宜忌</text>
+        </view>
+        <text class="section-sub">黄历 · 戊辰日</text>
+      </view>
+      <view class="yiji-grid">
+        <view class="yiji-card yi">
+          <view class="yiji-header">
+            <view class="yiji-icon yi-icon">✓</view>
+            <text class="yiji-label yi-label">宜</text>
+          </view>
+          <view class="yiji-tags">
+            <text class="yiji-tag" wx:for="{{yiList}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+        <view class="yiji-card ji">
+          <view class="yiji-header">
+            <view class="yiji-icon ji-icon">✕</view>
+            <text class="yiji-label ji-label">忌</text>
+          </view>
+          <view class="yiji-tags">
+            <text class="yiji-tag" wx:for="{{jiList}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="yiji-extra">
+        <view class="yiji-extra-item"><text>值神：</text><text>青龙</text></view>
+        <view class="yiji-extra-item"><text>冲煞：</text><text>冲狗 煞南</text></view>
+      </view>
+    </view>
+
+    <!-- 打卡 -->
+    <view class="section-card checkin-card">
+      <view class="flex items-center justify-between">
+        <view>
+          <text class="checkin-title">今日运势打卡</text>
+          <text class="checkin-desc">
+            <block wx:if="{{checkedToday}}">今日已打卡 · 连续 <text class="text-primary">{{checkInDays}}</text> 天</block>
+            <block wx:else>已连续打卡 <text class="text-primary">{{checkInDays}}</text> 天 · 积分 +{{10 + checkInDays}}</block>
+          </text>
+        </view>
+        <button class="checkin-btn {{checkedToday ? 'checked' : ''}}" disabled="{{checkedToday}}" bindtap="onCheckIn">
+          {{checkedToday ? '已打卡' : '打卡'}}
+        </button>
+      </view>
+      <view class="checkin-bars">
+        <view class="checkin-bar {{index < (checkInDays % 7) ? 'filled' : ''}}" wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="*this"></view>
+      </view>
+    </view>
+
+    <!-- 大运 & 流年 -->
+    <view class="section-card">
+      <view class="flex items-center justify-between mb-3">
+        <view class="flex items-center gap-2">
+          <text style="font-size:28rpx;color:var(--cinnabar)">🔥</text>
+          <text class="section-title">大运 · 流年</text>
+        </view>
+        <view class="flex items-center gap-3">
+          <navigator url="/pages/bookmarks/bookmarks" class="detail-link" wx:if="{{bookmarkedIds.length > 0}}">
+            已收藏 {{bookmarkedIds.length}}
+          </navigator>
+          <navigator url="/pages/reading/reading" class="detail-link">查看详情 →</navigator>
+        </view>
+      </view>
+
+      <!-- 当前大运 -->
+      <view class="current-dayun" wx:if="{{currentDayun}}">
+        <text class="dayun-label">当前大运</text>
+        <view class="flex items-center justify-between mt-1">
+          <text class="dayun-gz">{{currentDayun.gz}} <text class="dayun-gz-age">({{currentDayun.age}}岁)</text></text>
+          <text class="dayun-god">{{currentDayun.note || '大运'}}</text>
+        </view>
+        <rich-text wx:if="{{aiAnalysis && aiAnalysis.dayunAnalysis}}" nodes="{{dayunAnalysisNodes}}"></rich-text>
+      </view>
+
+      <!-- 流年 AI 提示 -->
+      <view class="liunian-hint-box" wx:if="{{aiAnalysis && aiAnalysis.liunianHint}}">
+        <text class="liunian-hint-label">流年 AI 提示</text>
+        <rich-text nodes="{{liunianHintNodes}}"></rich-text>
+      </view>
+
+      <!-- 流年列表 -->
+      <view class="liunian-list" wx:if="{{liunianList.length > 0}}">
+        <view class="liunian-item {{item.isCurrent ? 'active' : ''}}" wx:for="{{liunianList}}" wx:key="year">
+          <view class="liunian-dot {{item.isCurrent ? 'current' : ''}}"></view>
+          <view class="flex-1">
+            <view class="flex items-center gap-2">
+              <text class="liunian-year">{{item.year}}年</text>
+              <text class="liunian-ganzhi" wx:if="{{item.ganzhi}}">{{item.ganzhi}}</text>
+              <text class="liunian-shishen" wx:if="{{item.shishen}}">{{item.shishen}}</text>
+              <text class="liunian-current-tag" wx:if="{{item.isCurrent}}">当前</text>
+            </view>
+            <text class="liunian-hint">{{item.hint}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 默认年份（无数据时） -->
+      <view class="liunian-list" wx:else>
+        <view class="liunian-item" wx:for="{{defaultYearPrompts}}" wx:key="id">
+          <view class="liunian-dot {{item.tone === 'primary' ? 'current' : ''}}"></view>
+          <view class="flex-1">
+            <text class="liunian-year">{{item.title}}</text>
+            <text class="liunian-hint">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 大运横向滚动 -->
+      <scroll-view class="dayun-scroll" scroll-x enable-flex wx:if="{{dayunList.length > 0}}">
+        <view
+          class="dayun-card {{item.current ? 'active' : ''}}"
+          wx:for="{{dayunList}}"
+          wx:key="age"
+          data-gz="{{item.gz}}"
+          data-god="{{item.note}}"
+          data-age="{{item.age}}"
+          bindtap="onDayunDetail"
+        >
+          <text class="dayun-card-age">{{item.age}}岁</text>
+          <text class="dayun-card-gz {{item.current ? 'text-primary' : ''}}">{{item.gz}}</text>
+          <text class="dayun-card-note">{{item.note}}</text>
+        </view>
+      </scroll-view>
+
+      <navigator url="/pages/bookmarks/bookmarks" class="bookmark-link" wx:if="{{bookmarkedIds.length > 0}}">
+        查看已收藏流年
+      </navigator>
+    </view>
+
+    <!-- 国学科普入口 -->
+    <navigator url="/pages/community/community" class="kepu-entry">
+      <text style="font-size:32rpx;color:var(--jade)">✦</text>
+      <view class="flex-1">
+        <text class="kepu-title">国学小科普 · 何为「枢」？</text>
+        <text class="kepu-desc">天地之中曰枢，命理之机藏其内 →</text>
+      </view>
+    </navigator>
+
+  </view>
+</view>
+
+<!-- 五维详情弹窗 -->
+<ui-dialog
+  visible="{{fortuneDialogVisible}}"
+  title="{{fortuneDetail.key}}运 · 今日详解"
+  bindclose="onCloseFortuneDetail"
+>
+  <view class="fortune-detail-body">
+    <text class="fortune-detail-score" wx:if="{{!aiAnalysis}}">{{fortuneDetail.score}}分</text>
+    <text class="ai-tag" wx:if="{{fortuneDetail.aiHint}}">💡 {{fortuneDetail.aiHint}}</text>
+    <text class="fortune-detail-text">{{fortuneDetail.desc}}</text>
+  </view>
+</ui-dialog>
+
+<!-- 大运详情弹窗 -->
+<ui-dialog
+  visible="{{dayunDialogVisible}}"
+  title="{{dayunDialogData.age}}岁 · 大运「{{dayunDialogData.gz}}」"
+  description="{{dayunDialogData.god}}"
+  bindclose="onCloseDayunDetail"
+>
+  <view class="dayun-dialog-body">
+    <block wx:if="{{dayunLoading}}">
+      <view class="loading-wrap">
+        <text class="animate-spin" style="font-size:48rpx;color:var(--primary);margin-bottom:16rpx">⟳</text>
+        <text>AI 正在解读这段大运...</text>
+      </view>
+    </block>
+    <block wx:else>
+      <rich-text nodes="{{dayunAnalysisNodes}}"></rich-text>
+    </block>
+  </view>
+</ui-dialog>
+
+<!-- 角色切换弹窗 -->
+<ui-dialog
+  visible="{{roleDialogVisible}}"
+  title="切换角色"
+  description="最多可保存 5 个角色档案"
+  bindclose="onCloseRoleDialog"
+>
+  <view class="role-list">
+    <view
+      class="role-item {{item.id === activeRole.id ? 'active' : ''}}"
+      wx:for="{{roles}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onSwitchRole"
+    >
+      <text class="role-item-avatar">{{item.avatar || '🌿'}}</text>
+      <view class="flex-1">
+        <text class="role-item-name">{{item.name}}</text>
+        <text class="role-item-meta">{{item.gender}} · {{item.calendar === '农历' ? '农历' : ''}}{{item.birthDate}} {{item.birthTime}}</text>
+      </view>
+      <text class="role-item-check" wx:if="{{item.id === activeRole.id}}">✓</text>
+      <text class="role-item-delete" data-id="{{item.id}}" data-name="{{item.name}}" catchtap="onDeleteRole">✕</text>
+    </view>
+    <navigator
+      url="/pages/divine/divine"
+      class="role-add"
+      wx:if="{{roles.length < 5}}"
+      bindtap="onCloseRoleDialog"
+    >
+      + 新增角色（{{roles.length}}/5）
+    </navigator>
+  </view>
+</ui-dialog>

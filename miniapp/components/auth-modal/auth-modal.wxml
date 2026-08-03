@@ -1,0 +1,14 @@
+<ui-dialog visible="{{visible}}" title="{{mode === 'login' ? '登录' : '注册'}}" bindclose="onClose">
+  <view class="auth-body">
+    <view class="auth-tabs">
+      <text class="auth-tab {{mode === 'login' ? 'active' : ''}}" data-mode="login" bindtap="switchMode">登录</text>
+      <text class="auth-tab {{mode === 'register' ? 'active' : ''}}" data-mode="register" bindtap="switchMode">注册</text>
+    </view>
+    <input class="auth-input" value="{{username}}" placeholder="用户名" bindinput="onUsernameInput" />
+    <input class="auth-input" value="{{password}}" placeholder="密码" type="password" bindinput="onPasswordInput" />
+    <input class="auth-input" wx:if="{{mode === 'register'}}" value="{{displayName}}" placeholder="昵称" bindinput="onDisplayNameInput" />
+    <button class="auth-submit" bindtap="onSubmit" disabled="{{submitting}}">
+      {{submitting ? '处理中...' : (mode === 'login' ? '登录' : '注册')}}
+    </button>
+  </view>
+</ui-dialog>

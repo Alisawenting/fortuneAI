@@ -1,0 +1,19 @@
+<view class="ui-input-wrap">
+  <text class="ui-input-label" wx:if="{{label}}">{{label}}</text>
+  <input
+    class="ui-input {{error ? 'error' : ''}}"
+    value="{{value}}"
+    placeholder="{{placeholder}}"
+    type="{{type}}"
+    password="{{password}}"
+    disabled="{{disabled}}"
+    focus="{{focus}}"
+    maxlength="{{maxlength}}"
+    placeholder-style="color:#d1d5db"
+    bindinput="onInput"
+    bindfocus="onFocus"
+    bindblur="onBlur"
+    bindconfirm="onConfirm"
+  />
+  <text class="ui-input-error" wx:if="{{error}}">{{error}}</text>
+</view>

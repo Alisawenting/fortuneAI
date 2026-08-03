@@ -1,0 +1,3 @@
+<view class="brand-mark" style="width: {{size}}rpx; height: {{size}}rpx">
+  <text class="brand-text">☰</text>
+</view>

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "ui-card": "/components/ui/card/card",
+    "ui-skeleton": "/components/ui/skeleton/skeleton",
+    "ui-dialog": "/components/ui/dialog/dialog"
+  },
+  "navigationStyle": "custom"
+}

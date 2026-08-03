@@ -1,0 +1,10 @@
+<button
+  class="ui-btn {{variant}} {{size}} {{full ? 'w-full' : ''}}"
+  style="{{customStyle}}"
+  hover-class="ui-btn-hover"
+  disabled="{{disabled || loading}}"
+  bindtap="onTap"
+>
+  <text wx:if="{{loading}}" class="loading-icon">⟳</text>
+  <slot wx:else />
+</button>
