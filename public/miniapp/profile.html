@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>我的 · 云枢易馆</title>
+<link rel="stylesheet" href="common.css"/>
+<style>
+.av-circle{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 12px;font-family:var(--font-serif)}
+.menu-group{margin:14px 14px 0}
+.menu-group-title{font-size:11px;color:var(--sub);padding:0 4px 6px;text-transform:uppercase;letter-spacing:1px}
+.menu-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);text-decoration:none;color:var(--text);font-size:14px;transition:background .15s;border-bottom:1px solid var(--border-light)}
+.menu-item:first-of-type{border-radius:var(--radius) var(--radius) 0 0}
+.menu-item:last-of-type{border-radius:0 0 var(--radius) var(--radius);border-bottom:none}
+.menu-item:only-of-type{border-radius:var(--radius)}
+.menu-item .mi-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0}
+.menu-item .mi-right{margin-left:auto;color:var(--muted);font-size:13px;display:flex;align-items:center;gap:4px}
+.menu-item .mi-arrow{font-size:14px;color:var(--muted)}
+.menu-item:active{background:#faf8f5}
+.logout-btn{display:block;width:calc(100% - 28px);margin:24px 14px;padding:14px;border-radius:var(--radius-lg);font-size:15px;background:var(--card);color:var(--primary);border:1.5px solid var(--primary);text-align:center;cursor:pointer;font-family:var(--font-sans)}
+.footer-text{text-align:center;color:var(--muted);font-size:11px;padding:16px;font-family:var(--font-serif)}
+</style>
+</head>
+<body>
+<div class="top-ornament"></div>
+<div class="header-bar">
+  <a href="index.html" class="back">←</a>
+  <h1>我的</h1>
+</div>
+
+<div style="padding:24px 0 8px;text-align:center">
+  <div class="av-circle" id="avatar">云</div>
+  <div class="profile-name" id="displayName">云客</div>
+  <div style="font-size:12px;color:var(--sub);margin-top:2px" id="username">未登录</div>
+  <div id="memberBadge" style="margin-top:8px">
+    <span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;background:var(--gold-light);color:var(--gold)">👑 枢机会员</span>
+  </div>
+</div>
+
+<div class="menu-group">
+  <div class="menu-group-title">我的命理</div>
+  <a href="divine.html" class="menu-item"><span class="mi-icon">🔮</span>八字排盘<span class="mi-right"><span id="rizhuLabel">未录入</span><span class="mi-arrow">›</span></span></a>
+  <a href="divine.html" class="menu-item"><span class="mi-icon">📅</span>测算记录<span class="mi-right"><span id="recordCount">0 次</span><span class="mi-arrow">›</span></span></a>
+  <a href="chat.html" class="menu-item"><span class="mi-icon">💬</span>AI 问答记录<span class="mi-right"><span id="chatCount">0 条</span><span class="mi-arrow">›</span></span></a>
+  <a href="community.html" class="menu-item"><span class="mi-icon">📱</span>我的帖子<span class="mi-right"><span id="postCount">0 篇</span><span class="mi-arrow">›</span></span></a>
+</div>
+
+<div class="menu-group">
+  <div class="menu-group-title">社交</div>
+  <div class="menu-item"><span class="mi-icon">👥</span>关注<span class="mi-right" id="followCount">0<span class="mi-arrow">›</span></span></div>
+  <div class="menu-item"><span class="mi-icon">👤</span>粉丝<span class="mi-right" id="fanCount">0<span class="mi-arrow">›</span></span></div>
+  <a href="community.html" class="menu-item"><span class="mi-icon">⭐</span>收藏<span class="mi-right" id="bookmarkCount">0<span class="mi-arrow">›</span></span></a>
+</div>
+
+<div class="menu-group">
+  <div class="menu-group-title">会员</div>
+  <a href="#" class="menu-item" onclick="showToast('会员功能即将上线')"><span class="mi-icon">👑</span>枢机会员<span class="mi-right"><span id="memberStatus">免费版</span><span class="mi-arrow">›</span></span></a>
+</div>
+
+<div class="menu-group">
+  <div class="menu-group-title">设置</div>
+  <div class="menu-item" onclick="showToast('设置功能即将上线')"><span class="mi-icon">⚙️</span>通用设置<span class="mi-arrow mi-right">›</span></div>
+  <div class="menu-item" onclick="clearData()"><span class="mi-icon">🗑️</span>清除本地数据<span class="mi-arrow mi-right">›</span></div>
+  <div class="menu-item" onclick="showToast('关于云枢易馆 v2.0 · MIT License')"><span class="mi-icon">ℹ️</span>关于<span class="mi-right">v2.0<span class="mi-arrow">›</span></span></div>
+</div>
+
+<button class="logout-btn" onclick="clearData()">退出并清除数据</button>
+<div class="footer-text">☁️ 云枢易馆 · 古法藏枢机，AI 解流年</div>
+
+<div id="toast" class="toast"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-item"><span class="ni">🏠</span>运势</a>
+  <a href="divine.html" class="nav-item"><span class="ni">🔮</span>测算</a>
+  <a href="chat.html" class="nav-item"><span class="ni">💬</span>问答</a>
+  <a href="community.html" class="nav-item"><span class="ni">📱</span>广场</a>
+  <a href="profile.html" class="nav-item active"><span class="ni">👤</span>我的</a>
+</nav>
+
+<script>
+function showToast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},2000)}
+
+(function(){
+  try{
+    var d=JSON.parse(localStorage.getItem("yunshu:bazi-data"));
+    if(d){
+      document.getElementById("rizhuLabel").textContent=d.rizhu||"已录入";
+      document.getElementById("recordCount").textContent="1 次";
+      document.getElementById("displayName").textContent=d.name||"云客";
+      var av=d.name?d.name[0]:"云";
+      document.getElementById("avatar").textContent=av;
+    }
+  }catch(e){}
+  try{
+    var posts=JSON.parse(localStorage.getItem("yunshu:miniapp-posts")||"[]");
+    document.getElementById("postCount").textContent=posts.length+" 篇";
+  }catch(e){}
+  try{
+    var chats=JSON.parse(localStorage.getItem("yunshu:chat-count")||"0");
+    document.getElementById("chatCount").textContent=(chats||0)+" 条";
+  }catch(e){}
+})();
+
+function clearData(){
+  if(confirm("确定要清除所有本地数据吗？这将删除八字命盘、社区帖子和收藏。")){
+    localStorage.removeItem("yunshu:bazi-data");
+    localStorage.removeItem("yunshu:miniapp-posts");
+    localStorage.removeItem("yunshu:miniapp-likes");
+    showToast("数据已清除");
+    setTimeout(function(){location.reload()},1000);
+  }
+}
+</script>
+</body>
+</html>

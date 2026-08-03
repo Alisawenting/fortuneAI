@@ -4,57 +4,44 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <title>八字测算 · 云枢易馆</title>
+<link rel="stylesheet" href="common.css"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;background:#f7f3ed;color:#3d3226;min-height:100vh;padding-bottom:80px}
-.header{background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;padding:20px;display:flex;align-items:center;gap:16px}
-.header a{color:#fff;text-decoration:none;font-size:24px}
-.header h1{font-family:"Noto Serif SC",serif;font-size:20px}
-.form-card{margin:16px;background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.fg{margin-bottom:16px}
-.fg label{display:block;font-size:13px;font-weight:600;color:#666;margin-bottom:6px}
-.fg input,.fg select{width:100%;padding:12px;border:1.5px solid #e0d8cc;border-radius:12px;font-size:15px;font-family:inherit;background:#faf8f5}
-.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23999'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.gender-row{display:flex;gap:12px}
-.gender-btn{flex:1;padding:12px;border:1.5px solid #e0d8cc;border-radius:12px;text-align:center;font-size:15px;background:#faf8f5;cursor:pointer;font-family:inherit}
-.gender-btn.sel{border-color:#c43a2f;background:#fef5f4;color:#c43a2f;font-weight:600}
+.gender-row{display:flex;gap:10px}
+.gender-btn{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:15px;background:#faf8f5;cursor:pointer;font-family:inherit;transition:all .15s}
+.gender-btn.sel{border-color:var(--primary);background:var(--primary-light);color:var(--primary);font-weight:700}
 .date-row{display:flex;gap:8px}
-.date-row select{flex:1}
-.btn{display:block;width:calc(100% - 32px);margin:8px 16px;padding:14px;border-radius:14px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;border:none;cursor:pointer;font-family:inherit}
-.btn-primary{background:linear-gradient(135deg,#c43a2f,#8b1a1a);color:#fff;box-shadow:0 4px 16px rgba(196,58,47,.3)}
-.btn-outline{background:#fff;color:#c43a2f;border:1.5px solid #c43a2f}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,.04)}
-.nav-item{text-align:center;font-size:10px;color:#999;text-decoration:none;flex:1}
-.nav-item .ni{font-size:22px;display:block;margin-bottom:2px}
-.nav-item.active{color:#c43a2f}
-.result{margin:16px;display:none}
-.pillar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
-.pillar{background:#faf8f5;border-radius:12px;padding:12px;text-align:center;border:1px solid #eee}
-.pillar .pl{font-size:10px;color:#999}
-.pillar .pg{font-size:22px;font-family:"Noto Serif SC",serif;font-weight:700;margin:4px 0}
-.pillar .pz{font-size:18px;font-family:"Noto Serif SC",serif}
-.info-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;background:#fef5f4;color:#c43a2f}
-.tag.g{background:#e8f5e9;color:#2e7d32}
-.tag.b{background:#e3f2fd;color:#1565c0}
+.date-row select{flex:1;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%238c7b6e'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.result{margin:14px;display:none}
+.pillar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.pillar{background:#faf8f5;border-radius:var(--radius-sm);padding:14px 6px;text-align:center;border:1px solid var(--border)}
+.pillar .pl{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px}
+.pillar .pg{font-size:24px;font-family:var(--font-serif);font-weight:700;margin:4px 0}
+.pillar .pz{font-size:20px;font-family:var(--font-serif)}
+.pillar .pm{font-size:9px;color:var(--sub);margin-top:2px}
+.info-table{font-size:13px;line-height:2}
+.info-table b{color:var(--primary);font-family:var(--font-serif)}
+.wx-bar{display:flex;gap:8px;margin-top:8px}
+.wx-item{flex:1;text-align:center;padding:6px;background:#faf8f5;border-radius:var(--radius-sm);font-size:11px}
+.wx-item .wxv{font-size:18px;font-family:var(--font-serif);font-weight:700;margin-bottom:2px}
 </style>
 </head>
 <body>
-<div class="header">
-  <a href="index.html">←</a>
+<div class="top-ornament"></div>
+<div class="header-bar">
+  <a href="index.html" class="back">←</a>
   <h1>八字排盘</h1>
 </div>
 
-<form class="form-card" id="form" onsubmit="return false">
+<form class="form-card" onsubmit="return false">
   <div class="fg">
     <label>姓名</label>
-    <input type="text" id="name" placeholder="请输入姓名" value=""/>
+    <input type="text" id="name" placeholder="请输入姓名"/>
   </div>
   <div class="fg">
     <label>性别</label>
     <div class="gender-row">
-      <div class="gender-btn sel" onclick="selGender('男')" id="gMale">♂ 男</div>
-      <div class="gender-btn" onclick="selGender('女')" id="gFemale">♀ 女</div>
+      <div class="gender-btn sel" onclick="selGender('男')" id="gMale">♂ 乾造</div>
+      <div class="gender-btn" onclick="selGender('女')" id="gFemale">♀ 坤造</div>
     </div>
   </div>
   <div class="fg">
@@ -68,7 +55,6 @@ body{font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;background:#f
 </form>
 
 <button class="btn btn-primary" onclick="doCalc()">🔮 生成八字命盘</button>
-<button class="btn btn-outline" onclick="doZiwei()" style="display:none">✨ 生成紫微命盘（开发中）</button>
 
 <div class="result" id="result"></div>
 
@@ -76,86 +62,58 @@ body{font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;background:#f
   <a href="index.html" class="nav-item"><span class="ni">🏠</span>运势</a>
   <a href="divine.html" class="nav-item active"><span class="ni">🔮</span>测算</a>
   <a href="chat.html" class="nav-item"><span class="ni">💬</span>问答</a>
+  <a href="community.html" class="nav-item"><span class="ni">📱</span>广场</a>
+  <a href="profile.html" class="nav-item"><span class="ni">👤</span>我的</a>
 </nav>
 
 <script src="bazi-engine.js"></script>
 <script>
-var gender = "男";
-function selGender(g){
-  gender=g;
-  document.getElementById("gMale").className="gender-btn"+(g==="男"?" sel":"");
-  document.getElementById("gFemale").className="gender-btn"+(g==="女"?" sel":"");
-}
+var gender="男";
+function selGender(g){gender=g;document.getElementById("gMale").className="gender-btn"+(g==="男"?" sel":"");document.getElementById("gFemale").className="gender-btn"+(g==="女"?" sel":"");}
 
 function doCalc(){
-  var name = document.getElementById("name").value || "用户";
-  var birthDate = document.getElementById("birthDate").value;
-  var birthTime = document.getElementById("birthTime").value;
-  if(!birthDate||!birthTime){ alert("请填写出生日期和时间");return; }
+  var name=document.getElementById("name").value||"用户";
+  var birthDate=document.getElementById("birthDate").value;
+  var birthTime=document.getElementById("birthTime").value;
+  if(!birthDate||!birthTime){alert("请填写出生日期和时间");return}
+  var d=computeBazi(birthDate,birthTime);
+  d.name=name;d.gender=gender==="男"?"乾造":"坤造";
+  try{localStorage.setItem("yunshu:bazi-data",JSON.stringify(d))}catch(e){}
 
-  var d = computeBazi(birthDate, birthTime);
-  d.name = name;
-  d.gender = gender==="男"?"乾造":"坤造";
+  var wxColors={木:"#4a9e6e",火:"#c43a2f",土:"#c49a3c",金:"#8d8d9b",水:"#5a8ec9"};
+  var h='<div class="card" style="margin:0">';
+  h+='<div style="font-family:var(--font-serif);font-size:20px;text-align:center">'+d.gender+' · '+d.name+'</div>';
+  h+='<div style="text-align:center;font-size:12px;color:var(--sub);margin-top:4px">公历 '+d.gongli+' · '+d.rizhu+'</div>';
 
-  // 保存
-  try{ localStorage.setItem("yunshu:bazi-data",JSON.stringify(d)); }catch(e){}
-
-  // 渲染
-  var h = '<div class="card" style="margin:0 0 16px">';
-  h += '<div style="font-family:Noto Serif SC,serif;font-size:18px;margin-bottom:4px">'+d.gender+' · '+d.name+'</div>';
-  h += '<div style="font-size:13px;color:#666">公历 '+d.gongli+' · '+d.rizhu+'</div>';
-  h += '<div style="font-size:13px;color:#666">格局：'+d.zhengge+' · 五行：'+d.qiangruo+'</div>';
-
-  // 四柱
-  h += '<div class="pillar-grid">';
-  var colors = {木:"#4a9e6e",火:"#c43a2f",土:"#c49a3c",金:"#8d8d9b",水:"#5a8ec9"};
-  var wxG = d.sizhu.map(function(p){return WX[p.g];});
-  var wxZ = d.sizhu.map(function(p){return WX_Z[p.z];});
+  h+='<div class="pillar-grid">';
   for(var i=0;i<4;i++){
-    h += '<div class="pillar"><div class="pl">'+d.sizhu[i].label+'</div>';
-    h += '<div class="pg" style="color:'+(colors[wxG[i]]||"#333")+'">'+d.sizhu[i].g+'</div>';
-    h += '<div class="pz" style="color:'+(colors[wxZ[i]]||"#333")+'">'+d.sizhu[i].z+'</div>';
-    h += '<div style="font-size:9px;color:#999;margin-top:2px">'+d.nayin[i]+'</div>';
-    h += '<div style="font-size:9px;color:#999">'+d.shishen[i]+'</div>';
+    var p=d.sizhu[i],gw=wxColors[WX[p.g]]||"#333",zw=wxColors[WX_Z[p.z]]||"#333";
+    h+='<div class="pillar"><div class="pl">'+p.label+'</div><div class="pg" style="color:'+gw+'">'+p.g+'</div><div class="pz" style="color:'+zw+'">'+p.z+'</div><div class="pm">'+d.nayin[i]+'</div><div class="pm">'+d.shishen[i]+'</div></div>';
   }
-  h += '</div>';
+  h+='</div>';
 
-  // 藏干
-  h += '<div style="font-size:11px;color:#999;margin-top:4px">藏干：';
-  for(var i=0;i<4;i++) h += d.sizhu[i].label+' '+(d.canggan[i]||[]).join("")+'　';
-  h += '</div>';
+  h+='<div class="info-table">';
+  h+='<b>藏干：</b>'+d.canggan.map(function(c,i){return d.sizhu[i].label+" "+c.join("")}).join("　")+'<br>';
+  h+='<b>空亡：</b>'+d.xunkong.join("　")+'<br>';
+  h+='<b>格局：</b>'+d.zhengge+'　<b>五行：</b>'+d.qiangruo+'<br>';
+  h+='<b>喜用神：</b>'+d.xiyongshen+'　<b>称骨：</b>'+d.chenggu.liang+'两'+d.chenggu.qian+'钱';
+  h+='</div>';
 
-  // 五行
-  h += '<div style="margin-top:12px;font-size:13px">';
-  var wxNames = ["木","火","土","金","水"];
-  var wxColors = ["#4a9e6e","#c43a2f","#c49a3c","#8d8d9b","#5a8ec9"];
-  for(var i=0;i<5;i++){
-    h += '<span style="display:inline-block;margin-right:8px"><span style="color:'+wxColors[i]+'">'+wxNames[i]+'</span> '+d.scores[wxNames[i]]+'分</span>';
+  h+='<div class="wx-bar">';
+  var wxn=["木","火","土","金","水"],wxc=["#4a9e6e","#c43a2f","#c49a3c","#8d8d9b","#5a8ec9"];
+  for(var i=0;i<5;i++) h+='<div class="wx-item"><div class="wxv" style="color:'+wxc[i]+'">'+d.scores[wxn[i]]+'</div><span style="font-size:10px;color:var(--sub)">'+wxn[i]+'</span></div>';
+  h+='</div>';
+
+  h+='<div style="margin-top:14px;font-family:var(--font-serif);font-size:15px;font-weight:600">📅 大运排布</div>';
+  h+='<div class="scroll-x" style="margin-top:8px">';
+  for(var i=0;i<d.dayuns.length;i++){var dy=d.dayuns[i];
+    h+='<div style="min-width:78px;text-align:center;padding:12px 8px;background:#faf8f5;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px"><div style="color:var(--sub);font-size:10px">'+dy.age+'岁</div><div style="font-weight:700;color:var(--primary);margin:4px 0;font-size:14px;font-family:var(--font-serif)">'+dy.gz+'</div><div style="color:var(--sub);font-size:10px">'+dy.god+'</div></div>';
   }
-  h += '</div>';
-  h += '<div style="font-size:13px;margin-top:4px">'+d.qiangruo+' · 喜用神：'+d.xiyongshen+'</div>';
+  h+='</div></div>';
 
-  // 称骨
-  h += '<div style="font-size:13px;color:#999;margin-top:4px">称骨：'+d.chenggu.liang+'两'+d.chenggu.qian+'钱</div>';
-
-  // 大运
-  h += '<div style="margin-top:12px;font-family:Noto Serif SC,serif;font-size:14px;font-weight:600">📅 大运排布</div>';
-  h += '<div style="display:flex;gap:6px;overflow-x:auto;padding:8px 0">';
-  for(var i=0;i<d.dayuns.length;i++){
-    var dy = d.dayuns[i];
-    h += '<div style="min-width:75px;text-align:center;padding:8px;background:#faf8f5;border-radius:10px;border:1px solid #eee;font-size:12px"><div style="color:#999">'+dy.age+'岁</div><div style="font-weight:700;color:#c43a2f;margin:4px 0;font-size:13px">'+dy.gz+'</div><div style="color:#999;font-size:10px">'+dy.god+'</div></div>';
-  }
-  h += '</div>';
-
-  h += '</div>';
-
-  document.getElementById("result").innerHTML = h;
-  document.getElementById("result").style.display = "block";
+  document.getElementById("result").innerHTML=h;
+  document.getElementById("result").style.display="block";
   window.scrollTo({top:document.getElementById("result").offsetTop-20,behavior:"smooth"});
-}
-
-function doZiwei(){
-  alert("紫微斗数功能即将上线");
 }
 </script>
 </body>

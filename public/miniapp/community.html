@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>社区广场 · 云枢易馆</title>
+<link rel="stylesheet" href="common.css"/>
+<style>
+.tabs{display:flex;gap:6px;padding:12px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 18px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--sub);transition:all .15s}
+.tab.active{background:var(--primary-light);color:var(--primary);border-color:var(--primary)}
+.post-card{margin:0 14px 12px;background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.post-card .phead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.post-card .pav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0}
+.post-card .pinfo{flex:1}
+.post-card .pname{font-size:14px;font-weight:600;color:var(--text)}
+.post-card .pmeta{font-size:11px;color:var(--muted);margin-top:2px}
+.post-card .ptitle{font-family:var(--font-serif);font-size:16px;font-weight:600;margin-bottom:6px}
+.post-card .pbody{font-size:13px;line-height:1.7;color:var(--text);margin-bottom:10px}
+.post-card .pimages{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px}
+.post-card .pimages img{width:100%;height:140px;object-fit:cover;border-radius:var(--radius-sm);cursor:pointer}
+.post-card .pimages.single{grid-template-columns:1fr}
+.post-card .pimages.single img{height:200px}
+.post-card .pacts{display:flex;gap:20px;padding-top:10px;border-top:1px solid var(--border-light)}
+.post-act{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--sub);cursor:pointer;transition:color .15s}
+.post-act.liked{color:var(--primary)}
+.post-act:active{color:var(--primary)}
+.empty{padding:40px 20px;text-align:center;color:var(--sub)}
+.empty-icon{font-size:56px;margin-bottom:12px}
+.fab{position:fixed;bottom:80px;right:20px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 6px 24px rgba(196,58,47,.35);z-index:99;display:flex;align-items:center;justify-content:center}
+.editor-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
+.editor-overlay.show{display:flex}
+.editor{background:var(--bg);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:20px 16px;width:100%;max-height:90vh;overflow-y:auto}
+.editor h3{font-family:var(--font-serif);font-size:18px;margin-bottom:16px;text-align:center}
+.editor .cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.editor .cat{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;background:var(--card);border:1px solid var(--border)}
+.editor .cat.sel{background:var(--primary-light);color:var(--primary);border-color:var(--primary)}
+.editor textarea{width:100%;height:100px;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;resize:vertical;margin-bottom:12px}
+.preview-imgs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.preview-imgs img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="top-ornament"></div>
+<div class="header-bar">
+  <a href="index.html" class="back">←</a>
+  <h1>社区广场</h1>
+</div>
+
+<div class="tabs" id="tabs">
+  <span class="tab active" onclick="switchTab(0,'')">推荐</span>
+  <span class="tab" onclick="switchTab(1,'运势心得')">运势心得</span>
+  <span class="tab" onclick="switchTab(2,'命理科普')">命理科普</span>
+  <span class="tab" onclick="switchTab(3,'国学知识')">国学知识</span>
+  <span class="tab" onclick="switchTab(4,'生活感悟')">生活感悟</span>
+</div>
+
+<div id="postList"></div>
+
+<div class="empty" id="emptyState">
+  <div class="empty-icon">📝</div>
+  <p style="font-size:15px">暂无帖子</p>
+  <p style="font-size:12px;margin-top:4px">点击右下角按钮发布第一条帖子吧</p>
+</div>
+
+<button class="fab" onclick="showEditor()">✏</button>
+
+<div class="editor-overlay" id="editorOverlay" onclick="if(event.target===this)hideEditor()">
+  <div class="editor">
+    <h3>发布帖子</h3>
+    <div class="cats" id="editCats">
+      <span class="cat sel" onclick="selCat('运势心得')">运势心得</span>
+      <span class="cat" onclick="selCat('命理科普')">命理科普</span>
+      <span class="cat" onclick="selCat('生活感悟')">生活感悟</span>
+      <span class="cat" onclick="selCat('国学知识')">国学知识</span>
+    </div>
+    <div class="fg"><input type="text" id="editTitle" placeholder="标题（必填）"/></div>
+    <textarea id="editContent" placeholder="分享你的运势心得、命理感悟..."></textarea>
+    <div class="preview-imgs" id="previewImgs"></div>
+    <input type="file" id="imgInput" accept="image/*" multiple style="display:none" onchange="handleImages()"/>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('imgInput').click()">📷 添加图片</button>
+    </div>
+    <button class="btn btn-primary" onclick="publishPost()" id="publishBtn">发布</button>
+    <button class="btn btn-outline" onclick="hideEditor()" style="margin-top:8px">取消</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-item"><span class="ni">🏠</span>运势</a>
+  <a href="divine.html" class="nav-item"><span class="ni">🔮</span>测算</a>
+  <a href="chat.html" class="nav-item"><span class="ni">💬</span>问答</a>
+  <a href="community.html" class="nav-item active"><span class="ni">📱</span>广场</a>
+  <a href="profile.html" class="nav-item"><span class="ni">👤</span>我的</a>
+</nav>
+
+<script>
+var posts=[],likedPosts={},filter="",selCatVal="运势心得",newImages=[];
+(function(){try{posts=JSON.parse(localStorage.getItem("yunshu:miniapp-posts")||"[]");likedPosts=JSON.parse(localStorage.getItem("yunshu:miniapp-likes")||"{}")}catch(e){}
+  renderPosts();})();
+
+function showToast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},2000)}
+
+function switchTab(i,cat){
+  document.querySelectorAll(".tab").forEach(function(t,j){t.classList.toggle("active",j===i)});
+  filter=cat;renderPosts()
+}
+
+function getTimeAgo(ts){var s=Math.floor((Date.now()-ts)/1000);if(s<60)return"刚刚";if(s<3600)return Math.floor(s/60)+"分钟前";if(s<86400)return Math.floor(s/3600)+"小时前";return Math.floor(s/86400)+"天前"}
+
+function renderPosts(){
+  var list=filter?posts.filter(function(p){return p.category===filter}):posts;
+  list.sort(function(a,b){return b.createdAt-a.createdAt});
+  document.getElementById("emptyState").style.display=list.length?"none":"block";
+  var h="";
+  list.forEach(function(p){
+    var liked=likedPosts[p.id];
+    h+='<div class="post-card">';
+    h+='<div class="phead"><div class="pav">'+(p.author||"匿")[0]+'</div><div class="pinfo"><div class="pname">'+(p.author||"匿名")+'</div><div class="pmeta"><span class="tag tag-red">'+p.category+'</span> · '+getTimeAgo(p.createdAt)+'</div></div></div>';
+    h+='<div class="ptitle">'+esc(p.title)+'</div>';
+    h+='<div class="pbody">'+esc(p.content)+'</div>';
+    if(p.images&&p.images.length){var cls=p.images.length===1?"single":"";h+='<div class="pimages '+cls+'">';p.images.forEach(function(img){h+='<img src="'+img+'" onclick="previewImg(\''+img+'\')"/>'});h+='</div>'}
+    h+='<div class="pacts"><span class="post-act'+(liked?" liked":"")+'" onclick="toggleLike(\''+p.id+'\')">'+(liked?"❤️":"🤍")+' <span>'+p.likesCount+'</span></span><span class="post-act">💬 <span>'+p.commentsCount+'</span></span></div>';
+    h+='</div>';
+  });
+  document.getElementById("postList").innerHTML=h
+}
+
+function esc(s){return s.replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function toggleLike(id){likedPosts[id]=!likedPosts[id];var p=posts.find(function(p){return p.id===id});if(p){p.likesCount+=(likedPosts[id]?1:-1)}localStorage.setItem("yunshu:miniapp-likes",JSON.stringify(likedPosts));localStorage.setItem("yunshu:miniapp-posts",JSON.stringify(posts));renderPosts()}
+
+function selCat(c){selCatVal=c;document.querySelectorAll("#editCats .cat").forEach(function(e){e.classList.toggle("sel",e.textContent===c)})}
+
+function handleImages(){
+  var files=document.getElementById("imgInput").files;
+  for(var i=0;i<Math.min(files.length,4-newImages.length);i++){
+    var r=new FileReader();r.onload=function(e){newImages.push(e.target.result);renderPreview()};r.readAsDataURL(files[i])
+  }
+  document.getElementById("imgInput").value=""
+}
+function renderPreview(){var h="";newImages.forEach(function(u){h+='<img src="'+u+'"/>'});document.getElementById("previewImgs").innerHTML=h}
+
+function showEditor(){document.getElementById("editorOverlay").classList.add("show")}
+function hideEditor(){document.getElementById("editorOverlay").classList.remove("show");document.getElementById("editTitle").value="";document.getElementById("editContent").value="";newImages=[];renderPreview()}
+
+function publishPost(){
+  var title=document.getElementById("editTitle").value.trim(),content=document.getElementById("editContent").value.trim();
+  if(!title||!content){showToast("请填写标题和内容");return}
+  var p={id:"p"+Date.now(),category:selCatVal,title:title,content:content,images:newImages,author:"我",likesCount:0,commentsCount:0,createdAt:Date.now()};
+  posts.unshift(p);localStorage.setItem("yunshu:miniapp-posts",JSON.stringify(posts));hideEditor();renderPosts();showToast("发布成功！")
+}
+
+function previewImg(url){var d=document.createElement("div");d.style="position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;display:flex;align-items:center;justify-content:center;cursor:pointer";d.innerHTML='<img src="'+url+'" style="max-width:90%;max-height:90%;border-radius:8px"/>';d.onclick=function(){d.remove()};document.body.appendChild(d)}
+</script>
+</body>
+</html>
