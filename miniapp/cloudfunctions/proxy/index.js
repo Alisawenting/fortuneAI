@@ -18,12 +18,13 @@ exports.main = async (event) => {
         "Content-Type": "application/json",
         "Content-Length": Buffer.byteLength(body),
       },
-      timeout: 30000,
+      timeout: 120000,
     }, (res) => {
       let raw = "";
+      res.setEncoding("utf8");
       res.on("data", (chunk) => { raw += chunk; });
       res.on("end", () => {
-        try { resolve(JSON.parse(raw)); } catch { resolve({ success: false, error: "解析失败" }); }
+        try { resolve(JSON.parse(raw)); } catch (e) { resolve({ success: false, error: "解析失败", raw: raw.slice(0,200) }); }
       });
     });
 
