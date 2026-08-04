@@ -119,13 +119,27 @@ Page({
     });
     var liunianKey = 'years_info' + (currentIdx >= 0 ? currentIdx : 3);
     var liunianData = dyi[liunianKey] || [];
+    var liunianHints = { '比肩': '同辈助力，宜合作共赢。注意竞争关系，保持谦虚。',
+      '劫财': '人际活跃，开销增多。谨防冲动消费和破财，注意身边人。',
+      '食神': '创意迸发，适合学习新技能或开启副业。心情愉悦，享受生活。',
+      '伤官': '才思敏捷，表达欲强。宜展示才华，但注意口舌是非，避免过于尖锐。',
+      '正财': '正财运佳，工作收入稳定增长。适合稳扎稳打的投资理财。',
+      '偏财': '偏财运旺，可能有意外之财或投资机会。但风险与机遇并存，不可贪心。',
+      '正官': '事业运上升，容易被上级认可。适合争取晋升或承担更多责任。',
+      '七杀': '挑战与机遇并存的一年。压力即动力，突破自我的好时机，宜迎难而上。',
+      '正印': '贵人运强，长辈或上级会提供帮助。也是学习进修的好时机，身心滋养。',
+      '偏印': '独立思考能力强，适合深耕专业领域。但需注意人际关系，避免过于自我。'
+    };
     var liunian = liunianData.slice(0, 6).map(function (y) {
       var m = (y.year_char || '').match(/^(\d+)年（(.+?)·(.+?)）$/);
+      var yy = m ? parseInt(m[1]) : 0;
+      var shishen = m ? m[3] : '';
+      var hint = liunianHints[shishen] || '运势流转，把握当下，顺势而为。';
       return {
         year: m ? m[1] + '年' : y.year_char,
         ganzhi: m ? m[2] : '',
-        luck: m && parseInt(m[1]) === currentYear ? '当前' : (m ? m[3] : '流年'),
-        text: m ? (m[1] + '年流年「' + m[2] + '」· 十神「' + m[3] + '」') : ''
+        luck: yy === currentYear ? '当前' : (m ? m[3] : '流年'),
+        text: m ? (m[1] + '年流年「' + m[2] + '」· 十神「' + shishen + '」。' + hint) : ''
       };
     });
 
@@ -255,7 +269,8 @@ Page({
       } else {
         that.setData({ reportError: true, reportLoading: false });
       }
-    }).catch(function () {
+    }).catch(function (e) {
+      console.error('AI报告加载失败', e);
       that.setData({ reportError: true, reportLoading: false });
     });
   },
