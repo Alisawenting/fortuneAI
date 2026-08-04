@@ -157,6 +157,35 @@ Page({
       calendarInfo = '公历 ' + formData.birthDate + (bsi && bsi.nongli ? ' · 农历 ' + bsi.nongli : '');
     }
 
+    // 五行实分
+    var cesuanData = storage.getJSON('last-cesuan');
+    var elements = [
+      { name: '木', value: 25, color: '#4a9e6e' },
+      { name: '火', value: 20, color: '#d94e3c' },
+      { name: '土', value: 25, color: '#c49a3c' },
+      { name: '金', value: 20, color: '#b8b8c0' },
+      { name: '水', value: 10, color: '#5a8ec9' }
+    ];
+    if (cesuanData && cesuanData.xiyongshen) {
+      var x = cesuanData.xiyongshen;
+      elements[0].value = x.mu_score || 25;
+      elements[1].value = x.huo_score || 20;
+      elements[2].value = x.tu_score || 25;
+      elements[3].value = x.jin_score || 20;
+      elements[4].value = x.shui_score || 10;
+    }
+
+    // 称骨
+    var chengguInfo = '';
+    if (cesuanData && cesuanData.chenggu) {
+      chengguInfo = cesuanData.chenggu.total_weight + ' — ' + cesuanData.chenggu.description;
+    }
+
+    // 藏干/空亡
+    var cangganStr = di.canggan ? Object.keys(di.canggan).map(function(k){ return k+'：'+(di.canggan[k]||[]).join(''); }).join('　') : '';
+    var xunkongStr = di.kongwang ? Object.keys(di.kongwang).map(function(k){ return di.kongwang[k]; }).join('　') : '';
+    var xiyongshen = (cesuanData && cesuanData.xiyongshen && cesuanData.xiyongshen.xiyongshen) || '';
+
     this.setData({
       paipanData: paipanData,
       pillars: pillars,
@@ -168,13 +197,11 @@ Page({
       calendarInfo: calendarInfo,
       zhengge: (bsi && bsi.zhengge) || '',
       overallNayin: Object.values(di.nayin).join(' · '),
-      elements: [
-        { name: '木', value: 25, color: '#4a9e6e' },
-        { name: '火', value: 20, color: '#d94e3c' },
-        { name: '土', value: 25, color: '#c49a3c' },
-        { name: '金', value: 20, color: '#b8b8c0' },
-        { name: '水', value: 10, color: '#5a8ec9' }
-      ],
+      cangganStr: cangganStr,
+      xunkongStr: xunkongStr,
+      xiyongshen: xiyongshen,
+      chengguInfo: chengguInfo,
+      elements: elements,
       dayunList: dayunList,
       liunian: liunian,
       shensha: shensha.slice(0, 8),

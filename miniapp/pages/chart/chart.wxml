@@ -69,9 +69,11 @@
 
         <!-- 专业模式额外信息 -->
         <view class="pro-info mt-3" wx:if="{{tab === 'pro'}}">
-          <text>• 格局：{{zhengge || '—'}}</text>
-          <text>• 纳音：{{overallNayin || '—'}}</text>
-          <text>• 日主：{{rizhuDesc || '—'}}</text>
+          <text>• 格局：{{zhengge || '—'}}　• 纳音：{{overallNayin || '—'}}</text>
+          <text>• 日主：{{rizhuDesc || '—'}}　• 喜用神：{{xiyongshen || '—'}}</text>
+          <text>• 藏干：{{cangganStr || '—'}}</text>
+          <text>• 空亡：{{xunkongStr || '—'}}</text>
+          <text wx:if="{{chengguInfo}}">• 称骨：{{chengguInfo}}</text>
         </view>
       </view>
 

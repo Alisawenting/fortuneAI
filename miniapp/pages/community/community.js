@@ -34,7 +34,7 @@ Page({
     that.setData({ loading: true });
     var category = that.data.activeTab === 0 ? undefined : tabs[that.data.activeTab];
 
-    api.getPosts({ data: { category: category, page: 1, pageSize: 30 } }).then(function (res) {
+    api.getPosts({ category: category, page: 1, pageSize: 30 }).then(function (res) {
       if (res.success) {
         var posts = (res.posts || []).map(function (p) {
           p.timeAgo = that.formatTime(p.createdAt);
@@ -76,7 +76,7 @@ Page({
 
     this.setData({ likedPosts: likedPosts, posts: posts });
 
-    api.toggleLike({ data: { postId: id } }).catch(function () {
+    api.toggleLike({ postId: id }).catch(function () {
       // 回滚
       wx.showToast({ title: '操作失败', icon: 'none' });
     });

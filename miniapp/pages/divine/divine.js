@@ -213,6 +213,10 @@ Page({
       if (res.success && res.data) {
         storage.setJSON('last-paipan', res.data);
         storage.setJSON('last-form-data', formData);
+        // 同步拉取称骨/五行数据
+        api.cesuanBazi(formData).then(function (r2) {
+          if (r2.success && r2.data) storage.setJSON('last-cesuan', r2.data);
+        }).catch(function(){});
         wx.navigateTo({ url: '/pages/chart/chart' });
       } else {
         wx.showToast({ title: (res && res.error) || '排盘失败', icon: 'none' });
@@ -228,7 +232,7 @@ Page({
     var that = this;
     var formData = that.getFormData();
 
-    api.calculateZiwei({ data: formData }).then(function (res) {
+    api.calculateZiwei(formData).then(function (res) {
       if (res.success && res.data) {
         storage.setJSON('last-ziwei', res.data);
         wx.navigateTo({ url: '/pages/ziwei-chart/ziwei-chart' });

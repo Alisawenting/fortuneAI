@@ -35,15 +35,25 @@ Page({
     }
 
     var di = paipanData.detail_info;
+    var bsi = paipanData.base_info;
+    var dyi = paipanData.dayun_info;
+    var sizhu = di.sizhu.year.tg + di.sizhu.year.dz + ' ' + di.sizhu.month.tg + di.sizhu.month.dz + ' ' + di.sizhu.day.tg + di.sizhu.day.dz + ' ' + di.sizhu.hour.tg + di.sizhu.hour.dz;
     api.analyzeFortune({
-      data: {
-        name: (role && role.name) || '用户',
-        gender: (role && role.gender) || '男',
-        sizhu: di.sizhu.year.tg + di.sizhu.year.dz + ' ' +
-               di.sizhu.month.tg + di.sizhu.month.dz + ' ' +
-               di.sizhu.day.tg + di.sizhu.day.dz + ' ' +
-               di.sizhu.hour.tg + di.sizhu.hour.dz
-      }
+      name: (role && role.name) || '用户',
+      gender: (role && role.gender) || '男',
+      birthDate: (role && role.birthDate) || '',
+      sizhu: sizhu,
+      rizhu: di.sizhu.day.tg + di.sizhu.day.dz + '日元',
+      zhengge: (bsi && bsi.zhengge) || '',
+      currentDayun: '',
+      currentLiunian: '',
+      qiyun: (bsi && bsi.qiyun) || '',
+      xiyongshen: (bsi && bsi.wuxing_xiji) || '',
+      jishen: '',
+      wuxing: '',
+      shensha: '',
+      careerScore: 60, wealthScore: 60, loveScore: 60, healthScore: 60, fortuneScore: 60,
+      luckyYi: '', luckyJi: '', luckyColor: '', luckyNumber: '', luckyDirection: '', jixiong: ''
     }).then(function (res) {
       if (res.success && res.analysis) {
         var a = res.analysis;
