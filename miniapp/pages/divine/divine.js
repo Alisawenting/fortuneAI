@@ -209,7 +209,7 @@ Page({
 
     that.setData({ loading: true });
 
-    api.calculateBazi({ data: formData }).then(function (res) {
+    api.calculateBazi(formData).then(function (res) {
       if (res.success && res.data) {
         storage.setJSON('last-paipan', res.data);
         storage.setJSON('last-form-data', formData);

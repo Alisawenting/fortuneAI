@@ -12,9 +12,14 @@ async function handleAPI(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const path = url.pathname;
   const json = (data: any, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8" } });
+  // 解析 birthDate/birthTime 为 year/month/day/hours/minute
+  const parseInput = (b: any) => {
+    const [y, m, d] = (b.birthDate || "").split("-").map(Number);
+    const [h, min] = (b.birthTime || "").split(":").map(Number);
+    return { name: b.name || "用户", sex: b.gender === "男" ? 1 : 0, type: b.calendar === "农历" ? 0 : 1, year: y || 1995, month: m || 1, day: d || 1, hours: h || 0, minute: min || 0 };
+  };
 
   try {
-    // 读取 body（所有请求都可能是 POST JSON）
     let body: any = {};
     if (request.method === "POST") {
       try { body = await request.json(); } catch {}
@@ -23,35 +28,17 @@ async function handleAPI(request: Request): Promise<Response> {
     // === 八字排盘 ===
     if (path === "/api/yuanfenju/calculate" && request.method === "POST") {
       const { computePaipan } = await import("./lib/bazi/calculator");
-      const data = computePaipan({
-        name: body.name || "用户",
-        sex: body.gender === "男" ? 1 : 0,
-        type: body.calendar === "农历" ? 0 : 1,
-        year: body.year || 1995, month: body.month || 1, day: body.day || 1,
-        hours: body.hours || 0, minute: body.minute || 0,
-      });
+      const data = computePaipan(parseInput(body));
       return json({ success: true, data });
     }
     if (path === "/api/yuanfenju/cesuan" && request.method === "POST") {
       const { computeCesuan } = await import("./lib/bazi/calculator");
-      const data = computeCesuan({
-        name: body.name || "用户",
-        sex: body.gender === "男" ? 1 : 0,
-        type: body.calendar === "农历" ? 0 : 1,
-        year: body.year || 1995, month: body.month || 1, day: body.day || 1,
-        hours: body.hours || 0, minute: body.minute || 0,
-      });
+      const data = computeCesuan(parseInput(body));
       return json({ success: true, data });
     }
     if (path === "/api/yuanfenju/daily-fortune" && request.method === "POST") {
       const { computeYunshi } = await import("./lib/bazi/calculator");
-      const data = computeYunshi({
-        name: body.name || "用户",
-        sex: body.gender === "男" ? 1 : 0,
-        type: body.calendar === "农历" ? 0 : 1,
-        year: body.year || 1995, month: body.month || 1, day: body.day || 1,
-        hours: body.hours || 0, minute: body.minute || 0,
-      });
+      const data = computeYunshi(parseInput(body));
       return json({ success: true, data });
     }
 
