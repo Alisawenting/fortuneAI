@@ -160,3 +160,45 @@ button {
 .bg-gradient-cinnabar {
   background: linear-gradient(135deg, #d94e3c, #c0392b);
 }
+
+/* ===== 表单输入 ===== */
+.form-input {
+  width: 100%;
+  padding: 22rpx 24rpx;
+  border: 2rpx solid #e8e0d5;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  background: #faf8f5;
+  color: #3d3226;
+  box-sizing: border-box;
+}
+.form-input:focus {
+  border-color: #8b5cf6;
+  background: #fff;
+}
+
+/* ===== 导航 header ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+}
+.header-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+.back-btn {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  font-size: 32rpx;
+  color: #1f2937;
+  text-decoration: none;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+}
