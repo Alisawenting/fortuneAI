@@ -1,26 +1,25 @@
 App({
   globalData: {
-    apiBase: 'http://120.26.213.89',
+    apiBase: '', // 不再需要——云函数走了微信内网
     userInfo: null,
     statusBarHeight: 0,
     navBarHeight: 0
   },
 
   onLaunch() {
-    // 获取系统信息用于自定义导航栏适配
+    // 初始化云开发（做完云环境创建后取消注释）
+    if (wx.cloud) {
+      wx.cloud.init({ env: 'cloud1-你的环境ID' });
+    }
+
     var sysInfo = wx.getSystemInfoSync();
     this.globalData.statusBarHeight = sysInfo.statusBarHeight;
-    // 导航栏高度 = 状态栏 + 标题栏(44px → 88rpx)
     this.globalData.navBarHeight = sysInfo.statusBarHeight + 44;
 
     const token = wx.getStorageSync('yunshu:auth-token');
     const user = wx.getStorageSync('yunshu:user');
     if (token && user) {
-      try {
-        this.globalData.userInfo = JSON.parse(user);
-      } catch (e) {
-        console.error('解析用户数据失败:', e);
-      }
+      try { this.globalData.userInfo = JSON.parse(user); } catch (e) {}
     }
     console.log('云枢易馆 小程序启动');
   }

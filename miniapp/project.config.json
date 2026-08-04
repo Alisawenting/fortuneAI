@@ -44,6 +44,7 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
+  "cloudfunctionRoot": "../cloudfunctions/",
   "libVersion": "3.17.0",
   "appid": "wxc8b6e7064790a613",
   "projectname": "yunshu-miniapp",

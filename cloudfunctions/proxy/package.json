@@ -1,0 +1,9 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "云函数代理 — 转发请求到自有服务器",
+  "main": "index.js",
+  "dependencies": {
+    "got": "^11.8.0"
+  }
+}
