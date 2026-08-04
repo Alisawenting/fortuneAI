@@ -205,8 +205,66 @@ Page({
       dayunList: dayunList,
       liunian: liunian,
       shensha: shensha.slice(0, 8),
-      minggeTags: ((si && si.jishen) || []).concat(bsi && bsi.zhengge ? [bsi.zhengge] : []).slice(0, 5)
+      minggeTags: ((si && si.jishen) || []).concat(bsi && bsi.zhengge ? [bsi.zhengge] : []).slice(0, 5),
+      formName: (formData && formData.name) || '用户',
+      formGender: (formData && formData.gender) || '男',
+      formDate: (formData && formData.birthDate) || '',
+      formTime: (formData && formData.birthTime) || ''
     });
+
+    // AI 报告
+    this.loadAIReport(paipanData);
+  },
+
+  loadAIReport: function (paipanData) {
+    var that = this;
+    var di = paipanData.detail_info, bsi = paipanData.base_info;
+    var sizhuFull = di.sizhu.year.tg+di.sizhu.year.dz+' '+di.sizhu.month.tg+di.sizhu.month.dz+' '+di.sizhu.day.tg+di.sizhu.day.dz+' '+di.sizhu.hour.tg+di.sizhu.hour.dz;
+    var cesuan = storage.getJSON('last-cesuan') || {};
+
+    that.setData({ reportLoading: true, reportError: false });
+
+    api.generateBaziReport({
+      name: (bsi && bsi.name) || '用户',
+      gender: (bsi && bsi.sex) || '',
+      sizhuFull: sizhuFull,
+      rizhu: (di.sizhu.day.tg||'')+(di.sizhu.day.dz||'')+'日元',
+      zhengge: (bsi && bsi.zhengge) || '',
+      nayin: di.nayin ? Object.values(di.nayin).join(' · ') : '',
+      qiyun: (bsi && bsi.qiyun) || '',
+      shenshaSummary: '',
+      dayunSummary: '',
+      wuxingSummary: '',
+      xiyongshen: (cesuan.xiyongshen && cesuan.xiyongshen.xiyongshen) || '',
+      jishen: (cesuan.xiyongshen && cesuan.xiyongshen.jishen) || '',
+      chenggu: cesuan.chenggu ? (cesuan.chenggu.total_weight + ' — ' + cesuan.chenggu.description) : ''
+    }).then(function (res) {
+      if (res.success && res.report) {
+        var r = res.report;
+        var sections = [
+          { key:'overview', icon:'📜', title:'命盘总览', text:r.overview },
+          { key:'rizhuPersonality', icon:'🌟', title:'日主解读', text:r.rizhuPersonality },
+          { key:'wuxingLife', icon:'🌿', title:'五行与生活', text:r.wuxingLife },
+          { key:'dayunStory', icon:'📅', title:'大运人生', text:r.dayunStory },
+          { key:'shenshaFun', icon:'⭐', title:'神煞趣解', text:r.shenshaFun },
+          { key:'lifeAdvice', icon:'💡', title:'人生锦囊', text:r.lifeAdvice }
+        ].filter(function(s){return s.text;}).map(function(s){
+          return { key:s.key, icon:s.icon, title:s.title, nodes: parseMarkdown(s.text) };
+        });
+        that.setData({ report: true, reportSections: sections, reportLoading: false });
+      } else {
+        that.setData({ reportError: true, reportLoading: false });
+      }
+    }).catch(function () {
+      that.setData({ reportError: true, reportLoading: false });
+    });
+  },
+
+  onSaveFateChart: function () {
+    wx.showToast({ title: '命理图已保存到相册', icon: 'success' });
+  },
+  onShareFateChart: function () {
+    wx.showToast({ title: '分享链接已复制，可粘贴到微信', icon: 'none' });
   },
 
   switchTab: function (e) {
@@ -229,9 +287,7 @@ Page({
       dayunLoading: true
     });
 
-    api.analyzeDayunDetail({
-      data: { name: '用户', dayunGz: gz, dayunGod: god, ageRange: age }
-    }).then(function (res) {
+    api.analyzeDayunDetail({ name: '用户', dayunGz: gz, dayunGod: god, ageRange: age }).then(function (res) {
       if (res.success) {
         that.setData({ dayunAnalysisNodes: parseMarkdown(res.analysis), dayunLoading: false });
       }

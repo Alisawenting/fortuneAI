@@ -177,6 +177,60 @@
         </view>
         <navigator url="/pages/shop/shop" open-type="switchTab" class="shop-btn">进入开运商城</navigator>
       </view>
+
+      <!-- AI 八字深度分析报告 -->
+      <view class="section-card mt-5">
+        <view class="flex items-center gap-2">
+          <text style="font-size:36rpx">✨</text>
+          <view>
+            <text class="section-title">AI 八字深度分析报告</text>
+            <text class="section-sub" wx:if="{{reportLoading}}">AI 正在分析命盘...</text>
+            <text class="section-sub" wx:elif="{{report}}">基于八字排盘 · AI 通俗解读</text>
+            <text class="section-sub" wx:elif="{{reportError}}">AI 分析暂不可用</text>
+            <text class="section-sub" wx:else>准备中...</text>
+          </view>
+        </view>
+        <view wx:if="{{reportLoading}}" class="loading-wrap py-4">
+          <text class="animate-spin" style="font-size:48rpx;color:#8b5cf6">⟳</text>
+          <text style="font-size:26rpx;color:#6b7280;margin-top:16rpx">枢机正在细细解读你的命盘...</text>
+        </view>
+        <view wx:elif="{{report}}" class="mt-3">
+          <view class="report-section" wx:for="{{reportSections}}" wx:key="key">
+            <view class="rs-header"><text class="rs-icon">{{item.icon}}</text><text class="rs-title">{{item.title}}</text></view>
+            <rich-text class="rs-content" nodes="{{item.nodes}}"></rich-text>
+          </view>
+        </view>
+        <view wx:elif="{{reportError}}" class="mt-3">
+          <text style="color:#6b7280;font-size:26rpx;text-align:center;display:block;padding:32rpx">AI 分析暂不可用，以下为基础排盘数据</text>
+        </view>
+      </view>
+
+      <!-- 我的八字命理图 -->
+      <view class="section-card mt-5" id="fateChart">
+        <view class="flex items-center justify-between mb-3">
+          <text class="section-title">🖼️ 我的八字命理图</text>
+          <text style="font-size:22rpx;color:#6b7280">可保存 / 分享</text>
+        </view>
+        <view class="fate-chart-card">
+          <view class="fc-head"><text class="fc-brand">YUN SHU YI GUAN</text><text class="fc-brand">云枢易馆</text></view>
+          <text class="fc-name">{{formName}} · 八字命理</text>
+          <text class="fc-meta">{{formGender === '男' ? '乾造' : '坤造'}} · {{formDate}} {{formTime}}</text>
+          <view class="fc-pillars">
+            <view class="fcp-row"><text class="fcp-label"></text><text class="fcp-hdr" wx:for="{{pillars}}" wx:key="label">{{item.label}}</text></view>
+            <view class="fcp-row"><text class="fcp-label">干</text><text class="fcp-gan" wx:for="{{pillars}}" wx:key="label" style="color:{{item.ganColor}}">{{item.gan}}</text></view>
+            <view class="fcp-row"><text class="fcp-label">支</text><text class="fcp-zhi" wx:for="{{pillars}}" wx:key="label" style="color:{{item.zhiColor}}">{{item.zhi}}</text></view>
+          </view>
+          <view class="fc-elements">
+            <view class="fce-item" wx:for="{{elements}}" wx:key="name"><text style="font-size:24rpx;color:{{item.color}}">{{item.name}}</text><text style="font-size:18rpx;color:rgba(255,255,255,.5)">{{item.value}}</text></view>
+          </view>
+          <view class="fc-info"><text>日元 {{rizhuLabel}} · 格局：{{zhengge || '—'}}</text></view>
+          <view class="fc-footer"><text class="fc-ftext">古法藏枢机 · AI 解流年</text><text class="fc-qr">QR</text></view>
+        </view>
+        <view class="flex gap-2 mt-3">
+          <button class="btn-save" bindtap="onSaveFateChart">💾 保存命理图</button>
+          <button class="btn-share" bindtap="onShareFateChart">📤 分享给好友</button>
+        </view>
+      </view>
     </view>
   </block>
 

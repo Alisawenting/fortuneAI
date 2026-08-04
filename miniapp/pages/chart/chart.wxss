@@ -141,3 +141,37 @@
 /* ===== 弹窗 ===== */
 .dayun-dialog-body { font-size: 28rpx; line-height: 2; max-height: 60vh; overflow-y: auto; }
 .loading-wrap { display: flex; flex-direction: column; align-items: center; padding: 48rpx 0; font-size: 24rpx; color: #6b7280; }
+
+/* === AI 报告 === */
+.section-sub { font-size: 22rpx; color: #6b7280; display: block; }
+.report-section { padding: 24rpx; border-radius: 20rpx; border: 2rpx solid rgba(0,0,0,0.06); margin-bottom: 16rpx; background: #f9fafb; }
+.rs-header { display: flex; align-items: center; gap: 12rpx; margin-bottom: 12rpx; }
+.rs-icon { font-size: 28rpx; }
+.rs-title { font-size: 28rpx; font-weight: 600; }
+.rs-content { font-size: 26rpx; line-height: 1.8; color: #374151; }
+
+/* === 命理图 === */
+.fate-chart-card {
+  padding: 40rpx; border-radius: 32rpx; color: #fff;
+  background: linear-gradient(160deg, #2d1a4e 0%, #1a1f3a 50%, #3a1a08 100%);
+  position: relative; overflow: hidden;
+}
+.fc-head { display: flex; justify-content: space-between; }
+.fc-brand { font-size: 20rpx; opacity: .6; letter-spacing: 4rpx; }
+.fc-name { font-size: 40rpx; font-weight: 600; margin-top: 24rpx; }
+.fc-meta { font-size: 22rpx; opacity: .6; margin-top: 8rpx; }
+.fc-pillars { margin-top: 40rpx; }
+.fcp-row { display: flex; gap: 12rpx; align-items: center; margin-bottom: 12rpx; }
+.fcp-label { width: 36rpx; font-size: 16rpx; opacity: .4; text-align: right; }
+.fcp-hdr { flex: 1; text-align: center; font-size: 18rpx; opacity: .4; }
+.fcp-gan { flex: 1; text-align: center; font-size: 38rpx; font-weight: 700; }
+.fcp-zhi { flex: 1; text-align: center; font-size: 34rpx; font-weight: 600; }
+.fc-elements { display: flex; justify-content: space-around; margin-top: 40rpx; }
+.fce-item { text-align: center; }
+.fc-info { margin-top: 40rpx; padding: 24rpx; border-radius: 20rpx; background: rgba(255,255,255,.05); font-size: 22rpx; opacity: .7; }
+.fc-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 32rpx; padding-top: 24rpx; border-top: 1rpx solid rgba(255,255,255,.1); }
+.fc-ftext { font-size: 20rpx; opacity: .5; }
+.fc-qr { width: 64rpx; height: 64rpx; background: rgba(255,255,255,.9); color: #000; border-radius: 12rpx; display: flex; align-items: center; justify-content: center; font-size: 18rpx; }
+.btn-save, .btn-share { flex: 1; padding: 26rpx; border-radius: 24rpx; font-size: 28rpx; font-weight: 500; text-align: center; }
+.btn-save { background: #ffffff; border: 2rpx solid rgba(0,0,0,0.08); }
+.btn-share { background: #8b5cf6; color: #fff; }
