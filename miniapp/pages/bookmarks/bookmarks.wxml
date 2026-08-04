@@ -1,6 +1,6 @@
 <view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
   <view class="header px-5">
-    <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+    <navigator url="/pages/index/index" open-type="switchTab" class="back-btn"><text>←</text></navigator>
     <text class="header-title">我的收藏</text>
     <view class="back-btn"></view>
   </view>
@@ -9,7 +9,7 @@
     <block wx:if="{{bookmarks.length === 0}}">
       <view class="empty">
         <text class="empty-text">还没有收藏内容</text>
-        <navigator url="/pages/index/index" class="empty-link">去首页发现流年提示 →</navigator>
+        <navigator url="/pages/index/index" open-type="switchTab" class="empty-link">去首页发现流年提示 →</navigator>
       </view>
     </block>
     <block wx:else>

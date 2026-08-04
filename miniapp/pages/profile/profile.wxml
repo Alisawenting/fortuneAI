@@ -24,7 +24,7 @@
   <view class="section-card mx-5">
     <text class="section-title">社交</text>
     <view class="social-grid">
-      <navigator url="/pages/community/community" class="social-stat">
+      <navigator url="/pages/community/community" open-type="switchTab" class="social-stat">
         <text class="stat-num">{{myPostCount}}</text>
         <text class="stat-label">我的帖子</text>
       </navigator>

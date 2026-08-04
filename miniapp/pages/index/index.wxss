@@ -12,11 +12,11 @@
 }
 .brand-mark-text { color: white; font-size: 36rpx; font-weight: bold; }
 .brand-title { font-size: 36rpx; font-weight: 600; display: block; }
-.brand-sub { font-size: 22rpx; color: var(--muted-foreground); display: block; }
+.brand-sub { font-size: 22rpx; color: #6b7280; display: block; }
 .member-link {
   padding: 12rpx 24rpx; border-radius: 9999rpx;
-  border: 2rpx solid var(--border); background: var(--card);
-  font-size: 24rpx; color: var(--muted-foreground);
+  border: 2rpx solid rgba(0,0,0,0.08); background: #ffffff;
+  font-size: 24rpx; color: #6b7280;
 }
 
 /* ===== 角色切换 ===== */
@@ -24,7 +24,7 @@
   display: flex; align-items: center; gap: 24rpx;
   margin-top: 40rpx;
   padding: 24rpx; border-radius: 32rpx;
-  border: 2rpx solid var(--border); background: var(--card);
+  border: 2rpx solid rgba(0,0,0,0.08); background: #ffffff;
 }
 .role-avatar {
   width: 80rpx; height: 80rpx; border-radius: 24rpx;
@@ -34,17 +34,17 @@
 }
 .role-name { font-size: 28rpx; font-weight: 500; }
 .role-meta {
-  font-size: 20rpx; color: var(--muted-foreground);
-  padding: 4rpx 12rpx; border-radius: 9999rpx; background: var(--muted);
+  font-size: 20rpx; color: #6b7280;
+  padding: 4rpx 12rpx; border-radius: 9999rpx; background: #f3f4f6;
 }
-.role-hint { font-size: 22rpx; color: var(--muted-foreground); display: block; margin-top: 4rpx; }
-.arrow { font-size: 28rpx; color: var(--muted-foreground); }
+.role-hint { font-size: 22rpx; color: #6b7280; display: block; margin-top: 4rpx; }
+.arrow { font-size: 28rpx; color: #6b7280; }
 
 /* ===== 日期 ===== */
 .date-row {
   display: flex; align-items: center; gap: 16rpx;
   margin-top: 32rpx;
-  font-size: 24rpx; color: var(--muted-foreground);
+  font-size: 24rpx; color: #6b7280;
 }
 
 /* ===== section 卡片 ===== */
@@ -52,7 +52,7 @@
 
 /* ===== 五维运势 ===== */
 .section-label {
-  font-size: 28rpx; color: var(--muted-foreground);
+  font-size: 28rpx; color: #6b7280;
   display: block; margin-bottom: 24rpx;
 }
 .fortune-grid {
@@ -71,11 +71,11 @@
   background: rgba(139,92,246,0.08);
   font-size: 28rpx;
 }
-.fortune-key { font-size: 20rpx; color: var(--foreground); }
+.fortune-key { font-size: 20rpx; color: #1f2937; }
 .fortune-score { font-size: 24rpx; font-weight: 500; }
 .score-bar {
   width: 100%; height: 6rpx; border-radius: 9999rpx;
-  background: var(--muted); overflow: hidden;
+  background: #f3f4f6; overflow: hidden;
 }
 .score-bar-fill { height: 100%; border-radius: 9999rpx; }
 
@@ -87,44 +87,44 @@
 /* ===== AI 分析 ===== */
 .ai-section {
   padding: 40rpx; border-radius: 32rpx;
-  background: linear-gradient(135deg, rgba(139,92,246,0.08), var(--card), rgba(196,154,60,0.08));
+  background: linear-gradient(135deg, rgba(139,92,246,0.08), #ffffff, rgba(196,154,60,0.08));
   box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
 }
-.ai-label { font-size: 24rpx; color: var(--primary); }
-.share-btn { font-size: 24rpx; color: var(--muted-foreground); }
-.ai-content { margin-top: 24rpx; font-size: 28rpx; line-height: 2; color: var(--foreground); }
+.ai-label { font-size: 24rpx; color: #8b5cf6; }
+.share-btn { font-size: 24rpx; color: #6b7280; }
+.ai-content { margin-top: 24rpx; font-size: 28rpx; line-height: 2; color: #1f2937; }
 .ai-tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 24rpx; }
 .ai-tag {
   padding: 8rpx 20rpx; border-radius: 9999rpx;
-  background: var(--card); font-size: 22rpx; line-height: 1.6;
+  background: #ffffff; font-size: 22rpx; line-height: 1.6;
 }
-.ai-advice { font-size: 22rpx; color: var(--primary); font-style: italic; margin-top: 16rpx; display: block; }
+.ai-advice { font-size: 22rpx; color: #8b5cf6; font-style: italic; margin-top: 16rpx; display: block; }
 .ai-links { display: flex; align-items: center; gap: 24rpx; margin-top: 32rpx; }
 .ai-link-primary {
   padding: 12rpx 24rpx; border-radius: 9999rpx;
-  background: rgba(139,92,246,0.1); color: var(--primary); font-size: 24rpx;
+  background: rgba(139,92,246,0.1); color: #8b5cf6; font-size: 24rpx;
 }
 .ai-link-ghost {
   padding: 12rpx 24rpx; border-radius: 9999rpx;
-  border: 2rpx solid var(--border); color: var(--muted-foreground); font-size: 24rpx;
+  border: 2rpx solid rgba(0,0,0,0.08); color: #6b7280; font-size: 24rpx;
 }
-.ai-fallback { display: block; margin-top: 24rpx; font-size: 30rpx; line-height: 2; color: var(--foreground); }
+.ai-fallback { display: block; margin-top: 24rpx; font-size: 30rpx; line-height: 2; color: #1f2937; }
 
 /* ===== 幸运色 & 数字 ===== */
 .lucky-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24rpx; }
-.lucky-card { padding: 32rpx; border-radius: 32rpx; background: var(--card); box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04); }
+.lucky-card { padding: 32rpx; border-radius: 32rpx; background: #ffffff; box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04); }
 .lucky-color-dot {
   width: 72rpx; height: 72rpx; border-radius: 50%;
-  border: 4rpx solid var(--border);
+  border: 4rpx solid rgba(0,0,0,0.08);
 }
-.lucky-color-name { font-size: 20rpx; color: var(--muted-foreground); }
+.lucky-color-name { font-size: 20rpx; color: #6b7280; }
 .lucky-num {
   width: 72rpx; height: 72rpx; border-radius: 24rpx;
   background: rgba(139,92,246,0.1);
   display: flex; align-items: center; justify-content: center;
-  font-size: 36rpx; color: var(--primary);
+  font-size: 36rpx; color: #8b5cf6;
 }
-.lucky-extra { font-size: 20rpx; color: var(--muted-foreground); line-height: 1.6; flex: 1; }
+.lucky-extra { font-size: 20rpx; color: #6b7280; line-height: 1.6; flex: 1; }
 .lucky-extra text { display: block; }
 
 /* ===== 宜忌 ===== */
@@ -138,56 +138,56 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 24rpx; color: white;
 }
-.yi-icon { background: var(--jade); }
-.ji-icon { background: var(--cinnabar); }
+.yi-icon { background: #4a9e6e; }
+.ji-icon { background: #d94e3c; }
 .yiji-label { font-size: 28rpx; font-weight: 500; }
-.yi-label { color: var(--jade); }
-.ji-label { color: var(--cinnabar); }
+.yi-label { color: #4a9e6e; }
+.ji-label { color: #d94e3c; }
 .yiji-tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 16rpx; }
 .yiji-tag {
   padding: 8rpx 20rpx; border-radius: 9999rpx;
-  background: var(--card); font-size: 22rpx; color: var(--foreground);
+  background: #ffffff; font-size: 22rpx; color: #1f2937;
 }
 .yiji-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 24rpx; margin-top: 24rpx; }
 .yiji-extra-item {
   padding: 16rpx 24rpx; border-radius: 16rpx;
-  background: rgba(243,244,246,0.4); font-size: 22rpx; color: var(--muted-foreground);
+  background: rgba(243,244,246,0.4); font-size: 22rpx; color: #6b7280;
 }
-.yiji-extra-item text:last-child { color: var(--foreground); }
+.yiji-extra-item text:last-child { color: #1f2937; }
 
 /* ===== 打卡 ===== */
-.checkin-card { border: 2rpx solid var(--border); }
+.checkin-card { border: 2rpx solid rgba(0,0,0,0.08); }
 .checkin-title { font-size: 32rpx; font-weight: 500; display: block; }
-.checkin-desc { font-size: 24rpx; color: var(--muted-foreground); display: block; margin-top: 8rpx; }
+.checkin-desc { font-size: 24rpx; color: #6b7280; display: block; margin-top: 8rpx; }
 .checkin-btn {
   padding: 20rpx 40rpx; border-radius: 9999rpx;
   font-size: 28rpx; font-weight: 500;
-  background: var(--primary); color: var(--primary-foreground);
+  background: #8b5cf6; color: #ffffff;
   box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.08);
   border: none;
 }
-.checkin-btn.checked { background: var(--muted); color: var(--muted-foreground); box-shadow: none; }
+.checkin-btn.checked { background: #f3f4f6; color: #6b7280; box-shadow: none; }
 .checkin-btn::after { border: none; }
 .checkin-bars { display: flex; gap: 12rpx; margin-top: 32rpx; }
-.checkin-bar { flex: 1; height: 12rpx; border-radius: 9999rpx; background: var(--border); }
-.checkin-bar.filled { background: var(--primary); }
+.checkin-bar { flex: 1; height: 12rpx; border-radius: 9999rpx; background: rgba(0,0,0,0.08); }
+.checkin-bar.filled { background: #8b5cf6; }
 
 /* ===== 大运 & 流年 ===== */
 .section-title { font-size: 28rpx; font-weight: 500; }
-.section-sub { font-size: 22rpx; color: var(--muted-foreground); }
-.detail-link { font-size: 24rpx; color: var(--primary); }
+.section-sub { font-size: 22rpx; color: #6b7280; }
+.detail-link { font-size: 24rpx; color: #8b5cf6; }
 
 .current-dayun {
   padding: 24rpx; border-radius: 24rpx;
   background: rgba(139,92,246,0.05); border: 2rpx solid rgba(139,92,246,0.2);
   margin-bottom: 24rpx;
 }
-.dayun-label { font-size: 22rpx; color: var(--muted-foreground); display: block; }
-.dayun-gz { font-size: 32rpx; color: var(--primary); }
-.dayun-gz-age { font-size: 24rpx; color: var(--muted-foreground); }
+.dayun-label { font-size: 22rpx; color: #6b7280; display: block; }
+.dayun-gz { font-size: 32rpx; color: #8b5cf6; }
+.dayun-gz-age { font-size: 24rpx; color: #6b7280; }
 .dayun-god {
   padding: 8rpx 20rpx; border-radius: 9999rpx;
-  background: rgba(139,92,246,0.1); font-size: 22rpx; color: var(--primary);
+  background: rgba(139,92,246,0.1); font-size: 22rpx; color: #8b5cf6;
 }
 
 /* 流年提示 */
@@ -196,7 +196,7 @@
   background: rgba(240,253,244,0.5); border: 2rpx solid rgba(240,253,244,1);
   margin-bottom: 16rpx;
 }
-.liunian-hint-label { font-size: 22rpx; color: var(--muted-foreground); display: block; }
+.liunian-hint-label { font-size: 22rpx; color: #6b7280; display: block; }
 
 /* 流年列表 */
 .liunian-list { margin-bottom: 24rpx; }
@@ -207,37 +207,37 @@
 .liunian-item.active { background: rgba(139,92,246,0.05); }
 .liunian-dot {
   width: 12rpx; height: 12rpx; border-radius: 50%;
-  margin-top: 12rpx; background: var(--muted); flex-shrink: 0;
+  margin-top: 12rpx; background: #f3f4f6; flex-shrink: 0;
 }
-.liunian-dot.current { background: var(--primary); }
+.liunian-dot.current { background: #8b5cf6; }
 .liunian-year { font-size: 28rpx; font-weight: 500; }
-.liunian-ganzhi { font-size: 22rpx; color: var(--muted-foreground); }
-.liunian-shishen { font-size: 20rpx; color: var(--primary); }
+.liunian-ganzhi { font-size: 22rpx; color: #6b7280; }
+.liunian-shishen { font-size: 20rpx; color: #8b5cf6; }
 .liunian-current-tag {
   padding: 4rpx 12rpx; border-radius: 9999rpx;
-  background: rgba(139,92,246,0.1); font-size: 20rpx; color: var(--primary);
+  background: rgba(139,92,246,0.1); font-size: 20rpx; color: #8b5cf6;
 }
-.liunian-hint { font-size: 24rpx; color: var(--muted-foreground); margin-top: 4rpx; display: block; }
+.liunian-hint { font-size: 24rpx; color: #6b7280; margin-top: 4rpx; display: block; }
 
 /* 大运横向滚动 */
-.dayun-scroll { white-space: nowrap; padding-bottom: 8rpx; margin-top: 24rpx; padding-top: 24rpx; border-top: 2rpx solid var(--border); }
+.dayun-scroll { white-space: nowrap; padding-bottom: 8rpx; margin-top: 24rpx; padding-top: 24rpx; border-top: 2rpx solid rgba(0,0,0,0.08); }
 .dayun-card {
   display: inline-flex; flex-direction: column; align-items: center;
   min-width: 176rpx; padding: 24rpx 16rpx; margin-right: 16rpx;
-  border-radius: 24rpx; border: 2rpx solid var(--border); background: var(--card);
+  border-radius: 24rpx; border: 2rpx solid rgba(0,0,0,0.08); background: #ffffff;
   white-space: normal;
 }
-.dayun-card.active { border-color: var(--primary); background: rgba(139,92,246,0.05); }
+.dayun-card.active { border-color: #8b5cf6; background: rgba(139,92,246,0.05); }
 .dayun-card:active { transform: scale(0.95); }
-.dayun-card-age { font-size: 20rpx; color: var(--muted-foreground); }
+.dayun-card-age { font-size: 20rpx; color: #6b7280; }
 .dayun-card-gz { font-size: 28rpx; margin-top: 8rpx; }
-.dayun-card-note { font-size: 20rpx; color: var(--muted-foreground); margin-top: 4rpx; }
+.dayun-card-note { font-size: 20rpx; color: #6b7280; margin-top: 4rpx; }
 
 .bookmark-link {
   display: flex; align-items: center; justify-content: center;
   margin-top: 24rpx; padding: 16rpx;
-  border-radius: 16rpx; border: 2rpx dashed var(--border);
-  font-size: 24rpx; color: var(--muted-foreground);
+  border-radius: 16rpx; border: 2rpx dashed rgba(0,0,0,0.08);
+  font-size: 24rpx; color: #6b7280;
 }
 
 /* ===== 国学入口 ===== */
@@ -247,17 +247,17 @@
   background: rgba(243,244,246,0.6);
 }
 .kepu-title { font-size: 28rpx; font-weight: 500; display: block; }
-.kepu-desc { font-size: 24rpx; color: var(--muted-foreground); display: block; }
+.kepu-desc { font-size: 24rpx; color: #6b7280; display: block; }
 
 /* ===== 弹窗样式 ===== */
 .fortune-detail-body { text-align: center; }
-.fortune-detail-score { font-size: 28rpx; color: var(--muted-foreground); margin-bottom: 16rpx; display: block; }
-.fortune-detail-text { font-size: 28rpx; line-height: 2; color: var(--foreground); margin-top: 16rpx; display: block; }
+.fortune-detail-score { font-size: 28rpx; color: #6b7280; margin-bottom: 16rpx; display: block; }
+.fortune-detail-text { font-size: 28rpx; line-height: 2; color: #1f2937; margin-top: 16rpx; display: block; }
 
-.dayun-dialog-body { font-size: 28rpx; line-height: 2; color: var(--foreground); max-height: 60vh; overflow-y: auto; }
+.dayun-dialog-body { font-size: 28rpx; line-height: 2; color: #1f2937; max-height: 60vh; overflow-y: auto; }
 .loading-wrap {
   display: flex; flex-direction: column; align-items: center;
-  padding: 48rpx 0; font-size: 24rpx; color: var(--muted-foreground);
+  padding: 48rpx 0; font-size: 24rpx; color: #6b7280;
 }
 
 /* 角色列表 */
@@ -265,25 +265,25 @@
 .role-item {
   display: flex; align-items: center; gap: 24rpx;
   padding: 24rpx; border-radius: 24rpx;
-  border: 2rpx solid var(--border); background: var(--card);
+  border: 2rpx solid rgba(0,0,0,0.08); background: #ffffff;
 }
-.role-item.active { border-color: var(--primary); background: rgba(139,92,246,0.05); }
+.role-item.active { border-color: #8b5cf6; background: rgba(139,92,246,0.05); }
 .role-item-avatar {
   width: 80rpx; height: 80rpx; border-radius: 24rpx;
-  background: var(--muted);
+  background: #f3f4f6;
   display: flex; align-items: center; justify-content: center;
   font-size: 40rpx;
 }
 .role-item-name { font-size: 28rpx; font-weight: 500; display: block; }
-.role-item-meta { font-size: 22rpx; color: var(--muted-foreground); display: block; }
-.role-item-check { font-size: 28rpx; color: var(--primary); flex-shrink: 0; }
+.role-item-meta { font-size: 22rpx; color: #6b7280; display: block; }
+.role-item-check { font-size: 28rpx; color: #8b5cf6; flex-shrink: 0; }
 .role-item-delete {
   width: 56rpx; height: 56rpx; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  color: var(--muted-foreground); flex-shrink: 0;
+  color: #6b7280; flex-shrink: 0;
 }
 .role-add {
   padding: 24rpx; border-radius: 24rpx;
   border: 2rpx dashed rgba(139,92,246,0.4);
-  text-align: center; font-size: 28rpx; color: var(--primary);
+  text-align: center; font-size: 28rpx; color: #8b5cf6;
 }

@@ -6,16 +6,16 @@
 .content { padding-top: 40rpx; padding-bottom: 160rpx; }
 .loading-wrap {
   display: flex; flex-direction: column; align-items: center;
-  padding: 160rpx 0; font-size: 28rpx; color: var(--muted-foreground);
+  padding: 160rpx 0; font-size: 28rpx; color: #6b7280;
 }
-.analysis-text { font-size: 28rpx; line-height: 2; color: var(--foreground); }
+.analysis-text { font-size: 28rpx; line-height: 2; color: #1f2937; }
 
 .mt-5 { margin-top: 40rpx; }
 .dimensions { display: flex; flex-direction: column; gap: 16rpx; }
 .dim-card {
   padding: 32rpx; border-radius: 24rpx;
-  background: var(--card); box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  background: #ffffff; box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
 }
 .dim-icon { font-size: 36rpx; }
 .dim-label { font-size: 28rpx; font-weight: 500; display: block; margin-top: 8rpx; }
-.dim-text { font-size: 24rpx; color: var(--muted-foreground); line-height: 1.6; margin-top: 8rpx; display: block; }
+.dim-text { font-size: 24rpx; color: #6b7280; line-height: 1.6; margin-top: 8rpx; display: block; }

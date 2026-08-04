@@ -1,14 +1,14 @@
 .auth-body { padding: 8rpx 0; }
 .auth-tabs { display: flex; gap: 32rpx; margin-bottom: 32rpx; justify-content: center; }
-.auth-tab { font-size: 32rpx; color: var(--muted-foreground); padding: 8rpx 0; }
-.auth-tab.active { color: var(--primary); border-bottom: 4rpx solid var(--primary); font-weight: 600; }
+.auth-tab { font-size: 32rpx; color: #6b7280; padding: 8rpx 0; }
+.auth-tab.active { color: #8b5cf6; border-bottom: 4rpx solid #8b5cf6; font-weight: 600; }
 .auth-input {
-  width: 100%; padding: 24rpx 32rpx; border: 2rpx solid var(--border);
+  width: 100%; padding: 24rpx 32rpx; border: 2rpx solid rgba(0,0,0,0.08);
   border-radius: 24rpx; font-size: 28rpx; margin-bottom: 16rpx; box-sizing: border-box;
 }
 .auth-submit {
   width: 100%; padding: 28rpx; border-radius: 24rpx;
-  background: var(--primary); color: var(--primary-foreground);
+  background: #8b5cf6; color: #ffffff;
   font-size: 28rpx; font-weight: 500; border: none; margin-top: 16rpx;
 }
 .auth-submit[disabled] { opacity: 0.6; }

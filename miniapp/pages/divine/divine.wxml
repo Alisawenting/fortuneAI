@@ -1,6 +1,6 @@
 <view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
   <view class="header px-5">
-    <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+    <navigator url="/pages/index/index" open-type="switchTab" class="back-btn"><text>←</text></navigator>
     <text class="header-title">个人命盘录入</text>
     <view class="header-spacer"></view>
   </view>

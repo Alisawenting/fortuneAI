@@ -11,19 +11,19 @@
   font-size: 56rpx; font-weight: 600; margin: 0 auto;
 }
 .name { font-size: 36rpx; font-weight: 600; display: block; margin-top: 24rpx; }
-.handle { font-size: 24rpx; color: var(--muted-foreground); display: block; margin-top: 4rpx; }
+.handle { font-size: 24rpx; color: #6b7280; display: block; margin-top: 4rpx; }
 .stats { display: flex; justify-content: center; gap: 64rpx; margin-top: 32rpx; }
-.stat { text-align: center; font-size: 24rpx; color: var(--muted-foreground); }
-.stat-n { font-size: 36rpx; font-weight: 600; color: var(--primary); display: block; }
+.stat { text-align: center; font-size: 24rpx; color: #6b7280; }
+.stat-n { font-size: 36rpx; font-weight: 600; color: #8b5cf6; display: block; }
 
 .posts { padding-bottom: 120rpx; }
 .posts-title { font-size: 28rpx; font-weight: 500; display: block; margin-bottom: 24rpx; }
-.empty-text { text-align: center; padding: 80rpx 0; font-size: 28rpx; color: var(--muted-foreground); display: block; }
+.empty-text { text-align: center; padding: 80rpx 0; font-size: 28rpx; color: #6b7280; display: block; }
 .post-card {
   padding: 32rpx; border-radius: 24rpx;
-  background: var(--card); box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  background: #ffffff; box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
   margin-bottom: 16rpx;
 }
 .post-title { font-size: 30rpx; font-weight: 500; display: block; }
-.post-content { font-size: 28rpx; color: var(--muted-foreground); line-height: 1.8; margin-top: 8rpx; display: block; }
-.post-meta { font-size: 22rpx; color: var(--muted-foreground); margin-top: 12rpx; display: block; }
+.post-content { font-size: 28rpx; color: #6b7280; line-height: 1.8; margin-top: 8rpx; display: block; }
+.post-meta { font-size: 22rpx; color: #6b7280; margin-top: 12rpx; display: block; }

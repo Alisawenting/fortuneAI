@@ -7,7 +7,7 @@
         <text class="header-title">枢机 · AI 命理师</text>
         <text class="header-sub">{{baziLoading ? '正在加载命盘...' : (role ? '已绑定 · ' + role.name : '通用模式 · 未绑定命盘')}}</text>
       </view>
-      <navigator url="/pages/index/index" class="back-btn"><text>←</text></navigator>
+      <navigator url="/pages/index/index" open-type="switchTab" class="back-btn"><text>←</text></navigator>
     </view>
     <!-- 角色切换条 -->
     <scroll-view class="role-bar" scroll-x enable-flex wx:if="{{roles.length > 0}}">
@@ -18,7 +18,7 @@
         data-id="{{item.id}}"
         bindtap="onSwitchRole"
       >{{item.avatar || ''}} {{item.name}}</view>
-      <navigator url="/pages/divine/divine" class="role-tag add" wx:if="{{roles.length < 5}}">+ 新增</navigator>
+      <navigator url="/pages/divine/divine" open-type="switchTab" class="role-tag add" wx:if="{{roles.length < 5}}">+ 新增</navigator>
     </scroll-view>
   </view>
 

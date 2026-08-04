@@ -9,7 +9,7 @@ App({
   onLaunch() {
     // 初始化云开发（做完云环境创建后取消注释）
     if (wx.cloud) {
-      wx.cloud.init({ env: 'cloud1-你的环境ID' });
+      wx.cloud.init({ env: 'cloudbase-d4gf2f1q6082a06b6' });
     }
 
     var sysInfo = wx.getSystemInfoSync();

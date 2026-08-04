@@ -1,6 +1,6 @@
 <view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
   <view class="header px-5">
-    <navigator url="/pages/divine/divine" class="back-btn"><text>←</text></navigator>
+    <navigator url="/pages/divine/divine" open-type="switchTab" class="back-btn"><text>←</text></navigator>
     <text class="header-title">紫微斗数命盘</text>
     <view class="back-btn"><text>🔖</text></view>
   </view>
@@ -10,7 +10,7 @@
       <view class="empty-icon">🧭</view>
       <text class="empty-title">尚未排盘</text>
       <text class="empty-desc">请先在测算页面录入生辰，生成紫微命盘</text>
-      <navigator url="/pages/divine/divine" class="empty-btn">开始测算 →</navigator>
+      <navigator url="/pages/divine/divine" open-type="switchTab" class="empty-btn">开始测算 →</navigator>
     </view>
   </block>
 

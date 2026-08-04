@@ -5,30 +5,30 @@
 .header-inner { display: flex; align-items: center; gap: 24rpx; padding: 24rpx 40rpx; }
 .header-icon {
   width: 80rpx; height: 80rpx; border-radius: 24rpx;
-  background: rgba(139,92,246,0.1); color: var(--primary);
+  background: rgba(139,92,246,0.1); color: #8b5cf6;
   display: flex; align-items: center; justify-content: center; font-size: 40rpx;
 }
 .header-title { font-size: 28rpx; font-weight: 500; display: block; }
-.header-sub { font-size: 22rpx; color: var(--muted-foreground); display: block; }
-.back-btn { font-size: 36rpx; color: var(--muted-foreground); }
+.header-sub { font-size: 22rpx; color: #6b7280; display: block; }
+.back-btn { font-size: 36rpx; color: #6b7280; }
 
 .role-bar { white-space: nowrap; padding: 0 40rpx 16rpx; }
 .role-tag {
   display: inline-block; padding: 8rpx 24rpx; margin-right: 12rpx;
   border-radius: 9999rpx; font-size: 22rpx;
-  background: var(--muted); color: var(--muted-foreground);
+  background: #f3f4f6; color: #6b7280;
 }
-.role-tag.active { background: var(--primary); color: var(--primary-foreground); }
-.role-tag.add { border: 2rpx dashed rgba(139,92,246,0.4); color: var(--primary); background: transparent; }
+.role-tag.active { background: #8b5cf6; color: #ffffff; }
+.role-tag.add { border: 2rpx dashed rgba(139,92,246,0.4); color: #8b5cf6; background: transparent; }
 
 /* 消息 */
 .msg-list { flex: 1; padding: 32rpx 40rpx 32rpx; overflow-y: auto; }
-.msg-date { text-align: center; font-size: 22rpx; color: var(--muted-foreground); margin-bottom: 32rpx; }
+.msg-date { text-align: center; font-size: 22rpx; color: #6b7280; margin-bottom: 32rpx; }
 .msg-item { display: flex; margin-bottom: 32rpx; }
 .msg-item.user { justify-content: flex-end; }
 .msg-avatar {
   width: 56rpx; height: 56rpx; border-radius: 50%;
-  background: rgba(139,92,246,0.1); color: var(--primary);
+  background: rgba(139,92,246,0.1); color: #8b5cf6;
   display: flex; align-items: center; justify-content: center;
   font-size: 24rpx; margin-right: 16rpx; flex-shrink: 0;
 }
@@ -36,8 +36,8 @@
   max-width: 78%; padding: 24rpx 32rpx; border-radius: 24rpx;
   font-size: 28rpx; line-height: 1.8; box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
 }
-.ai-bubble { background: var(--card); border-top-left-radius: 4rpx; }
-.user-bubble { background: var(--primary); color: var(--primary-foreground); border-top-right-radius: 4rpx; }
+.ai-bubble { background: #ffffff; border-top-left-radius: 4rpx; }
+.user-bubble { background: #8b5cf6; color: #ffffff; border-top-right-radius: 4rpx; }
 
 /* 输入栏 */
 .input-bar {
@@ -49,26 +49,26 @@
 .quick-row::-webkit-scrollbar { display: none; }
 .quick-tag {
   flex-shrink: 0; padding: 8rpx 24rpx; border-radius: 9999rpx;
-  border: 2rpx solid var(--border); background: var(--card);
-  font-size: 24rpx; color: var(--muted-foreground);
+  border: 2rpx solid rgba(0,0,0,0.08); background: #ffffff;
+  font-size: 24rpx; color: #6b7280;
 }
 .input-row { display: flex; align-items: center; gap: 16rpx; }
 .voice-btn {
   width: 80rpx; height: 80rpx; border-radius: 50%;
-  background: var(--muted); border: none;
+  background: #f3f4f6; border: none;
   display: flex; align-items: center; justify-content: center; font-size: 32rpx;
 }
-.voice-btn.active { background: var(--cinnabar); animation: pulse 1s infinite; }
+.voice-btn.active { background: #d94e3c; animation: pulse 1s infinite; }
 .msg-input {
   flex: 1; padding: 20rpx 32rpx; border-radius: 9999rpx;
-  border: 2rpx solid var(--border); background: var(--card);
+  border: 2rpx solid rgba(0,0,0,0.08); background: #ffffff;
   font-size: 28rpx;
 }
 .send-btn {
   width: 80rpx; height: 80rpx; border-radius: 50%;
-  background: var(--primary); border: none;
+  background: #8b5cf6; border: none;
   display: flex; align-items: center; justify-content: center;
-  font-size: 32rpx; color: var(--primary-foreground);
+  font-size: 32rpx; color: #ffffff;
 }
 .send-btn[disabled] { opacity: 0.5; }
 

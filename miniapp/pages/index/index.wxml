@@ -8,7 +8,7 @@
         <text class="brand-sub">古法藏枢机 · AI 解流年</text>
       </view>
     </view>
-    <navigator url="/pages/profile/profile" class="member-link">会员中心</navigator>
+    <navigator url="/pages/profile/profile" open-type="switchTab" class="member-link">会员中心</navigator>
   </view>
 
   <!-- 角色切换 -->
@@ -92,7 +92,7 @@
         <text class="ai-advice" wx:if="{{aiAnalysis.luckyAdvice}}">💡 {{aiAnalysis.luckyAdvice}}</text>
         <view class="ai-links">
           <navigator url="/pages/reading/reading" class="ai-link-primary">查看完整解读 ▸</navigator>
-          <navigator url="/pages/chat/chat" class="ai-link-ghost">追问 AI</navigator>
+          <navigator url="/pages/chat/chat" open-type="switchTab" class="ai-link-ghost">追问 AI</navigator>
         </view>
       </block>
 
@@ -100,7 +100,7 @@
         <text class="ai-fallback">{{yunshiData ? yunshiData.yunshi_info.fortune_description : '水木相生，今日宜静中观变。上午灵感来得轻盈，适合写下三件被你搁置的小事；黄昏时分若有人来询意见，请放慢半拍再答。'}}</text>
         <view class="ai-links">
           <navigator url="/pages/reading/reading" class="ai-link-primary">查看完整 AI 解读 ▸</navigator>
-          <navigator url="/pages/chat/chat" class="ai-link-ghost">追问 AI</navigator>
+          <navigator url="/pages/chat/chat" open-type="switchTab" class="ai-link-ghost">追问 AI</navigator>
         </view>
       </block>
     </view>
@@ -271,7 +271,7 @@
     </view>
 
     <!-- 国学科普入口 -->
-    <navigator url="/pages/community/community" class="kepu-entry">
+    <navigator url="/pages/community/community" open-type="switchTab" class="kepu-entry">
       <text style="font-size:32rpx;color:var(--jade)">✦</text>
       <view class="flex-1">
         <text class="kepu-title">国学小科普 · 何为「枢」？</text>

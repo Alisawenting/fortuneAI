@@ -1,6 +1,6 @@
 <view class="page" style="padding-top:{{navBarHeight}}px;padding-bottom:120rpx">
   <view class="header px-5">
-    <navigator url="/pages/divine/divine" class="back-btn"><text>←</text></navigator>
+    <navigator url="/pages/divine/divine" open-type="switchTab" class="back-btn"><text>←</text></navigator>
     <text class="header-title">我的命盘</text>
     <view class="back-btn" bindtap="onBookmark"><text>🔖</text></view>
   </view>
@@ -10,7 +10,7 @@
       <view class="empty-icon">✦</view>
       <text class="empty-title">尚未排盘</text>
       <text class="empty-desc">请先录入生辰信息，生成您的专属命盘</text>
-      <navigator url="/pages/divine/divine" class="empty-btn">开始测算 →</navigator>
+      <navigator url="/pages/divine/divine" open-type="switchTab" class="empty-btn">开始测算 →</navigator>
     </view>
   </block>
 
@@ -173,7 +173,7 @@
             <text class="shop-desc">基于命盘喜用神智能推荐</text>
           </view>
         </view>
-        <navigator url="/pages/shop/shop" class="shop-btn">进入开运商城</navigator>
+        <navigator url="/pages/shop/shop" open-type="switchTab" class="shop-btn">进入开运商城</navigator>
       </view>
     </view>
   </block>
