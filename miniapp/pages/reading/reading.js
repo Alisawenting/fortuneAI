@@ -82,5 +82,6 @@ Page({
         dimensions: []
       });
     });
-  }
+  },
+  goBack: function () { wx.navigateBack(); }
 });

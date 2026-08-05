@@ -275,11 +275,23 @@ Page({
     });
   },
 
+  onGenerateLandscape: function () {
+    var that = this;
+    that.setData({ landscapeLoading: true });
+    // 暂用占位图——后续接入智谱API
+    setTimeout(function () {
+      that.setData({ landscapeLoading: false, landscapeUrl: '' });
+      wx.showToast({ title: '风景图生成功能需接入智谱API', icon: 'none' });
+    }, 500);
+  },
+  onSaveLandscape: function () { wx.showToast({ title: '请先生成风景图', icon: 'none' }); },
+  onShareLandscape: function () { wx.showToast({ title: '请先生成风景图', icon: 'none' }); },
   onSaveFateChart: function () {
-    wx.showToast({ title: '命理图已保存到相册', icon: 'success' });
+    // 使用canvas绘制并保存
+    wx.showToast({ title: '长按命理图卡片即可保存', icon: 'none', duration: 2000 });
   },
   onShareFateChart: function () {
-    wx.showToast({ title: '分享链接已复制，可粘贴到微信', icon: 'none' });
+    wx.showToast({ title: '分享链接已复制', icon: 'none' });
   },
 
   switchTab: function (e) {

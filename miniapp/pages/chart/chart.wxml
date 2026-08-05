@@ -175,7 +175,7 @@
             <text class="shop-desc">基于命盘喜用神智能推荐</text>
           </view>
         </view>
-        <navigator url="/pages/shop/shop" open-type="switchTab" class="shop-btn">进入开运商城</navigator>
+        <navigator url="/pages/shop/shop" class="shop-btn">进入开运商城</navigator>
       </view>
 
       <!-- AI 八字深度分析报告 -->
@@ -259,7 +259,7 @@
   <ui-dialog
     visible="{{dayunDialogVisible}}"
     title="{{dayunDialogData.age}}岁 · 大运「{{dayunDialogData.gz}}」"
-    description="{{dayunDialogData.god}}"
+    description="{{dayunDialogData.god || ''}}"
     bindclose="onCloseDayunDetail"
   >
     <view class="dayun-dialog-body">
